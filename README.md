@@ -1,13 +1,13 @@
 # EHR-Dashboard
 
-EHR-Dashboard is a web application designed to provide a visual interface for Electronic Health Records (EHR). This dashboard allows healthcare professionals to view, analyze, and interact with patient health data efficiently.
+EHR-Dashboard is a web application designed to provide a visual interface for Electronic Health Records (EHR). This dashboard allows healthcare professionals and patients to view, analyze, and interact with patient health data efficiently. It offers distinct views for both patients and clinicians, enhancing accessibility and usability for each user group.
 
 ## Features
 
-- **Patient Overview**: View comprehensive data on individual patients, including medical history, medications, and recent visits.
-- **Data Visualization**: Graphs and charts to display trends in health metrics over time.
-- **Interactive Interface**: Responsive and user-friendly UI for easy navigation and data retrieval.
-- **Secure Access**: Ensures patient data confidentiality with secure access protocols.
+- **Patient View**: Allows patients to securely access and view their own medical data, including recent test results, medical history, and health trends over time.
+- **Clinician View**: Enables clinicians to view and manage health data for their assigned patients. Clinicians can quickly access patient records, monitor health metrics, and view historical data to support informed decision-making.
+- **Data Visualization**: Provides graphs and charts to display trends in health metrics, helping both patients and clinicians track health changes over time.
+- **Interactive Interface**: Designed with a user-friendly and responsive interface for easy navigation and data retrieval.
 
 ```
 EHR-Dashboard/
