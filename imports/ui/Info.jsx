@@ -11,10 +11,10 @@ export const Info = () => {
   }
 
   return (
-    <div>
-      <h2>Learn Meteor!</h2>
-      <ul>{links.map(
-        link => <li key={link._id}>
+    <div className='pt-10'>
+      <h2 className='text-xl'>Learn Meteor!</h2>
+      <ul className='ml-10'>{links.map(
+        link => <li key={link._id} className='mt-2 underline'>
           <a href={link.url} target="_blank">{link.title}</a>
         </li>
       )}</ul>

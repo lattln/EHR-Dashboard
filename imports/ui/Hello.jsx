@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ThemeToggle from './ThemeToggle';
 
 export const Hello = () => {
   const [counter, setCounter] = useState(0);
@@ -8,9 +9,10 @@ export const Hello = () => {
   };
 
   return (
-    <div>
-      <button onClick={increment}>Click Me</button>
-      <p>You've pressed the button {counter} times.</p>
+    <div className='pt-10'>
+      <ThemeToggle />
+      <button onClick={increment} className=' ml-2 btn btn-primary'>Click Me</button>
+      <p className='mt-3'>You've pressed the button {counter} times.</p>
     </div>
   );
 };
