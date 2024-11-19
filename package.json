@@ -5,7 +5,8 @@
     "start": "meteor run",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer"
+    "visualize": "meteor --production --extra-packages bundle-visualizer",
+    "lint": "npx eslint ."
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
@@ -23,9 +24,21 @@
     "testModule": "tests/main.js"
   },
   "devDependencies": {
+    "@meteorjs/eslint-config-meteor": "^1.0.5",
     "autoprefixer": "^10.4.20",
+    "babel-eslint": "^10.1.0",
     "daisyui": "^4.12.14",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-meteor": "^0.4.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-meteor": "^7.3.0",
+    "eslint-plugin-react": "^7.37.2",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14"
+  },
+  "eslintConfig": {
+    "extends": "@meteorjs/eslint-config-meteor"
   }
 }
