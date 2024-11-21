@@ -1,15 +1,11 @@
 import React from 'react';
-import { Hello } from './Hello.jsx';
-import { Info } from './Info.jsx';
-import { NavBar } from './NavBar.jsx';
-import { ExampleChart } from './ExampleChart.jsx';
+import { Login } from './Login.jsx';
 
 export const App = () => (
-  <div>
-    <NavBar/>
-    <Hello/>
-    <Info/>
-    <ExampleChart/>
-    
-  </div>
-);
+    <div>
+        <h1>Hello</h1>
+        <Login />
+    </div>
+)
+
+export default App;
