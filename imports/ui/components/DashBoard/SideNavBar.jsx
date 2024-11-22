@@ -5,10 +5,10 @@ import { NAV_LINKS } from '../../constants/dashBoard'
 const SideNavBar = () => {
     return (
         <div>
-            <div className="hidden h-screen w-24 bg-primary shadow-lg lg:flex flex-col items-center py-4 space-y-7">
+            <div className="fixed hidden h-screen w-24 bg-primary shadow-lg lg:flex flex-col items-center py-4 space-y-7">
                 {/* Logo */}
                 <div className="mb-6">
-                    <Link to="/">
+                    <Link to="/dev">
                         <div className="w-12 h-12 bg-primary-content rounded-full flex items-center justify-center">
                             <span className="text-xs font-bold">LOGO</span>
                         </div>

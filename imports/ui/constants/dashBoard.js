@@ -4,7 +4,7 @@ import { IconHome, IconHistory, IconUser, IconSetting } from './svgLibrary';
 export const NAV_LINKS = [
     {
         name: 'Home',
-        route: '/',
+        route: '/dashboard',
         icon: <IconHome className="w-6 h-6 text-primary-content" />
     },
     {
@@ -51,4 +51,9 @@ export const USER_INFO =
         label: "Last Appointment",
         value: "10/18/2024"
     }
+}
+
+export const PLACEHOLDER = {
+    chart: "Chart Placeholder",
+    placeHolder: "PLACE HOLDER BOX"
 }
