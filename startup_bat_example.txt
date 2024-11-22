@@ -1,0 +1,18 @@
+> @echo off
+
+Set the MongoDB URL environment variable
+> set MONGO_URL=mongodb://localhost:27017/{db_name}
+
+Optional: Set the port for the Meteor app (default is 3000)
+> set PORT=3000
+
+> meteor
+
+--------------------------
+run this in CLI using ./startup.bat
+
+OR
+
+macOS must grant permission to run
+> chmod +x ./startup.bat
+> ./startup.bat
