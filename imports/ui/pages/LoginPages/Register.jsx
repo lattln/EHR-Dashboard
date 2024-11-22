@@ -27,7 +27,7 @@ const Register = () => {
                                 <span className="label-text text-primary">Username</span>
                             </label>
                             <input
-                                type="email"
+                                type="text"
                                 placeholder="Enter your Username"
                                 className="input input-bordered w-full pl-10"
                                 required
