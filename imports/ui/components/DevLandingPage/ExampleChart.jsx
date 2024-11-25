@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import Chart from 'chart.js/auto';
 
-export const ExampleChart = () => {
+const ExampleChart = () => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
 
@@ -54,7 +54,8 @@ export const ExampleChart = () => {
         <div className='w-128 h-96'>
             <canvas ref={chartRef} />
         </div>
-        
+
     );
 };
 
+export default ExampleChart
