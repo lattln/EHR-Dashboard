@@ -116,14 +116,10 @@ Meteor.methods({
     },
     async "patient.getDiastolicBloodPressureMetrics"(patientID){
         this.unblock();
-        return await getPatientDiastolicBloodPressureMetrics(patientid);
+        return await getPatientDiastolicBloodPressureMetrics(patientID);
     },
     async "patient.getBodyTempMetrics"(patientID){
         this.unblock();
         return await getPatientBodyTempMetrics(patientID);
     },
 })
-
-
-
-
