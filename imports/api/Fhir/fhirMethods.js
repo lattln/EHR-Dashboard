@@ -85,6 +85,45 @@ async function getPatientBodyTempMetrics(patientID) {
     return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID);
 }
 
+Meteor.methods({
+    async "patient.getHealthMetrics"(loincCode, patientID){
+        this.unblock();
+        return await getPatientHealthMetrics(loincCode, patientID);
+    },
+    async "patient.getRecordByIdentifier"(patientIdentifier){
+        this.unblock();
+        return await getPatientRecordByIdentifier(patientIdentifier);
+    },
+    async "patient.getWeightMetrics"(patientID){
+        this.unblock();
+        return await getPatientWeightMetrics(patientID);
+    },
+    async "patient.getHeightMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHeightMetrics(patientID);
+    },
+    async "patient.getHeartRateMetrics"(patientID){
+        this.unblock();
+        return await getPatientHeartRateMetrics(patientID);
+    },
+    async "patient.getBMIMetrics"(patientID){
+        this.unblock();
+        return await getPatientBMIMetrics(patientID);
+    },
+    async "patient.getSystolicBloodPressureMetrics"(patientID){
+        this.unblock();
+        return await getPatientSystolicBloodPressureMetrics(patientID);
+    },
+    async "patient.getDiastolicBloodPressureMetrics"(patientID){
+        this.unblock();
+        return await getPatientDiastolicBloodPressureMetrics(patientid);
+    },
+    async "patient.getBodyTempMetrics"(patientID){
+        this.unblock();
+        return await getPatientBodyTempMetrics(patientID);
+    },
+})
+
 
 
 
