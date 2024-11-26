@@ -57,69 +57,85 @@ async function getPatientHealthMetrics(loincCode, patientID) {
     return metrics;
 }
 
-async function getPatientWeightMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID);
-}
-
-async function getPatientHeightMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID);
-}
-
-async function getPatientBMIMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID);
-}
-
-async function getPatientHeartRateMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID);
-}
-
-async function getPatientSystolicBloodPressureMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID);
-}
-
-async function getPatientDiastolicBloodPressureMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID);
-}
-
-async function getPatientBodyTempMetrics(patientID) {
-    return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID);
-}
-
 Meteor.methods({
-    async "patient.getHealthMetrics"(loincCode, patientID){
+    async "patient.getHealthMetrics"(loincCode, patientID) {
         this.unblock();
         return await getPatientHealthMetrics(loincCode, patientID);
     },
-    async "patient.getRecordByIdentifier"(patientIdentifier){
+    async "patient.getRecordByIdentifier"(patientIdentifier) {
         this.unblock();
         return await getPatientRecordByIdentifier(patientIdentifier);
     },
-    async "patient.getWeightMetrics"(patientID){
+    async "patient.getWeightMetrics"(patientID) {
         this.unblock();
-        return await getPatientWeightMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID);
     },
     async "patient.getHeightMetrics"(patientID) {
         this.unblock();
-        return await getPatientHeightMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID);
     },
-    async "patient.getHeartRateMetrics"(patientID){
+    async "patient.getHeartRateMetrics"(patientID) {
         this.unblock();
-        return await getPatientHeartRateMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID);
     },
-    async "patient.getBMIMetrics"(patientID){
+    async "patient.getBMIMetrics"(patientID) {
         this.unblock();
-        return await getPatientBMIMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID);
     },
-    async "patient.getSystolicBloodPressureMetrics"(patientID){
+    async "patient.getSystolicBloodPressureMetrics"(patientID) {
         this.unblock();
-        return await getPatientSystolicBloodPressureMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID);
     },
-    async "patient.getDiastolicBloodPressureMetrics"(patientID){
+    async "patient.getDiastolicBloodPressureMetrics"(patientID) {
         this.unblock();
-        return await getPatientDiastolicBloodPressureMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID);
     },
-    async "patient.getBodyTempMetrics"(patientID){
+    async "patient.getBodyTempMetrics"(patientID) {
         this.unblock();
-        return await getPatientBodyTempMetrics(patientID);
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID);
     },
-})
+    async "patient.getBodyOxygenSaturationMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID);
+    },
+    async "patient.getHemoglobinHGBMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID);
+    },
+    async "patient.getHemoglobinA1CMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID);
+    },
+    async "patient.getErythrocyteSedimentationRateMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID);
+    },
+    async "patient.getGlucoseSerumPlasmaMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID);
+    },
+    async "patient.getPotassiumSerumPlasmaMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID);
+    },
+    async "patient.getCholesterolTotalMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID);
+    },
+    async "patient.getLowDensityLipoproteinMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID);
+    },
+    async "patient.getHighDensityLipoproteinMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID);
+    },
+    async "patient.getUreaNitrogenBUNMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID);
+    },
+    async "patient.getCreatinineMetrics"(patientID) {
+        this.unblock();
+        return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID);
+    },
+});
