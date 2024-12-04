@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const NavBar = () => {
+const NavBar = () => {
     return (
         <div className="navbar bg-base-100">
             <div className="flex-1">
@@ -24,3 +24,5 @@ export const NavBar = () => {
         </div>
     )
 }
+
+export default NavBar
