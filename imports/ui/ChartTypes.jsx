@@ -49,13 +49,6 @@ function ChartTypes(){
         label: 'Hours Spent',
         data: [100, 135, 189, 300, 120]
     }
-
-    return (
-        <div className="h-2/3 w-2/3">
-            <Line width={'1/3'} xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']} xTitle={'Month'} yTitle={'Minutes'} datasets={lineData} />
-            <Scatter width={'1/3'} xTitle={'Month'} yTitle={'Minutes'} datasets={scatterData} />
-        </div>
-    ) 
 }
 
 export default ChartTypes;

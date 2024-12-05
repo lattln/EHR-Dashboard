@@ -21,7 +21,7 @@ Chart.register(
     zoomPlugin
 );
 
-function Line({xTitle, yTitle, xLabels, datasets, width }){
+function Line({ loinc }){
     const lineColors = [
         'rgb(255, 99, 132)',
         'rgb(53, 162, 235)',
@@ -33,23 +33,43 @@ function Line({xTitle, yTitle, xLabels, datasets, width }){
     ];
 
     const [data, setData] = useState({
-        datasets: [],
-        labels: xLabels,
+        datasets: [{
+            label: 'Jack',
+            data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            borderColor: lineColors[0]
+        },
+        {
+            label: 'Austin',
+            data: [10, 20, 30, 40, 50, 60, 70, 80, 90],
+            borderColor: lineColors[1]
+        },
+        {
+            label: 'Lin',
+            data: [9, 8, 7, 6, 5, 4, 3, 2, 1],
+            borderColor: lineColors[2]
+        },
+        {
+            label: 'Noah',
+            data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
+            borderColor: lineColors[3]
+        }],
+        labels: ['Jan', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
     });
     
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         scales: {
             y: {
                 title: {
                     display: true,
-                    text: yTitle
+                    text: "Hours" 
                 }
             },
             x: {
                 title: {
                     display: true,
-                    text: xTitle
+                    text: "Months" 
                 }
             }
         },
@@ -65,25 +85,7 @@ function Line({xTitle, yTitle, xLabels, datasets, width }){
         }
     }
 
-    useEffect(() => {
-        let formattedDatasets = [];
-        datasets.map((d, idx) => {
-            formattedDatasets.push({
-                label: d.name,
-                data: d.data,
-                borderColor: lineColors[idx],
-                backgroundColor: lineColors[idx]
-            })
-        })
-
-        setData({...data, datasets: formattedDatasets});
-    }, [datasets]);
-
-    return ( 
-        <div className={`w-${width} h-1/3`}>
-            <LineChart data={data} options={options}/>
-        </div>
-    )
+    return <LineChart className="h-full w-full" data={data} options={options}/>
 }
 
 export default Line;

@@ -1,9 +1,32 @@
 import React from 'react';
 import Header from '../components/DashBoard/Header';
+import ChartList from '../charts';
 import { PLACEHOLDER, USER_INFO } from '../constants/dashBoard';
+import { useState } from 'react';
 
 
 const DashBoard = () => {
+    const [charts, setCharts] = useState([
+        {
+            type: 'Line',
+            width: '2',
+            height: '1',
+            loinc: `29463-7` 
+        },
+        {
+            type: 'VBar',
+            width: '1',
+            height: '2',
+            loinc: `29463-7` 
+        },
+        {
+            type: 'HBar',
+            width: 'full',
+            height: '1',
+            loinc: `29463-7` 
+        },
+    ]);
+
     return (
         <div className="flex ml-24 min-h-screen bg-base-200">
 
@@ -30,18 +53,18 @@ const DashBoard = () => {
 
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <div className="bg-base-100 p-6 rounded-lg shadow h-60">
-                            <p>{PLACEHOLDER.chart}</p>
-                        </div>
+                    <div className="grid grid-cols-1 grid-rows-4 lg:grid-cols-3 gap-5">
 
-                        {Array.from({ length: 10 }).map((_, index) => (
-                            <div className="bg-base-100 p-6 rounded-lg shadow h-60">
-                                <p>
-                                    {PLACEHOLDER.placeHolder}
-                                </p>
-                            </div>
-                        ))}
+                        {
+                            charts.map((chart, idx) => {
+                                const ChartElement = ChartList[chart.type];
+                                return (
+                                    <div className={`bg-base-100 p-6 rounded-lg shadow h-60 col-span-${chart.width} row-span-${chart.height}`} key={idx}>
+                                        <ChartElement loinc={chart.loinc} />
+                                    </div>
+                                ) 
+                            })
+                        }
 
                     </div>
                 </div>

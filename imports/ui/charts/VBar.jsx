@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bar as BarChart} from 'react-chartjs-2';
+import zoomPlugin from 'chartjs-plugin-zoom';
 import {
   Chart,
   CategoryScale,
@@ -7,7 +8,6 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
 
 Chart.register(
@@ -16,32 +16,10 @@ Chart.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  zoomPlugin
 );
 
-function VBar({ xTitle, yTitle, xLabels, datasets, width }){
-    const [data, setData] = useState({
-        labels: xLabels,
-        datasets: [datasets]
-    })
-
-    const options = {
-        scales: {
-            y: {
-                title: {
-                    display: true,
-                    text: yTitle
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: xTitle
-                }
-            }
-        },
-    }
-
+function VBar({ loinc }){
     const barColors = [
         'rgb(255, 99, 132)',
         'rgb(53, 162, 235)',
@@ -51,12 +29,45 @@ function VBar({ xTitle, yTitle, xLabels, datasets, width }){
         '#734222',
         '#8673a1'
     ];
+    const [barData] = useState({
+        labels: ['Jack', 'Collin', 'Lin', 'Noah', 'Austin'],
+        datasets: [{
+            label: 'Hours Spent',
+            data: [100, 135, 189, 300, 120],
+            backgroundColor: barColors
+        }],
+    });
 
-    return ( 
-        <div className={`w-${width} h-1/3`}>
-            <BarChart data={data} options={options}/>
-        </div>
-    )
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                    },
+                    mode: 'xy',
+                }
+            }
+        },
+        scales: {
+            y: {
+                title: {
+                    display: true,
+                    text: "Hours" 
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: "Team member" 
+                }
+            }
+        }
+    }
+
+    return <BarChart data={barData} options={options} />;
 }
 
 export default VBar;
