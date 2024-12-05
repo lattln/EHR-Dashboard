@@ -56,7 +56,7 @@ const UserSettings = () => {
                         name="firstName"
                         value={settings.firstName}
                         onChange={handleChange}
-                        className="w-full p-2 border rounded"
+                        className="input input-bordered w-full"
                     />
                 </div>
                 <div>
@@ -69,7 +69,7 @@ const UserSettings = () => {
                         name="lastName"
                         value={settings.lastName}
                         onChange={handleChange}
-                        className="w-full p-2 border rounded"
+                        className="input input-bordered w-full"
                     />
                 </div>
                 <div>
@@ -82,12 +82,12 @@ const UserSettings = () => {
                         name="email"
                         value={settings.email}
                         onChange={handleChange}
-                        className="w-full p-2 border rounded"
+                        className="input input-bordered w-full"
                     />
                 </div>
                 <button
                     type="submit"
-                    className="bg-primary text-primary-content px-4 py-2 rounded mt-4"
+                    className="btn btn-primary mt-4"
                 >
                     Save Settings
                 </button>
@@ -107,7 +107,7 @@ const UserSettings = () => {
                             name="currentPassword"
                             value={settings.currentPassword}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded"
+                            className="input input-bordered w-full"
                         />
                     </div>
                     <div>
@@ -120,12 +120,12 @@ const UserSettings = () => {
                             name="newPassword"
                             value={settings.newPassword}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded"
+                            className="input input-bordered w-full"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="bg-primary text-primary-content px-4 py-2 rounded"
+                        className="btn btn-secondary"
                     >
                         Change Password
                     </button>
