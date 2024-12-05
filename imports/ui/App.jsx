@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound";
 import DevLanding from "./pages/DevLanding";
 import Layout from "./Layout";
 import Register from "./pages/LoginPages/Register";
+import UserSettings from '../ui/pages/UserSettings';
 
 // Define your routes
 const router = createBrowserRouter(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
             children: [
                 { index: true, element: <Navigate to="/dev" replace /> },
                 { path: "dashboard", element: <DashBoard /> },
+                { path: "user", element: <UserSettings /> },
             ],
         },
         { path: "/login", element: <Login /> },
