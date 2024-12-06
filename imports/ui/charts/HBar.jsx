@@ -30,6 +30,12 @@ function HBar({ loinc }){
         '#8673a1'
     ];
 
+    loinc.map((code) => {
+        Meteor.callAsync('patient.getHealthMetrics', code, 1).then((data) => {
+            console.log(data);
+        })
+    })
+
     const [barData] = useState({
         labels: ['Jack', 'Collin', 'Lin', 'Noah', 'Austin'],
         datasets: [{

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../components/DashBoard/Header';
 import ChartList from '../charts';
 import { PLACEHOLDER, USER_INFO } from '../constants/dashBoard';
@@ -9,23 +9,65 @@ const DashBoard = () => {
     const [charts, setCharts] = useState([
         {
             type: 'Line',
-            width: '2',
-            height: '1',
-            loinc: `29463-7` 
+            height: 1,
+            width: 2,
+            loinc: 'getWeightMetrics', 
+            label: 'Weight'
         },
         {
-            type: 'VBar',
-            width: '1',
-            height: '2',
-            loinc: `29463-7` 
+            type: 'Line',
+            height: 1,
+            width: 1,
+            loinc: 'getHeightMetrics', 
+            label: 'Height'
         },
         {
-            type: 'HBar',
-            width: 'full',
-            height: '1',
-            loinc: `29463-7` 
+            type: 'Line',
+            height: 1,
+            width: 2,
+            loinc: 'getDiastolicBloodPressureMetrics', 
+            label: 'Diastolic Blood Pressure'
+        },
+        {
+            type: 'Line',
+            height: 1,
+            width: 1,
+            loinc: 'getSystolicBloodPressureMetrics', 
+            label: 'Systolic Blood Pressure'
+        },
+        {
+            type: 'Line',
+            height: 1,
+            width: 1,
+            loinc: 'getBMIMetrics', 
+            label: 'BMI'
         },
     ]);
+
+    function changeSize(e, idx){
+        let width = 1;
+        let height = 1;
+        switch(e.target.value){
+            case 'med':
+                width = 2;
+                break;
+            case 'large':
+                height = 2;
+                width = 2;
+                break; 
+        }
+
+        setCharts(charts.map((c, i) => {
+            if(i === idx){
+                return { ...c, height: height, width: width }
+            } else {
+                return c;
+            }
+        }))
+    }
+
+    useEffect(() => {
+    }, [charts]);
 
     return (
         <div className="flex ml-24 min-h-screen bg-base-200">
@@ -58,9 +100,24 @@ const DashBoard = () => {
                         {
                             charts.map((chart, idx) => {
                                 const ChartElement = ChartList[chart.type];
+                                let selectedSize = 'small';
+                                if(chart.height > 1){
+                                    selectedSize = 'large';
+                                } else if(chart.width > 1){
+                                    selectedSize = 'med';
+                                }
                                 return (
-                                    <div className={`bg-base-100 p-6 rounded-lg shadow h-60 col-span-${chart.width} row-span-${chart.height}`} key={idx}>
-                                        <ChartElement loinc={chart.loinc} />
+                                    <div 
+                                        className="bg-base-100 p-6 rounded-lg shadow h-80" 
+                                        key={idx}
+                                        style={{gridColumnStart: "span " + chart.width, gridRowStart: "span " + chart.height}}
+                                    >
+                                        <ChartElement loinc={chart.loinc} label={chart.label} className='h-3/4' />
+                                        <select className='select select-bordered h-1/4' value={selectedSize} onChange={(e) => changeSize(e, idx)}>
+                                            <option value="small">Small</option>
+                                            <option value="med">Medium</option>
+                                            <option value="large">Large</option>
+                                        </select>
                                     </div>
                                 ) 
                             })

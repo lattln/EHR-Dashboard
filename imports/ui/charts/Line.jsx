@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Line as LineChart } from 'react-chartjs-2';
+import { format } from 'date-fns';
+import 'chartjs-adapter-date-fns';
 import zoomPlugin from "chartjs-plugin-zoom";
 import { 
     Chart,
-    CategoryScale,
+    TimeScale,
     LinearScale,
     PointElement,
     LineElement,
@@ -12,7 +14,7 @@ import {
 } from "chart.js";
 
 Chart.register(
-    CategoryScale,
+    TimeScale,
     LinearScale,
     PointElement,
     LineElement,
@@ -21,7 +23,7 @@ Chart.register(
     zoomPlugin
 );
 
-function Line({ loinc }){
+function Line({ label, loinc }){
     const lineColors = [
         'rgb(255, 99, 132)',
         'rgb(53, 162, 235)',
@@ -33,47 +35,17 @@ function Line({ loinc }){
     ];
 
     const [data, setData] = useState({
-        datasets: [{
-            label: 'Jack',
-            data: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            borderColor: lineColors[0]
-        },
-        {
-            label: 'Austin',
-            data: [10, 20, 30, 40, 50, 60, 70, 80, 90],
-            borderColor: lineColors[1]
-        },
-        {
-            label: 'Lin',
-            data: [9, 8, 7, 6, 5, 4, 3, 2, 1],
-            borderColor: lineColors[2]
-        },
-        {
-            label: 'Noah',
-            data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
-            borderColor: lineColors[3]
-        }],
-        labels: ['Jan', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+        datasets: []
     });
     
-    const options = {
+    const [options, setOptions] = useState({
         responsive: true,
         maintainAspectRatio: false,
-        scales: {
-            y: {
-                title: {
-                    display: true,
-                    text: "Hours" 
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: "Months" 
-                }
-            }
-        },
         plugins: {
+            title: {
+                display: true,
+                text: label
+            },
             zoom: {
                 zoom: {
                     wheel: {
@@ -83,9 +55,56 @@ function Line({ loinc }){
                 }
             }
         }
-    }
+    })
 
-    return <LineChart className="h-full w-full" data={data} options={options}/>
+    useEffect(() => {
+        let newDataset = {
+            label: label,
+            data: [],
+            pointRadius: 3,
+            pointBackgroundColor: lineColors[0],
+            borderColor: lineColors[0],
+            backgroundColor: lineColors[0]
+        }
+
+        Meteor.callAsync(`patient.${loinc}`, 1).then((dataPoints) => {
+            if(dataPoints.length < 1){
+                return;
+            }
+            dataPoints.map((dataPoint) => {
+                newDataset.data.push({ 
+                    x: format(new Date(dataPoint.dateIssued), 'y-MM-dd'),
+                    y: dataPoint.valueQuantity.value
+                })
+            })
+            setOptions({ ...options, 
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'MMM y',
+                            unit: 'month'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: dataPoints[0].valueQuantity.unit
+                        }
+                    }
+                },
+            })
+            setData({ datasets: [newDataset] });
+        })
+
+        return () => {}
+    }, [])
+
+    return <LineChart data={data} options={options}/>
 }
 
 export default Line;
