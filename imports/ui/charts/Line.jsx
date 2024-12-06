@@ -23,7 +23,7 @@ Chart.register(
     zoomPlugin
 );
 
-function Line({ label, loinc }){
+function Line({ className, label, loinc }){
     const lineColors = [
         'rgb(255, 99, 132)',
         'rgb(53, 162, 235)',
@@ -104,7 +104,11 @@ function Line({ label, loinc }){
         return () => {}
     }, [])
 
-    return <LineChart data={data} options={options}/>
+    return (
+        <div className={className}>
+            <LineChart data={data} options={options}/>
+        </div>
+    )
 }
 
 export default Line;

@@ -54,7 +54,11 @@ const DashBoard = () => {
             case 'large':
                 height = 2;
                 width = 2;
-                break; 
+                break;
+            case 'tall':
+                height = 2;
+                width = 1;
+                break;
         }
 
         setCharts(charts.map((c, i) => {
@@ -101,22 +105,25 @@ const DashBoard = () => {
                             charts.map((chart, idx) => {
                                 const ChartElement = ChartList[chart.type];
                                 let selectedSize = 'small';
-                                if(chart.height > 1){
+                                if(chart.height > 1 && chart.width > 1){
                                     selectedSize = 'large';
+                                } else if(chart.height > 1){
+                                    selectedSize = 'tall'
                                 } else if(chart.width > 1){
                                     selectedSize = 'med';
                                 }
                                 return (
                                     <div 
-                                        className="bg-base-100 p-6 rounded-lg shadow h-80" 
+                                        className="bg-base-100 p-6 rounded-lg shadow min-h-80 max-h-full" 
                                         key={idx}
                                         style={{gridColumnStart: "span " + chart.width, gridRowStart: "span " + chart.height}}
                                     >
-                                        <ChartElement loinc={chart.loinc} label={chart.label} className='h-3/4' />
-                                        <select className='select select-bordered h-1/4' value={selectedSize} onChange={(e) => changeSize(e, idx)}>
+                                        <ChartElement loinc={chart.loinc} label={chart.label} className='h-5/6' />
+                                        <select className='select select-bordered h-1/6 max-h-12' value={selectedSize} onChange={(e) => changeSize(e, idx)}>
                                             <option value="small">Small</option>
                                             <option value="med">Medium</option>
                                             <option value="large">Large</option>
+                                            <option value="tall">Tall</option>
                                         </select>
                                     </div>
                                 ) 
