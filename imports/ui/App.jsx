@@ -6,7 +6,7 @@ import NotFound from "./pages/NotFound";
 import DevLanding from "./pages/DevLanding";
 import Layout from "./Layout";
 import Register from "./pages/LoginPages/Register";
-import UserSettings from '../ui/pages/UserSettings';
+import UserSettings from './components/DashBoard/UserSettings';
 
 // Define your routes
 const router = createBrowserRouter(

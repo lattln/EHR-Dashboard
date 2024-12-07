@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
 const UserSettings = () => {
-    // Example state for managing user settings
     const [settings, setSettings] = useState({
         firstName: "John",
-        lastName: "Doe",
-        email: "johndoe@example.com",
+        lastName: "Smith",
+        email: "johnsmith@example.com",
         currentPassword: "",
         newPassword: "",
     });
