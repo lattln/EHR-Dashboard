@@ -36,7 +36,7 @@ const DashBoard = () => {
                         </div>
 
                         {Array.from({ length: 10 }).map((_, index) => (
-                            <div className="bg-base-100 p-6 rounded-lg shadow h-60">
+                            <div className="bg-base-100 p-6 rounded-lg shadow h-60" key={index}>
                                 <p>
                                     {PLACEHOLDER.placeHolder}
                                 </p>
