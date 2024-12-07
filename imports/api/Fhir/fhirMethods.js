@@ -19,11 +19,18 @@ function transformObservationInformation(response)
 
     for(let entry of response.entry){
         metrics.push({
+            loincText: entry.resource.code.text,
+            loincCode: entry.resource.code.coding.code,
             dateIssued: entry.resource.issued,
             valueQuantity: entry.resource.valueQuantity
         });
     }
     return metrics;
+
+}
+
+function transformLabInformation(response) 
+{
 
 }
 
@@ -55,6 +62,24 @@ async function getPatientHealthMetrics(loincCode, patientID) {
     }
 
     return metrics;
+}
+
+/**
+ * a function that pulls a given patient's diagnosticsreports from the fhir server and pulls the refrencing observations
+ * so that the results can be displayed visually in the recent labs section of the client dashboard
+ * @param {*} patientID 
+ */
+async function getPatientLabs(patientID) {
+    const searchResponse = await fhirClient.search({
+        resourceType: "DiagnosticReport",
+        searchParams: {
+            subject: patientID,
+            category: "LAB",
+            _sort: "-date",
+            _include: 'DiagnosticReport:result'
+        }
+    });
+
 }
 
 Meteor.methods({
