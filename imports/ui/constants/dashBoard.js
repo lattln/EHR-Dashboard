@@ -24,36 +24,35 @@ export const NAV_LINKS = [
     },
 ];
 
-export const USER_INFO =
-{
-    name:
-    {
+export const USER_INFO = {
+    name: {
         label: "Name",
-        value: "John Smith"
+        firstName: "John",
+        lastName: "Smith",
     },
-    gender:
-    {
+    email: {
+        label: "Email",
+        value: "johnsmith@example.com",
+    },
+    gender: {
         label: "Gender",
-        value: "Male"
+        value: "Male",
     },
-    birth:
-    {
+    birth: {
         label: "Birthday",
-        value: "3/12/1987"
+        value: "3/12/1987",
     },
-    physician:
-    {
+    physician: {
         label: "Physician",
-        value: "Dr. Dre"
+        value: "Dr. Dre",
     },
-    lastAppt:
-    {
+    lastAppt: {
         label: "Last Appointment",
-        value: "10/18/2024"
-    }
-}
+        value: "10/18/2024",
+    },
+};
 
 export const PLACEHOLDER = {
     chart: "Chart Placeholder",
-    placeHolder: "PLACE HOLDER BOX"
-}
+    placeHolder: "PLACE HOLDER BOX",
+};
