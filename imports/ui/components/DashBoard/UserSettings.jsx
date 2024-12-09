@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { USER_INFO } from '../../constants/dashBoard';
 
 const UserSettings = () => {
     const [settings, setSettings] = useState({
-        firstName: "John",
-        lastName: "Smith",
-        email: "johnsmith@example.com",
+        firstName: USER_INFO.name.firstName,
+        lastName: USER_INFO.name.lastName,
+        email: USER_INFO.email.value,
         currentPassword: "",
         newPassword: "",
     });

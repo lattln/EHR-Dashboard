@@ -27,7 +27,12 @@ export const NAV_LINKS = [
 export const USER_INFO = {
     name: {
         label: "Name",
-        value: "John Smith",
+        firstName: "John",
+        lastName: "Smith",
+    },
+    email: {
+        label: "Email",
+        value: "johnsmith@example.com",
     },
     gender: {
         label: "Gender",
