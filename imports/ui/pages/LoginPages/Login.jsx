@@ -1,13 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { IconEmail, IconLock } from '../../constants/svgLibrary';
 
 const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');     // lins job not mine
+    const navigate = useNavigate();
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+
+        Meteor.loginWithPassword(email, password, (err) => {
+            if (err) {
+                setError(err.reason);
+            } else {
+                setError('');
+                alert('Login sucessful!');
+                navigate('/dashboard');
+            }
+        })
+    }
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-base-200">
             <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-md bg-base-100">
                 <h2 className="text-2xl font-bold text-center text-primary">Login</h2>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleLogin}>
 
                     <div className="form-control space-y-1">
                         <div className="relative">
@@ -17,6 +36,8 @@ const Login = () => {
                             <input
                                 type="email"
                                 placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="input input-bordered w-full pl-10"
                                 required
                             />
@@ -31,6 +52,8 @@ const Login = () => {
                             <input
                                 type="password"
                                 placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 className="input input-bordered w-full pl-10"
                                 required
                             />

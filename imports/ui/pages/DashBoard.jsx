@@ -119,7 +119,7 @@ const DashBoard = () => {
 
                     <div className="grid grid-cols-3 gap-6 bg-primary rounded-lg">
                         <div className=" text-primary-content p-4">
-                            <p>{USER_INFO.name.label}: {USER_INFO.name.label}</p>
+                            <p>{USER_INFO.name.label}: {USER_INFO.name.firstName} {USER_INFO.name.lastName}</p>
                             <p>{USER_INFO.birth.label}: {USER_INFO.birth.value}</p>
                         </div>
                         <div className=" text-primary-content p-4">
