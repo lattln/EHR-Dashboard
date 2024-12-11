@@ -8,6 +8,7 @@ import {
   BarElement,
   Title,
   Tooltip,
+  Legend,
 } from 'chart.js';
 
 Chart.register(
@@ -16,10 +17,11 @@ Chart.register(
   BarElement,
   Title,
   Tooltip,
-  zoomPlugin
+  zoomPlugin,
+  Legend
 );
 
-function VBar({ loinc }){
+function VBar({ loinc, label, className }){
     const barColors = [
         'rgb(255, 99, 132)',
         'rgb(53, 162, 235)',
@@ -30,12 +32,19 @@ function VBar({ loinc }){
         '#8673a1'
     ];
     const [barData] = useState({
-        labels: ['Jack', 'Collin', 'Lin', 'Noah', 'Austin'],
-        datasets: [{
-            label: 'Hours Spent',
-            data: [100, 135, 189, 300, 120],
-            backgroundColor: barColors
-        }],
+        labels: ['LDL', 'HDL'],
+        datasets: [
+            {
+                label: 'Recommended Levels',
+                data: [160, 60],
+                backgroundColor: barColors[0] 
+            },
+            {
+                label: 'Actual Levels',
+                data: [120, 80],
+                backgroundColor: barColors[1] 
+            },
+        ],
     });
 
     const options = {
@@ -55,19 +64,17 @@ function VBar({ loinc }){
             y: {
                 title: {
                     display: true,
-                    text: "Hours" 
+                    text: "mg/dL" 
                 }
             },
-            x: {
-                title: {
-                    display: true,
-                    text: "Team member" 
-                }
-            }
         }
     }
 
-    return <BarChart data={barData} options={options} />;
+    return (
+        <div className={className}>
+            <BarChart data={barData} options={options} />;
+        </div>
+    )
 }
 
 export default VBar;
