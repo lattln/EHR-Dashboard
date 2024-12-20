@@ -163,4 +163,9 @@ Meteor.methods({
         this.unblock();
         return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID);
     },
+
+    async "patient.getRecentLabs"(patientID) {
+        this.unblock();
+        return await getPatientLabs(patientID);
+    },
 });
