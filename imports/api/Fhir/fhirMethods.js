@@ -3,9 +3,9 @@
  * these methods will take the results from the query to the server and transform it for the front end to utilize 
  * when creating graphs off of patient medical data.
  */
-const {fhirClient} = require(`./fhirclient.js`);
-const {Meteor} = require(`meteor/meteor`);
-const {LOINC_MAPPING} = require(`./../Loinc/loincConstants.js`);
+const fhirClient = require('./fhirclient.js');
+const {Meteor} = require('meteor/meteor');
+const {LOINC_MAPPING} = require('./../Loinc/loincConstants.js');
 //temporary mapping
 
 // takes only the useful information about the given observation
@@ -69,16 +69,27 @@ async function getPatientHealthMetrics(loincCode, patientID) {
  * so that the results can be displayed visually in the recent labs section of the client dashboard
  * @param {*} patientID 
  */
-async function getPatientLabs(patientID) {
-    const searchResponse = await fhirClient.search({
-        resourceType: "DiagnosticReport",
-        searchParams: {
-            subject: patientID,
-            category: "LAB",
-            _sort: "-date",
-            _include: 'DiagnosticReport:result'
-        }
-    });
+async function getPatientLabs(patientID, labReturnLimit=100) {
+
+    try {
+        let searchResponse;
+
+        searchResponse = await fhirClient.search({
+            resourceType: "DiagnosticReport",
+            searchParams: {
+                subject: patientID,
+                category: "LAB",
+                _sort: "-date",
+                _include: 'DiagnosticReport:result',
+                _count: labReturnLimit
+            }
+        });
+
+        return searchResponse;
+    }
+    catch (error) {
+        console.log(error.message);
+    }
 
 }
 
@@ -164,8 +175,8 @@ Meteor.methods({
         return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID);
     },
 
-    async "patient.getRecentLabs"(patientID) {
+    async "patient.getRecentLabs"(patientID, labReturnLimit=100) {
         this.unblock();
-        return await getPatientLabs(patientID);
+        return await getPatientLabs(patientID, labReturnLimit);
     },
 });

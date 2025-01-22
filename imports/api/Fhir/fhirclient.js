@@ -1,4 +1,4 @@
-const Client = require('fhir-kit-client');
+ let {Client} = require('fhir-kit-client');
 
 /**
  * object for accessing the specified fhir server.
@@ -10,5 +10,5 @@ const fhirClient = new Client({
 })
 
 module.exports = {
-    fhirClient
-};
+    fhirClient,
+}
