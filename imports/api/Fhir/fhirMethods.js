@@ -48,11 +48,18 @@ async function transformDiagonosticReportInformation(diagnosticsReportResource) 
 //returns the full FHIR patient record of the specified patientIdentifier
 //The patientIdentifier is not the id that the record is stored under but rather the identifier[0].value
 async function getPatientRecordByID(patientID) {
-    let response = await fhirClient.read({
-        resourceType: "Patient",
-        id: patientIdentifier
-    });
-     
+    let response;
+
+    try {
+        response = await fhirClient.read({
+            resourceType: "Patient",
+            id: patientIdentifier
+        });
+    } 
+    catch (error) {
+        console.log(error.message);
+    }
+    
     return response;
 }
 
