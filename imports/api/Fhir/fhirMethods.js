@@ -125,21 +125,6 @@ async function getRecentPatientLabs(patientID, labReturnLimit=100) {
             labs.push(await transformDiagonosticReportInformation(entry.resource))
         }
 
-        for await (const lab of labs) {
-            let observations = [];
-
-            for (const observation of lab.observations) {
-                
-                let result = await getPatientObservation(observation.reference.split("/").pop())
-                observations.push({
-                    loincText: result.code.text,
-                    loincCode: result.code.coding.code,
-                    dateIssued: result.issued,
-                    valueQuantity: result.valueQuantity
-                })
-            }
-            lab.observations = observations;
-        }
     }
     catch (error) {
         console.log(error.message);
