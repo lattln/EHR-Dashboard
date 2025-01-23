@@ -6,42 +6,68 @@
 const fhirClient = require('./fhirclient.js');
 const {Meteor} = require('meteor/meteor');
 const {LOINC_MAPPING} = require('./../Loinc/loincConstants.js');
-//temporary mapping
 
 // takes only the useful information about the given observation
-function transformObservationInformation(response)
+function transformObservationInformation(observationResource) 
 {
-    let metrics = [];
+    if (!observationResource || observationResource.resourceType !== "Observation")
+        return null;
 
-    if (!response || response.total === 0 || !response.entry) {
-        return metrics;
+    return {
+        loincText: observationResource.code.text,
+        loincCode: observationResource.code.coding.code,
+        dateIssued: observationResource.issued,
+        valueQuantity: observationResource.valueQuantity,
     }
-
-    for(let entry of response.entry){
-        metrics.push({
-            loincText: entry.resource.code.text,
-            loincCode: entry.resource.code.coding.code,
-            dateIssued: entry.resource.issued,
-            valueQuantity: entry.resource.valueQuantity
-        });
-    }
-    return metrics;
 
 }
 
-function transformLabInformation(response) 
-{
+async function transformDiagonosticReportInformation(diagnosticsReportResource) {
+    if(!diagnosticsReportResource || diagnosticsReportResource.resourceType !== "DiagnosticReport")
+        return null;
 
+    console.log(diagnosticsReportResource)
+    let resource = {
+        loincCode: diagnosticsReportResource.code.coding[0].code,
+        loincText: diagnosticsReportResource.code.coding[0].display,
+        dateIssued: diagnosticsReportResource.issued,
+        observations: diagnosticsReportResource.result
+    };
+
+    //map referenced observations to actual resources from fhir server
+    resource.observations = await Promise.all(
+        resource.observations.map(async (ref) => {
+            const observationID = ref.reference.split("/")[1]; //Observation/1
+            const observationResource = await getPatientObservation(observationID);
+            return transformObservationInformation(observationResource);
+        }));
+
+    return resource;
 }
 
 //returns the full FHIR patient record of the specified patientIdentifier
 //The patientIdentifier is not the id that the record is stored under but rather the identifier[0].value
-async function getPatientRecordByIdentifier(patientIdentifier) {
-    let response = await fhirClient.search({
+async function getPatientRecordByID(patientID) {
+    let response = await fhirClient.read({
         resourceType: "Patient",
-        searchParams: {identifier: patientIdentifier}
+        id: patientIdentifier
     });
      
+    return response;
+}
+
+async function getPatientObservation(observationID) {
+    let response;
+    try {
+        response = await fhirClient.read({
+            resourceType: "Observation",
+            id: observationID
+        })
+    }
+    catch (error) {
+        console.log(error.message)
+    }
+    
     return response;
 }
 
@@ -54,7 +80,15 @@ async function getPatientHealthMetrics(loincCode, patientID) {
             resourceType: "Observation",
             searchParams: {code: loincCode, subject: patientID},
         });
-        metrics = transformObservationInformation(response)
+
+        if (!response || response.total === 0 || !response.entry) {
+            return metrics;
+        }
+        for(let entry of response.entry){
+            metrics.push(transformObservationInformation(entry.resource));
+        }
+
+        return metrics;
 
     } 
     catch (error) {
@@ -69,8 +103,8 @@ async function getPatientHealthMetrics(loincCode, patientID) {
  * so that the results can be displayed visually in the recent labs section of the client dashboard
  * @param {*} patientID 
  */
-async function getPatientLabs(patientID, labReturnLimit=100) {
-
+async function getRecentPatientLabs(patientID, labReturnLimit=100) {
+    let labs = [];
     try {
         let searchResponse;
 
@@ -80,16 +114,37 @@ async function getPatientLabs(patientID, labReturnLimit=100) {
                 subject: patientID,
                 category: "LAB",
                 _sort: "-date",
-                _include: 'DiagnosticReport:result',
                 _count: labReturnLimit
             }
         });
 
-        return searchResponse;
+        if (!searchResponse || searchResponse.total === 0 || !searchResponse.entry)
+            return labs;
+
+        for (let entry of searchResponse.entry) {
+            labs.push(await transformDiagonosticReportInformation(entry.resource))
+        }
+
+        for await (const lab of labs) {
+            let observations = [];
+
+            for (const observation of lab.observations) {
+                
+                let result = await getPatientObservation(observation.reference.split("/").pop())
+                observations.push({
+                    loincText: result.code.text,
+                    loincCode: result.code.coding.code,
+                    dateIssued: result.issued,
+                    valueQuantity: result.valueQuantity
+                })
+            }
+            lab.observations = observations;
+        }
     }
     catch (error) {
         console.log(error.message);
     }
+    return labs
 
 }
 
@@ -98,9 +153,9 @@ Meteor.methods({
         this.unblock();
         return await getPatientHealthMetrics(loincCode, patientID);
     },
-    async "patient.getRecordByIdentifier"(patientIdentifier) {
+    async "patient.getRecordByID"(patientID) {
         this.unblock();
-        return await getPatientRecordByIdentifier(patientIdentifier);
+        return await getPatientRecordByID(patientID);
     },
     async "patient.getWeightMetrics"(patientID) {
         this.unblock();
@@ -177,6 +232,11 @@ Meteor.methods({
 
     async "patient.getRecentLabs"(patientID, labReturnLimit=100) {
         this.unblock();
-        return await getPatientLabs(patientID, labReturnLimit);
+        return await getRecentPatientLabs(patientID, labReturnLimit);
+    },
+
+    async "patient.findPatient"({patientName, patientPhoneNumber, patientDOB}) {
+        this.unblock();
+        
     },
 });
