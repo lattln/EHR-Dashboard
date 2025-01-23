@@ -61,27 +61,32 @@ async function findPatientByInfo(patientInformation) {
     let matchedPatients = [];
 
     const {patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB} = patientInformation;
-    const searchResponse = await fhirClient.search({
-        resourceType: "Patient",
-        searchParams: {
-            given: patientGivenName, 
-            family: patientFamilyName,
-            birthdate: patientDOB,
-            telecom: patientPhoneNumber
+
+    try {
+        const searchResponse = await fhirClient.search({
+            resourceType: "Patient",
+            searchParams: {
+                given: patientGivenName, 
+                family: patientFamilyName,
+                birthdate: patientDOB,
+                telecom: patientPhoneNumber
+            }
+        });
+
+        if(!searchResponse || !searchResponse.entry || searchResponse.total === 0)
+            return -1;
+    
+        if(searchResponse.total === 1)
+            return parseInt(searchResponse.entry[0].resource.id);
+    
+        for (const patient of searchResponse.entry) {
+            matchedPatients.push(parseInt(patient.resource.id));
         }
-    });
-
-    if(!searchResponse || !searchResponse.entry || searchResponse.total === 0)
-        return -1;
-
-    if(searchResponse.total === 1)
-        return parseInt(searchResponse.entry[0].resource.id);
-
-    for (const patient of searchResponse.entry) {
-        matchedPatients.push(parseInt(patient.resource.id));
+    }
+    catch (error) {
+        console.log(error.message);
     }
     return matchedPatients;
-
 }
 
 async function getPatientObservation(observationID) {
