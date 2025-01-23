@@ -3,7 +3,7 @@
  * these methods will take the results from the query to the server and transform it for the front end to utilize 
  * when creating graphs off of patient medical data.
  */
-const fhirClient = require('./fhirclient.js');
+const {fhirClient} = require('./fhirclient.js');
 const {Meteor} = require('meteor/meteor');
 const {LOINC_MAPPING} = require('./../Loinc/loincConstants.js');
 
@@ -54,6 +54,34 @@ async function getPatientRecordByID(patientID) {
     });
      
     return response;
+}
+
+async function findPatientByInfo(patientInformation) {
+
+    let matchedPatients = [];
+
+    const {patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB} = patientInformation;
+    const searchResponse = await fhirClient.search({
+        resourceType: "Patient",
+        searchParams: {
+            given: patientGivenName, 
+            family: patientFamilyName,
+            birthdate: patientDOB,
+            telecom: patientPhoneNumber
+        }
+    });
+
+    if(!searchResponse || !searchResponse.entry || searchResponse.total === 0)
+        return -1;
+
+    if(searchResponse.total === 1)
+        return parseInt(searchResponse.entry[0].resource.id);
+
+    for (const patient of searchResponse.entry) {
+        matchedPatients.push(parseInt(patient.resource.id));
+    }
+    return matchedPatients;
+
 }
 
 async function getPatientObservation(observationID) {
@@ -220,8 +248,8 @@ Meteor.methods({
         return await getRecentPatientLabs(patientID, labReturnLimit);
     },
 
-    async "patient.findPatient"({patientName, patientPhoneNumber, patientDOB}) {
+    async "patient.findByInfo"({patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB}) {
         this.unblock();
-        
+        return await findPatientByInfo({patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB})
     },
 });
