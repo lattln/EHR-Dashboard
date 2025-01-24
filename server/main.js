@@ -1,5 +1,6 @@
-import "../imports/api/Fhir/fhirMethods.js";
-import "../imports/api/Loinc/loincConstants.js"
-import "../imports/api/User/userMethods.js";
-import "../imports/api/Loinc/lioncMethods.js";
-import "../imports/startup/initRoles.js";
+import "../imports/api/Fhir/fhirMethods";
+import "../imports/api/Loinc/loincConstants.js";
+import "../imports/api/User/userMethods";
+import "../imports/api/Loinc/lioncMethods";
+import "../imports/startup/initRoles";
+import "../imports/api/OpenAI/openaiMethods.js";
