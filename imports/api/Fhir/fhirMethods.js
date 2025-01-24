@@ -53,7 +53,7 @@ async function getPatientRecordByID(patientID) {
     try {
         response = await fhirClient.read({
             resourceType: "Patient",
-            id: patientIdentifier
+            id: patientID
         });
     } 
     catch (error) {
