@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import React, { useEffect } from 'react';
 import Header from '../components/DashBoard/Header';
 import ChartList from '../charts';
@@ -71,6 +72,63 @@ const DashBoard = () => {
             label: 'Cholesterol levels (HDL, LDL)'
         }
     ]);
+
+    const generateSteps = (min, max, numSteps) => {
+        const stepSize = (max - min) / numSteps;
+        const colors = ['#FFA500', '#FFFF00', '#00FF00', '#FFFF00', '#FFA500', '#FF0000'];
+    
+        return Array.from({ length: numSteps }, (_, index) => {
+            return {
+                color: colors[index % colors.length],
+                limit: min + stepSize * (index + 1),
+                showTick: true
+            };
+        });
+    };
+
+    const fetchChartData = async (metricType) => {
+        try {
+            const response = await Meteor.callAsync('openai.send', metricType, {
+                age: USER_INFO.age,
+                weight: USER_INFO.weight,
+                gender: USER_INFO.gender,
+                height: USER_INFO.height
+            });
+    
+            if (response?.data?.min !== undefined && response?.data?.max !== undefined) {
+                setCharts(prevCharts =>
+                    prevCharts.map(chart =>
+                        chart.loinc === `get${metricType}Metrics`
+                            ? {
+                                ...chart,
+                                min: response.data.min,
+                                max: response.data.max,
+                                steps: generateSteps(response.data.min, response.data.max, 6)
+                            }
+                            : chart
+                    )
+                );
+            } else if (response?.data?.recommended !== undefined) {
+                setCharts(prevCharts =>
+                    prevCharts.map(chart =>
+                        chart.loinc === `get${metricType}Metrics`
+                            ? {
+                                ...chart,
+                                recommended: response.data.recommended
+                            }
+                            : chart
+                    )
+                );
+            }
+    
+        } catch (error) {
+            console.error(`Error fetching data for ${metricType}:`, error);
+        }
+    };
+    
+    useEffect(() => {
+        ['BMI', 'LDL', 'HDL', 'Weight', 'Height', 'Cholesterol'].forEach(metric => fetchChartData(metric));
+    }, []);
 
     function removeChart(idx){
         let newCharts = charts.toSpliced(idx, 1);

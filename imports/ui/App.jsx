@@ -7,6 +7,7 @@ import DevLanding from "./pages/DevLanding";
 import Layout from "./Layout";
 import Register from "./pages/LoginPages/Register";
 import UserSettings from './components/DashBoard/UserSettings';
+import OpenAITest from './pages/OpenAITest';
 
 // Define your routes
 const router = createBrowserRouter(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
                 { index: true, element: <Navigate to="/dev" replace /> },
                 { path: "dashboard", element: <DashBoard /> },
                 { path: "user", element: <UserSettings /> },
+                { path: "history", element: <OpenAITest />}
             ],
         },
         { path: "/login", element: <Login /> },
