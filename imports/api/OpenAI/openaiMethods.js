@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod.mjs';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 /**
@@ -133,4 +133,5 @@ Meteor.methods({
     },
 });
 
+export { callOpenAI };
 export { callOpenAI };
