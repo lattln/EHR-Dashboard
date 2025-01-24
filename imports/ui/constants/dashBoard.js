@@ -50,6 +50,14 @@ export const USER_INFO = {
         label: "Last Appointment",
         value: "10/18/2024",
     },
+    weight: {
+        label: "Weight (lbs)",
+        value: "174"
+    },
+    height: {
+        label: "Height (in.)",
+        value: "70"
+    }
 };
 
 export const PLACEHOLDER = {
