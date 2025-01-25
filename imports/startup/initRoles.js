@@ -1,6 +1,5 @@
 import { Roles } from 'meteor/alanning:roles';
-
-const roles = ['clinician', 'patient'];
+import roles from "../api/User/userRoles.js";
 
 Meteor.startup(() => {
     roles.forEach(role => {
