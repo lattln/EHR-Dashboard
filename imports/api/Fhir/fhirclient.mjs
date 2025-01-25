@@ -1,4 +1,4 @@
- let {Client} = require('fhir-kit-client');
+ import Client from 'fhir-kit-client';
 
 /**
  * object for accessing the specified fhir server.
@@ -6,9 +6,7 @@
  * server supports the actions.
  */
 const fhirClient = new Client({
-    baseUrl: `http://localhost:8080/fhir`
+    baseUrl: 'http://localhost:8080/fhir'
 })
 
-module.exports = {
-    fhirClient,
-}
+export {fhirClient}
