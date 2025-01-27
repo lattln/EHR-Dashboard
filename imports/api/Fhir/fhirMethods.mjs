@@ -3,7 +3,7 @@
  * these methods will take the results from the query to the server and transform it for the front end to utilize 
  * when creating graphs off of patient medical data.
  */
-import { fhirClient } from './fhirclient.mjs';
+import { fhirClient } from './fhirclient.js';
 import { Meteor } from 'meteor/meteor';
 import { LOINC_MAPPING } from '../Loinc/loincConstants.js';
 
@@ -45,8 +45,7 @@ async function transformDiagonosticReportInformation(diagnosticsReportResource) 
     return resource;
 }
 
-//returns the full FHIR patient record of the specified patientIdentifier
-//The patientIdentifier is not the id that the record is stored under but rather the identifier[0].value
+//returns the full FHIR patient record of the specified patientID
 async function getPatientRecordByID(patientID) {
     let response;
 
@@ -63,6 +62,13 @@ async function getPatientRecordByID(patientID) {
     return response;
 }
 
+/**
+*   Given required user information: given name, family name, phonenumber, dob. 
+*   This function will search through the fhir server to find all patient records 
+*   with all matching information. If no record is found, -1 is returned. If multiple
+    records are found, a list of IDs are returned. If only one record is found,
+*   the id of that record is returned.
+*/  
 async function findPatientByInfo(patientInformation) {
 
     let matchedPatients = [];

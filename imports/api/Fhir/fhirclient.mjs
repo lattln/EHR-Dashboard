@@ -9,4 +9,6 @@ const fhirClient = new Client({
     baseUrl: 'http://localhost:8080/fhir'
 })
 
-export {fhirClient}
+export default {
+    fhirClient,
+}

@@ -19,5 +19,3 @@ export const LOINC_MAPPING = {
     UREA_NITROGEN_BUN: `3094-0`,
     CREATININE: `2160-0`,
 };
-
-//module.exports = {LOINC_MAPPING};
