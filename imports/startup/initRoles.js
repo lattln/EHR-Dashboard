@@ -1,5 +1,5 @@
 import { Roles } from 'meteor/alanning:roles';
-import roles from "../api/User/userRoles.js";
+import { roles } from "../api/User/userRoles.js";
 
 Meteor.startup(() => {
     roles.forEach(role => {
