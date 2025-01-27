@@ -1,4 +1,4 @@
-const LOINC_MAPPING = {
+export const LOINC_MAPPING = {
     BODY_WEIGHT: `29463-7`,
     BODY_HEIGHT: `8302-2`,
     BODY_BMI: `39156-5`,
@@ -19,5 +19,3 @@ const LOINC_MAPPING = {
     UREA_NITROGEN_BUN: `3094-0`,
     CREATININE: `2160-0`,
 };
-
-module.exports = {LOINC_MAPPING};
