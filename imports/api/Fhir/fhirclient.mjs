@@ -1,4 +1,4 @@
- import { Client } from 'fhir-kit-client';
+ import Client from 'fhir-kit-client';
 
 /**
  * object for accessing the specified fhir server.
