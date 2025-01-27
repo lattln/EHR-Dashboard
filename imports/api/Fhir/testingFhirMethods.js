@@ -1,4 +1,4 @@
-const { Meteor } = require('meteor/meteor');
+import { Meteor } from 'meteor/meteor';
 
 async function main(){
     const result = await Meteor.callAsync("patient.getRecentLabs", 1, 100);

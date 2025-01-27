@@ -3,9 +3,9 @@
  * these methods will take the results from the query to the server and transform it for the front end to utilize 
  * when creating graphs off of patient medical data.
  */
-const {fhirClient} = require('./fhirclient.js');
-const {Meteor} = require('meteor/meteor');
-const {LOINC_MAPPING} = require('./../Loinc/loincConstants.js');
+import { fhirClient } from './fhirclient.js';
+import { Meteor } from 'meteor/meteor';
+import { LOINC_MAPPING } from './../Loinc/loincConstants.js';
 
 // takes only the useful information about the given observation
 function transformObservationInformation(observationResource) 
