@@ -42,10 +42,10 @@ Meteor.methods({
 
         switch (role) {
             case "patient":
-                userID = patientHandler(userInformation)
+                userID = await patientHandler(userInformation)
                 break;
             case "clinician":
-                userID = clinicianHandler(userInformation);
+                userID = await clinicianHandler(userInformation);
                 throw new Meteor.Error("Unimplemented", "Current feature is not implemented yet.");
                 break;
             case "admin":
