@@ -11,7 +11,7 @@ Accounts.onCreateUser(async (options, user) => {
   }
 
   switch (options.role) {
-    case "patient":
+    case roles.PATIENT:
       const {firstName, lastName, dob, phoneNumber} = options;
       const fhirID = await Meteor.callAsync("patient.findByInfo", {
         patientGivenName: firstName,
@@ -33,9 +33,9 @@ Accounts.onCreateUser(async (options, user) => {
       user.profile.phoneNumber = phoneNumber;
 
       break;
-    case "clinician":
+    case roles.CLINICIAN:
       break;
-    case "admin":
+    case roles.ADMIN:
       break
     default:
       throw new Meteor.Error("Invalid Role Assignment", "The role provided is invalid.")

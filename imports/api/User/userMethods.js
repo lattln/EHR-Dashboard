@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor'; 
 import { Roles } from 'meteor/alanning:roles';
+import { roles } from './userRoles';
 
 async function patientHandler(options = {firstName, lastName, email, password, phoneNumber, dob, role}) {
     if (!firstName || !lastName || !phoneNumber || !dob) {
@@ -21,8 +22,11 @@ async function patientHandler(options = {firstName, lastName, email, password, p
     return userID 
 } 
 
-function clinicianHandler(options) {
+function clinicianHandler(options = {firstName, lastName, email, password, phoneNumber, role}) {
     //TODO
+    if (!firstName || !lastName || !phoneNumber || !password) {
+        throw new Meteor.Error("Not Enough Information", "the provided user information is not enough to create a clinician account");
+    }
 }
 
 function adminHandler(options) {
@@ -41,14 +45,13 @@ Meteor.methods({
         let userID;
 
         switch (role) {
-            case "patient":
+            case roles.PATIENT:
                 userID = await patientHandler(userInformation)
                 break;
-            case "clinician":
+            case roles.CLINICIAN:
                 userID = await clinicianHandler(userInformation);
                 throw new Meteor.Error("Unimplemented", "Current feature is not implemented yet.");
-                break;
-            case "admin":
+            case roles.ADMIN:
                 throw new Meteor.Error("Unimplemented", "Current feature is not implemented yet.");
             default:
                 throw new Meteor.Error("Invalid Role Assignment", "The role provided is invalid.")
