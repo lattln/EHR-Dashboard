@@ -11,25 +11,13 @@ Accounts.onCreateUser(async (options, user) => {
 
   switch (options.role) {
     case roles.PATIENT:
-      const {firstName, lastName, dob, phoneNumber} = options;
-      const fhirID = await Meteor.callAsync("patient.findByInfo", {
-        patientGivenName: firstName,
-        patientFamilyName: lastName,
-        patientDOB: dob,
-        patientPhoneNumber: phoneNumber,
-      });
-
-      if (fhirID !== -1) {
-        user.fhirID = fhirID;
-      } 
-      else {
-        throw new Meteor.Error("Patient Not Found", "A patient with the provided information does not exist in the fhir server.");
-      }
+      const {firstName, lastName, dob, phoneNumber, fhirID} = options;
 
       user.profile.firstName = firstName;
       user.profile.lastName = lastName;
       user.profile.dob = dob;
       user.profile.phoneNumber = phoneNumber;
+      user.fhirID = options.fhirID;
 
       break;
     case roles.CLINICIAN:
