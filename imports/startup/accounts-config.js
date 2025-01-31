@@ -17,7 +17,7 @@ Accounts.onCreateUser(async (options, user) => {
       user.profile.lastName = lastName;
       user.profile.dob = dob;
       user.profile.phoneNumber = phoneNumber;
-      user.fhirID = options.fhirID;
+      user.fhirID = fhirID;
 
       break;
     case roles.CLINICIAN:
