@@ -9,6 +9,7 @@ Accounts.onCreateUser(async (options, user) => {
     user.profile = options.profile;
   }
 
+  //add any additional properties to the user object before adding it to the users collection.
   switch (options.role) {
     case roles.PATIENT:
       const {firstName, lastName, dob, phoneNumber, fhirID} = options;
