@@ -98,9 +98,9 @@ function adminHandler(options) {
 Meteor.methods({
     async 'user.signup'(userInformation) {
 
-        const {email, userName, password, role} = userInformation;
+        const {email, password, role} = userInformation;
         
-        if((!email && !userName) || !password || !role){
+        if(!email || !password || !role){
             throw new Meteor.Error("Not Enough Information", 
                 "the provided user information is not enough for account creation.")
         }
