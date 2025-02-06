@@ -30,8 +30,10 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "chai": "^5.1.2",
     "daisyui": "^4.12.14",
     "postcss": "^8.4.47",
+    "sinon": "^19.0.2",
     "tailwindcss": "^3.4.14"
   }
 }

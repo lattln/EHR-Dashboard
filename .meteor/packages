@@ -23,3 +23,4 @@ alanning:roles
 accounts-base
 accounts-password
 meteor
+meteortesting:mocha
