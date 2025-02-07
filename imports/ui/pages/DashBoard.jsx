@@ -88,6 +88,7 @@ const DashBoard = () => {
 
     const fetchChartData = async (metricType) => {
         try {
+            const s = Meteor.callAsync('patient.getRecordByIdentifier', 1)
             const response = await Meteor.callAsync('openai.send', metricType, {
                 age: USER_INFO.age,
                 weight: USER_INFO.weight,
