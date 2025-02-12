@@ -211,6 +211,14 @@ async function getRecentPatientLabs(patientID, labReturnLimit=100) {
 }
 
 Meteor.methods({
+    /**
+     * Retrieves patient health metrics based on LOINC code.
+     * @param {string} loincCode - The LOINC code for the desired health metric.
+     * @param {string} patientID - The ID of the patient.
+     * @param {number} [pageNumber=1] - The page number for paginated results.
+     * @param {number} [count=100] - The number of records per page.
+     * @returns {Promise<Array>} A list of transformed observation metrics.
+     */
     async "patient.getHealthMetrics"(loincCode, patientID, pageNumber = 1, count = 100) {
         this.unblock();
         try {
@@ -219,7 +227,11 @@ Meteor.methods({
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
-
+    /**
+     * Retrieves a full FHIR patient record by ID.
+     * @param {string} patientID - The unique ID of the patient.
+     * @returns {Promise<Object>} The patient's FHIR record.
+     */
     async "patient.getRecordByID"(patientID) {
         this.unblock();
         try {
@@ -390,7 +402,12 @@ Meteor.methods({
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
-
+    /**
+     * Retrieves the most recent lab reports for a patient.
+     * @param {string} patientID - The unique ID of the patient.
+     * @param {number} [labReturnLimit=100] - The maximum number of lab reports to retrieve.
+     * @returns {Promise<Array>} A list of recent diagnostic reports.
+     */
     async "patient.getRecentLabs"(patientID, labReturnLimit = 100) {
         this.unblock();
         try {
@@ -399,7 +416,15 @@ Meteor.methods({
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
-
+    /**
+     * Searches for a patient by given name, family name, phone number, and date of birth.
+     * @param {Object} patientInfo - An object containing patient search criteria.
+     *      @param {string} patientInfo.patientGivenName - The given name of the patient.
+     *      @param {string} patientInfo.patientFamilyName - The family name of the patient.
+     *      @param {string} patientInfo.patientPhoneNumber - The patient's phone number.
+     *      @param {string} patientInfo.patientDOB - The patient's date of birth.
+     * @returns {Promise<number|Array>} The patient ID if a single record is found, a list of IDs if multiple records are found, or -1 if no record is found.
+     */
     async "patient.findByInfo"({ patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB }) {
         this.unblock();
         try {
