@@ -33,6 +33,9 @@ async function patientHandler(
     catch (error) {
         if (error instanceof Meteor.Error) {
             throw error;
+        } else {
+            console.error(error.message);
+            throw new Meteor.Error("Account-Creation-Internal-Error");
         }
     }
     
