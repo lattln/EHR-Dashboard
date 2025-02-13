@@ -11,17 +11,19 @@ const createAdmin = async function({username, password}) {
         const rootUID = await Accounts.createUserAsync(
             {
                 username,
-                password
+                password,
+                role: UserRoles.ADMIN
             }
         );
-        await Roles.addUsersToRolesAsync(rootUID, UserRoles.ADMIN);
+        await Roles.addUsersToRolesAsync(rootUID, [UserRoles.ADMIN]);
     }
     catch (error) {
-        console.log(error.message);
+        throw error;
     }
 };
 
 const createClinician = async function({email, password, firstName, lastName}) {
+
     try {
         const clinicianUID = await Meteor.callAsync("user.signup", {
             email, 
@@ -32,20 +34,23 @@ const createClinician = async function({email, password, firstName, lastName}) {
         });
     } 
     catch (error) {
-        console.log(error.message)
+        throw error;
     }
     
 
 }
 
-Meteor.startup(async () =>{
+Meteor.startup(() =>{
 
-    await createAdmin({username: "ROOT", password: "LIGMA"});
-    await createClinician(
-        {
-            email: "johnD@gmail.com", 
-            password:"super-secure-password",
-            firstName: "John",
-            lastName: "Darksouls"
-        });
+    createAdmin({
+        username: "ROOT",
+        password: "LIGMA"
+    }).catch((err) => console.log(err));
+   
+    createClinician({
+        email: "johnD@gmail.com", 
+        password: "super-secure-password",
+        firstName: "John",
+        lastName: "Darksouls",
+    }).catch((err) => console.log(err));
 });
