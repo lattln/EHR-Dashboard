@@ -32,6 +32,7 @@ function VBar({ loinc, label, className }){
         '#8673a1'
     ];
     const [barData, setBarData] = useState({
+    const [barData, setBarData] = useState({
         labels: ['LDL', 'HDL'],
         datasets: [
             {
