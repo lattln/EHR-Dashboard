@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
 import { Roles } from 'meteor/roles';
-import { roles } from "../api/User/userRoles";
+import { UserRoles } from "../api/User/userRoles";
 
 
 //for development purposes, create initial admin account and clinician accounts here.
@@ -14,7 +14,7 @@ const createAdmin = async function({username, password}) {
                 password
             }
         );
-        await Roles.addUsersToRolesAsync(rootUID, roles.ADMIN);
+        await Roles.addUsersToRolesAsync(rootUID, UserRoles.ADMIN);
     }
     catch (error) {
         console.log(error.message);
@@ -28,7 +28,7 @@ const createClinician = async function({email, password, firstName, lastName}) {
             password, 
             firstName, 
             lastName, 
-            role: roles.CLINICIAN
+            role: UserRoles.CLINICIAN
         });
     } 
     catch (error) {

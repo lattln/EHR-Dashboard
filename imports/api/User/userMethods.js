@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor'; 
-import { Roles } from 'meteor/roles';
-import { roles } from './userRoles';
+import { Roles } from 'meteor/roles';;
+import { UserRoles } from './userRoles';
 
 async function patientHandler(
     options = {
@@ -131,13 +131,13 @@ Meteor.methods({
 
         try {
             switch (role) {
-                case roles.PATIENT:
+                case UserRoles.PATIENT:
                     userID = await patientHandler(userInformation)
                     break;
-                case roles.CLINICIAN:
+                case UserRoles.CLINICIAN:
                     userID = await clinicianHandler(userInformation);
                     break;
-                case roles.ADMIN:
+                case UserRoles.ADMIN:
                     throw new Meteor.Error("Unauthorized", 
                         "Cannot create admin accounts from this method.");
                 default:

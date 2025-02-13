@@ -1,10 +1,10 @@
-import { Roles } from 'meteor/alanning:roles';
-import { roles } from "../api/User/userRoles.js";
+import { Roles } from 'meteor/roles';
+import { UserRoles } from "../api/User/userRoles.js";
 
 Meteor.startup(async () => {
    
-    for (let role in roles) {
-        await Roles.createRoleAsync(roles[role], {unlessExists: true})
+    for (let role in UserRoles) {
+        await Roles.createRoleAsync(UserRoles[role], {unlessExists: true})
     }
 });
 
