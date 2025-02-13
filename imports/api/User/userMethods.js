@@ -2,17 +2,17 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';;
 import { UserRoles } from './userRoles';
 
-async function patientHandler(
-    options = {
-            firstName, 
-            lastName, 
-            email, 
-            password, 
-            phoneNumber, 
-            dob, 
-            role
-    }
-) {
+async function patientHandler(options) {
+    const {
+        firstName, 
+        lastName, 
+        email, 
+        password, 
+        phoneNumber, 
+        dob, 
+        role
+    } = options;
+    
     if (!firstName || !lastName || !phoneNumber || !dob) {
 
         throw new Meteor.Error("Not Enough Information", 
@@ -78,16 +78,16 @@ async function patientHandler(
     return userID 
 } 
 
-async function clinicianHandler(
-    options = {
+async function clinicianHandler(options) {
+    //TODO
+    const {
         firstName, 
         lastName, 
         email, 
         password, 
         role
-    }
-) {
-    //TODO
+    } = options;
+
     if (!firstName || !lastName ||  !password) {
         throw new Meteor.Error("Not Enough Information", 
             "the provided user information is not enough to create a clinician account");
