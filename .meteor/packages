@@ -22,4 +22,4 @@ react-meteor-data       # React higher-order component for reactively tracking M
 accounts-base@3.0.4
 accounts-password@3.0.3
 meteor@2.1.0
-roles
+alanning:roles

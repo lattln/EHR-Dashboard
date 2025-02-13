@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
-import { Roles } from 'meteor/roles';
+import { Roles } from 'meteor/alanning:roles';
 import { UserRoles } from "../api/User/userRoles";
 
 

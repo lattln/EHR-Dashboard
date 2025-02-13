@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'; 
-import { Roles } from 'meteor/roles';;
+import { Roles } from 'meteor/alanning:roles';;
 import { UserRoles } from './userRoles';
 
 async function patientHandler(
