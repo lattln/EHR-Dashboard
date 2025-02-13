@@ -5,9 +5,7 @@
     "start": "meteor run",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "test:unit": "mocha tests/unit --recursive --exit",
-    "test:integration": "mocha tests/integration --recursive --exit",
-    "test": "npm run test:unit && npm run test:integration"
+    "test": "meteor test --once --driver-package meteortesting:mocha"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
