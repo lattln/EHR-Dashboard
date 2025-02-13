@@ -174,7 +174,7 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
  * so that the results can be displayed visually in the recent labs section of the client dashboard
  * @param {*} patientID 
  */
-async function getRecentPatientLabs(patientID, pageNumber=1, count=100) {
+async function getRecentPatientLabs(patientID, pageNumber, count) {
     let labs = [];
     let offset = (pageNumber - 1) * count;
     try {
@@ -406,13 +406,14 @@ Meteor.methods({
     /**
      * Retrieves the most recent lab reports for a patient.
      * @param {string} patientID - The unique ID of the patient.
-     * @param {number} [labReturnLimit=100] - The maximum number of lab reports to retrieve.
+     * @param {number} pageNumber - The page number with count number of objects.
+     * @param {number} [count=100] - The maximum number of lab reports to retrieve per page.
      * @returns {Promise<Array>} A list of recent diagnostic reports.
      */
-    async "patient.getRecentLabs"(patientID, labReturnLimit = 100) {
+    async "patient.getRecentLabs"(patientID, pageNumber = 1, count = 100) {
         this.unblock();
         try {
-            return await getRecentPatientLabs(patientID, labReturnLimit);
+            return await getRecentPatientLabs(patientID, labReturnLimit, pageNumber, count);
         } catch (error) {
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
