@@ -1,6 +1,5 @@
 import React from 'react'
 import Hello from '../components/DevLandingPage/Hello'
-import Info from '../components/DevLandingPage/Info'
 import ThemeToggle from '../components/DevLandingPage/ThemeToggle'
 import { useNavigate } from 'react-router-dom'
 import { PAGES } from '../constants/devLanding'
@@ -19,7 +18,6 @@ const DevLanding = () => {
     return (
         <div className='px-8 py-10'>
             <Hello />
-            <Info />
             <ThemeToggle />
             <div>
                 <h1 className='text-4xl font-medium pt-3'>
