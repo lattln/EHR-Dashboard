@@ -174,12 +174,13 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
  * so that the results can be displayed visually in the recent labs section of the client dashboard
  * @param {*} patientID 
  */
-async function getRecentPatientLabs(patientID, labReturnLimit=100) {
+async function getRecentPatientLabs(patientID, pageNumber=1, count=100) {
     let labs = [];
+    let offset = (pageNumber - 1) * count;
     try {
         let searchResponse;
 
-        if (labReturnLimit <= 0) {
+        if (count <= 0 || pageNumber <= 0) {
             return labs;
         }
 
@@ -189,7 +190,8 @@ async function getRecentPatientLabs(patientID, labReturnLimit=100) {
                 subject: patientID,
                 category: "LAB",
                 _sort: "-date",
-                _count: labReturnLimit
+                _offset: offset,
+                _count: count
             }
         });
 
@@ -201,7 +203,6 @@ async function getRecentPatientLabs(patientID, labReturnLimit=100) {
         }
 
         return labs;
-
     }
     catch (error) {
         console.error(error.message);
