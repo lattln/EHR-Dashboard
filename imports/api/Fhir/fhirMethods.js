@@ -15,13 +15,12 @@ function transformObservationInformation(observationResource)
 
     return {
         loincText: observationResource.code.text,
-        loincCode: observationResource.code.coding.code,
+        loincCode: observationResource.code.coding[0].code,
         dateIssued: observationResource.issued,
         valueQuantity: observationResource.valueQuantity,
     }
 
 }
-
 async function transformDiagonosticReportInformation(diagnosticsReportResource) {
     if(!diagnosticsReportResource || diagnosticsReportResource.resourceType !== "DiagnosticReport")
         return null;
