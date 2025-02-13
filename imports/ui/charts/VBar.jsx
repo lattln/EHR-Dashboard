@@ -31,7 +31,7 @@ function VBar({ loinc, label, className }){
         '#734222',
         '#8673a1'
     ];
-    const [barData] = useState({
+    const [barData, setBarData] = useState({
         labels: ['LDL', 'HDL'],
         datasets: [
             {
@@ -69,6 +69,45 @@ function VBar({ loinc, label, className }){
             },
         }
     }
+
+    useEffect(() => {
+        async function fetchRecommendedLevels() {
+            const userData = {
+                age: 40,
+                gender: 'male'
+            }
+
+            try {
+                // this is hard coded in for LDL and HDL for now, but we should get a way
+                // to pass in the loinc/label instead
+                const ldlRes = await Meteor.callAsync('openai.getRecommended', 'LDL', userData);
+                const hdlRes = await Meteor.callAsync('openai.getRecommended', 'HDL', userData);
+
+                if (ldlRes.status === 'success' && hdlRes.status === 'success') {
+                    const ldlRecommended = ldlRes.data.recommended;
+                    const hdlRecommended = hdlRes.data.recommended;
+
+                    setBarData(prevData => {
+                        const updatedData = prevData.datasets.map(dataset => {
+                            if (dataset.label === 'Recommended Levels') {
+                                return {
+                                    ...dataset,
+                                    data: [ldlRecommended, hdlRecommended]
+                                };
+                            }
+                            return dataset;
+                        });
+                        return { ...prevData, datasets: updatedData };
+                    })
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchRecommendedLevels();
+    }, [])
 
     return (
         <div className={className}>
