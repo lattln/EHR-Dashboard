@@ -271,3 +271,5 @@ Meteor.methods({
         return await findPatientByInfo({patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB})
     },
 });
+
+module.exports = { transformObservationInformation };
