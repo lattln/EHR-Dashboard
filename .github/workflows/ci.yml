@@ -11,6 +11,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      METEOR_ALLOW_SUPERUSER: "true"
+      METEOR_DISABLE_TELEMETRY: "1"
 
     steps:
       - name: Checkout Repository
@@ -28,6 +31,4 @@ jobs:
         run: meteor npm install
 
       - name: Run Tests
-        env:
-          METEOR_DISABLE_TELEMETRY: "1"
         run: meteor test --driver-package meteortesting:mocha --once --allow-superuser
