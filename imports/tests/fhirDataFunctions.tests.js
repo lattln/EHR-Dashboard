@@ -14,7 +14,7 @@ import {
 
 describe('FHIR Data Functions', function () {
     describe('transformObservationInformation', function () {
-        it('Should return null if the resourec is null', function () {
+        it('Should return null if the resource is null', function () {
             const result = transformObservationInformation(null);
             assert.isNull(result, 'Expected null when observation is null')
         })
