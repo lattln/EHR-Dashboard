@@ -435,3 +435,5 @@ Meteor.methods({
         }
     },
 });
+
+module.exports = { transformObservationInformation };
