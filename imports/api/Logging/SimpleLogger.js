@@ -1,4 +1,4 @@
-import fs from "node:fs/promises";
+import fs from "node:fs";
 import util from "node:util";
 import path from "node:path";
 
@@ -26,18 +26,24 @@ Object.freeze(TYPE)
 export class SimpleLogger {
     TYPE = TYPE;
 
-    constructor (config){
+    constructor (config = {}){
         let {
-            fileName, //name of the file all logs will go into.
-            filePath, //path all log files should be saved under.
-            debugModeEnabled, //boolean to enable or disable debug mode.
-            fileWriteEnabled, //boolean to enable or disable file writing
+            rootFileName = undefined, //name of the file all logs will go into.
+            rootFilePath = undefined, //path all log files should be saved under.
+            debugModeEnabled = true, //boolean to enable or disable debug mode.
+            fileWriteEnabled = false, //boolean to enable or disable file writing
 
         } = config;
 
-        this.fileName = fileName;
-        this.filePath = filePath;
-        this.debug = debugModeEnabled;
+        this.config = {rootFileName, rootFilePath, debugModeEnabled, fileWriteEnabled};
+        this.writeStreams = {};
+
+        if(this.config.fileWriteEnabled){
+
+            this.writeStreams[TYPE.INFO] = this.#setUpWriteStream(TYPE.INFO);
+            this.writeStreams[TYPE.WARN] = this.#setUpWriteStream(TYPE.WARN);
+            this.writeStreams[TYPE.ERROR] = this.#setUpWriteStream(TYPE.ERROR);
+        }  
 
     }
 
@@ -47,8 +53,10 @@ export class SimpleLogger {
     }
 
     //helper function to write the formatted output into a logs file.
-    async #writeLogToFile (formattedLine) {
-
+    async #writeLogToFile (logType, formattedLine) {
+        if(this.config.fileWriteEnabled){
+            this.writeStreams[logType].write(formattedLine + "\n");
+        }
     }
 
     //helper function to print out the message into a formatted log in the terminal
@@ -56,9 +64,23 @@ export class SimpleLogger {
 
     }
 
+    //helper method that sets up the writestreams and all important listeners here.
+    #setUpWriteStream (logType) {
+        let writeStream = fs.createWriteStream(path.join(this.config.rootFilePath, `${TYPE_STRING_MAPPING[logType].toLowerCase()}.${this.rootFileName}.txt`), {flags: "a"});
+        writeStream.on("close", () => {
+
+        });
+        
+        return writeStream;
+    }
+
     //calls printline and writes to specified files.
     #log (logType, ...message) {
+        const formattedLine = printLine(logType, ...message);
+        console.log(formattedLine);
+        this.#writeLogToFile(logType, formattedLine);
 
+        
     }
 
     info (...message) {
