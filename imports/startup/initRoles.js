@@ -1,11 +1,11 @@
 import { Roles } from 'meteor/alanning:roles';
+import { UserRoles } from "../api/User/userRoles.js";
 
-const roles = ['clinician', 'patient'];
-
-Meteor.startup(() => {
-    roles.forEach(role => {
-        Roles.createRoleAsync(role, { unlessExists: true });
-    });
+Meteor.startup(async () => {
+   
+    for (let role in UserRoles) {
+        await Roles.createRoleAsync(UserRoles[role], {unlessExists: true})
+    }
 });
 
 // use Meteor.subscribe('userRoles') to access
