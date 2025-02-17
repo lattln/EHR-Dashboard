@@ -15,13 +15,12 @@ function transformObservationInformation(observationResource)
 
     return {
         loincText: observationResource.code.text,
-        loincCode: observationResource.code.coding.code,
+        loincCode: observationResource.code.coding[0].code,
         dateIssued: observationResource.issued,
         valueQuantity: observationResource.valueQuantity,
     }
 
 }
-
 async function transformDiagonosticReportInformation(diagnosticsReportResource) {
     if(!diagnosticsReportResource || diagnosticsReportResource.resourceType !== "DiagnosticReport")
         return null;
@@ -35,14 +34,21 @@ async function transformDiagonosticReportInformation(diagnosticsReportResource) 
     };
 
     //map referenced observations to actual resources from fhir server
-    resource.observations = await Promise.all(
-        resource.observations.map(async (ref) => {
-            const observationID = ref.reference.split("/")[1]; //Observation/1
-            const observationResource = await getPatientObservation(observationID);
-            return transformObservationInformation(observationResource);
-        }));
-
-    return resource;
+    try {
+        resource.observations = await Promise.all(
+            resource.observations.map(async (ref) => {
+                const observationID = ref.reference.split("/")[1]; //Observation/1
+                const observationResource = await getPatientObservation(observationID);
+                return transformObservationInformation(observationResource);
+            }));
+    
+        return resource;
+    } 
+    catch (error) {
+        console.error(error.message);
+        throw error;
+    }
+    
 }
 
 //returns the full FHIR patient record of the specified patientID
@@ -54,12 +60,13 @@ async function getPatientRecordByID(patientID) {
             resourceType: "Patient",
             id: patientID
         });
+
+        return response;
     } 
     catch (error) {
         console.log(error.message);
+        throw error;
     }
-    
-    return response;
 }
 
 /**
@@ -95,11 +102,13 @@ async function findPatientByInfo(patientInformation) {
         for (const patient of searchResponse.entry) {
             matchedPatients.push(parseInt(patient.resource.id));
         }
+
+        return matchedPatients;
     }
     catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        throw error;
     }
-    return matchedPatients;
 }
 
 async function getPatientObservation(observationID) {
@@ -109,22 +118,38 @@ async function getPatientObservation(observationID) {
             resourceType: "Observation",
             id: observationID
         })
+
+        return response;
     }
     catch (error) {
-        console.log(error.message)
+        console.error(error.message);
+        throw error;
     }
     
-    return response;
 }
 
-async function getPatientHealthMetrics(loincCode, patientID) {
+async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) {
     let response;
     let metrics = [];
+    let offset = 0;
     
     try {
+
+        if (pageNumber <= 0 || count <= 0) {
+            return metrics;
+        }
+
+        offset = (pageNumber - 1) * count;
+
         response = await fhirClient.search({
             resourceType: "Observation",
-            searchParams: {code: loincCode, subject: patientID},
+            searchParams: {
+                code: loincCode, 
+                subject: patientID,
+                _count: count,
+                _offset: offset,
+
+            },
         });
 
         if (!response || response.total === 0 || !response.entry) {
@@ -139,9 +164,8 @@ async function getPatientHealthMetrics(loincCode, patientID) {
     } 
     catch (error) {
         console.error(error.message);
+        throw error;
     }
-
-    return metrics;
 }
 
 /**
@@ -149,10 +173,15 @@ async function getPatientHealthMetrics(loincCode, patientID) {
  * so that the results can be displayed visually in the recent labs section of the client dashboard
  * @param {*} patientID 
  */
-async function getRecentPatientLabs(patientID, labReturnLimit=100) {
+async function getRecentPatientLabs(patientID, pageNumber, count) {
     let labs = [];
+    let offset = (pageNumber - 1) * count;
     try {
         let searchResponse;
+
+        if (count <= 0 || pageNumber <= 0) {
+            return labs;
+        }
 
         searchResponse = await fhirClient.search({
             resourceType: "DiagnosticReport",
@@ -160,7 +189,8 @@ async function getRecentPatientLabs(patientID, labReturnLimit=100) {
                 subject: patientID,
                 category: "LAB",
                 _sort: "-date",
-                _count: labReturnLimit
+                _offset: offset,
+                _count: count
             }
         });
 
@@ -171,104 +201,238 @@ async function getRecentPatientLabs(patientID, labReturnLimit=100) {
             labs.push(await transformDiagonosticReportInformation(entry.resource))
         }
 
+        return labs;
     }
     catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        throw error;
     }
-    return labs
 
 }
 
 Meteor.methods({
-    async "patient.getHealthMetrics"(loincCode, patientID) {
+    /**
+     * Retrieves patient health metrics based on LOINC code.
+     * @param {string} loincCode - The LOINC code for the desired health metric.
+     * @param {string} patientID - The ID of the patient.
+     * @param {number} [pageNumber=1] - The page number for paginated results.
+     * @param {number} [count=100] - The number of records per page.
+     * @returns {Promise<Array>} A list of transformed observation metrics.
+     */
+    async "patient.getHealthMetrics"(loincCode, patientID, pageNumber = 1, count = 100) {
         this.unblock();
-        return await getPatientHealthMetrics(loincCode, patientID);
+        try {
+            return await getPatientHealthMetrics(loincCode, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
     },
+    /**
+     * Retrieves a full FHIR patient record by ID.
+     * @param {string} patientID - The unique ID of the patient.
+     * @returns {Promise<Object>} The patient's FHIR record.
+     */
     async "patient.getRecordByID"(patientID) {
         this.unblock();
-        return await getPatientRecordByID(patientID);
-    },
-    async "patient.getWeightMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID);
-    },
-    async "patient.getHeightMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID);
-    },
-    async "patient.getHeartRateMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID);
-    },
-    async "patient.getBMIMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID);
-    },
-    async "patient.getSystolicBloodPressureMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID);
-    },
-    async "patient.getDiastolicBloodPressureMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID);
-    },
-    async "patient.getBodyTempMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID);
-    },
-    async "patient.getBodyOxygenSaturationMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID);
-    },
-    async "patient.getHemoglobinHGBMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID);
-    },
-    async "patient.getHemoglobinA1CMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID);
-    },
-    async "patient.getErythrocyteSedimentationRateMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID);
-    },
-    async "patient.getGlucoseSerumPlasmaMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID);
-    },
-    async "patient.getPotassiumSerumPlasmaMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID);
-    },
-    async "patient.getCholesterolTotalMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID);
-    },
-    async "patient.getLowDensityLipoproteinMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID);
-    },
-    async "patient.getHighDensityLipoproteinMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID);
-    },
-    async "patient.getUreaNitrogenBUNMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID);
-    },
-    async "patient.getCreatinineMetrics"(patientID) {
-        this.unblock();
-        return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID);
+        try {
+            return await getPatientRecordByID(patientID);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
     },
 
-    async "patient.getRecentLabs"(patientID, labReturnLimit=100) {
+    async "patient.getWeightMetrics"(patientID, pageNumber = 1, count = 100) {
         this.unblock();
-        return await getRecentPatientLabs(patientID, labReturnLimit);
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
     },
 
-    async "patient.findByInfo"({patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB}) {
+    async "patient.getHeightMetrics"(patientID, pageNumber = 1, count = 100) {
         this.unblock();
-        return await findPatientByInfo({patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB})
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getHeartRateMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getBMIMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getSystolicBloodPressureMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getDiastolicBloodPressureMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getBodyTempMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getBodyOxygenSaturationMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getHemoglobinHGBMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getHemoglobinA1CMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getErythrocyteSedimentationRateMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getGlucoseSerumPlasmaMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getPotassiumSerumPlasmaMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getCholesterolTotalMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getLowDensityLipoproteinMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getHighDensityLipoproteinMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getUreaNitrogenBUNMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+
+    async "patient.getCreatinineMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+    /**
+     * Retrieves the most recent lab reports for a patient.
+     * @param {string} patientID - The unique ID of the patient.
+     * @param {number} pageNumber - The page number with count number of objects.
+     * @param {number} [count=100] - The maximum number of lab reports to retrieve per page.
+     * @returns {Promise<Array>} A list of recent diagnostic reports.
+     */
+    async "patient.getRecentLabs"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            return await getRecentPatientLabs(patientID, labReturnLimit, pageNumber, count);
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
+    },
+    /**
+     * Searches for a patient by given name, family name, phone number, and date of birth.
+     * @param {Object} patientInfo - An object containing patient search criteria.
+     *      @param {string} patientInfo.patientGivenName - The given name of the patient.
+     *      @param {string} patientInfo.patientFamilyName - The family name of the patient.
+     *      @param {string} patientInfo.patientPhoneNumber - The patient's phone number.
+     *      @param {string} patientInfo.patientDOB - The patient's date of birth.
+     * @returns {Promise<number|Array>} The patient ID if a single record is found, a list of IDs if multiple records are found, or -1 if no record is found.
+     */
+    async "patient.findByInfo"({ patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB }) {
+        this.unblock();
+        try {
+            return await findPatientByInfo({ patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB });
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
     },
 });
 
