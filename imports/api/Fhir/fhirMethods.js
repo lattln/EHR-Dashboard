@@ -50,6 +50,13 @@ async function transformDiagonosticReportInformation(diagnosticsReportResource) 
     }
     
 }
+function getPatientAge(birthdate) {
+    const dateNow = Date.now();
+    const patientBirthDateMs = Date.parse(birthdate);
+
+    const ageDate = new Date(dateNow - patientBirthDateMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
 
 //returns the full FHIR patient record of the specified patientID
 async function getPatientRecordByID(patientID) {
@@ -60,6 +67,11 @@ async function getPatientRecordByID(patientID) {
             resourceType: "Patient",
             id: patientID
         });
+
+        if(response.birthDate)
+            response["age"] = getPatientAge(response.birthDate)
+        else 
+            response["age"] = "unknown";
 
         return response;
     } 
