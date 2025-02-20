@@ -1,11 +1,28 @@
 import pino from "pino";
 
-const mongodbTransports = pino.transport(
+const loggerTransports = pino.transport(
     {
-        target: "pino.mongodb",
-        options: {
-            uri: "mongodb://localhost:3001/logs"
-        },
+        targets: [
+            {
+                target: "pino-mongodb",
+                options: {
+                    uri: "mongodb://localhost:3001/meteor",
+                    collection: "logs",
+                    mongoOptions: {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true,
+                    },
+                    
+                },
+                level: "info",
+            },
+            {
+                target: "pino-pretty",
+                options: {colorize: true,},
+                level: "info",
+            },
+        ]
     }
 );
-const loggerInstance = pino();
+
+export const logger = pino(loggerTransports);
