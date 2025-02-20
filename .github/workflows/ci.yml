@@ -1,0 +1,34 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      METEOR_ALLOW_SUPERUSER: "true"
+      METEOR_DISABLE_TELEMETRY: "1"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Meteor
+        run: curl https://install.meteor.com/ | sh
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: meteor npm install
+
+      - name: Run Tests
+        run: meteor test --driver-package meteortesting:mocha --once --allow-superuser

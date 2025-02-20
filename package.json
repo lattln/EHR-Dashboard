@@ -17,11 +17,13 @@
     "meteor-node-stubs": "^1.2.5",
     "pino": "^9.6.0",
     "pino-mongodb": "^4.3.0",
+    "openai": "^4.85.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-gauge-component": "^1.2.62",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "zod": "^3.24.2"
   },
   "meteor": {
     "mainModule": {
@@ -32,8 +34,13 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "chai": "^5.1.2",
     "daisyui": "^4.12.14",
+    "form-data-encoder": "^4.0.2",
+    "formdata-node": "^6.0.3",
+    "node-domexception": "^2.0.1",
     "postcss": "^8.4.47",
+    "sinon": "^19.0.2",
     "tailwindcss": "^3.4.14"
   }
 }
