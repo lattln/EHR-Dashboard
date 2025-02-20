@@ -25,4 +25,14 @@ const loggerTransports = pino.transport(
     }
 );
 
-export const logger = pino(loggerTransports);
+export const logger = pino(
+    {
+        formatters: {
+            level: (label) => {return {level: label.toUpperCase()}},
+        },
+        timestamp: () => {return `,"time":"${new Date(Date.now()).toISOString()}"`;},
+        nestedKey: "payload",
+
+    },
+    loggerTransports
+);
