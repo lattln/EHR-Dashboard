@@ -108,6 +108,8 @@ async function findPatientByInfo(patientInformation) {
 
     const {patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB} = patientInformation;
 
+    logger.info(patientInformation, "searching for patient with matching information in fhir server.")
+
     try {
         const searchResponse = await fhirClient.search({
             resourceType: "Patient",
@@ -119,20 +121,27 @@ async function findPatientByInfo(patientInformation) {
             }
         });
 
-        if(!searchResponse || !searchResponse.entry || searchResponse.total === 0)
+        if(!searchResponse || !searchResponse.entry || searchResponse.total === 0) {
+            logger.warn("no patient found");
             return -1;
+        }
     
-        if(searchResponse.total === 1)
+        if(searchResponse.total === 1) {
+            logger.info(`Patient found with fhirID ${searchResponse.entry[0].resource.id}`);
             return parseInt(searchResponse.entry[0].resource.id);
-    
+        }
+
         for (const patient of searchResponse.entry) {
             matchedPatients.push(parseInt(patient.resource.id));
         }
 
+        if (matchedPatients.length > 1)
+            logger.warn("Multiple patients found matching information.")
+
         return matchedPatients;
     }
     catch (error) {
-        console.error(error.message);
+        logger.error(error.message);
         throw error;
     }
 }
@@ -144,11 +153,11 @@ async function getPatientObservation(observationID) {
             resourceType: "Observation",
             id: observationID
         })
+        logger.info(`Getting observation # ${observationID}`)
 
         return response;
     }
     catch (error) {
-        console.error(error.message);
         throw error;
     }
     
@@ -203,8 +212,6 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
 
     } 
     catch (error) {
-        console.error(error.message);
-        logger.error(error);
         throw error;
     }
 }
@@ -246,7 +253,6 @@ async function getRecentPatientLabs(patientID, pageNumber, count) {
         return labs;
     }
     catch (error) {
-        console.error(error.message);
         throw error;
     }
 
