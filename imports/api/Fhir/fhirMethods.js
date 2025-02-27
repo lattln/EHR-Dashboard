@@ -11,17 +11,30 @@ import { LOINC_MAPPING } from '../Loinc/loincConstants.js';
 // takes only the useful information about the given observation
 function transformObservationInformation(observationResource) 
 {
+    let valueQuantities;
+
     if (!observationResource || observationResource.resourceType !== "Observation")
         return null;
+
+    if (observationResource.component && Array.isArray(observationResource.component)) {
+        valueQuantities = observationResource.component.map((subObservation) => {
+            return {
+                loincCode: subObservation.code.coding[0].code,
+                loincText: subObservation.code.coding[0].display,
+                valueQuantity: subObservation.valueQuantity
+            }
+        })
+    }
 
     return {
         loincText: observationResource.code.text,
         loincCode: observationResource.code.coding[0].code,
         dateIssued: observationResource.issued,
-        valueQuantity: observationResource.valueQuantity,
+        valueQuantities: observationResource.valueQuantity ? [observationResource.valueQuantity] : valueQuantities
     }
 
 }
+
 async function transformDiagonosticReportInformation(diagnosticsReportResource) {
     if(!diagnosticsReportResource || diagnosticsReportResource.resourceType !== "DiagnosticReport")
         return null;
@@ -148,9 +161,20 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
     
     try {
 
+        if (!(loincCode && patientID && pageNumber && count)) {
+            return metrics;
+        }
+
+        //join loincCodes in a string seperated by "," and retrieve observations with the loinc Codes.
+        if (Array.isArray(loincCode)) {
+            loincCode = loincCode.join(",");
+        }
+        
+
         if (pageNumber <= 0 || count <= 0) {
             return metrics;
         }
+
 
         offset = (pageNumber - 1) * count;
 
@@ -226,7 +250,7 @@ async function getRecentPatientLabs(patientID, pageNumber, count) {
 Meteor.methods({
     /**
      * Retrieves patient health metrics based on LOINC code.
-     * @param {string} loincCode - The LOINC code for the desired health metric.
+     * @param {string or array[string]} loincCode - The LOINC code for the desired health metric. Can include a list of loincCodes.
      * @param {string} patientID - The ID of the patient.
      * @param {number} [pageNumber=1] - The page number for paginated results.
      * @param {number} [count=100] - The number of records per page.
@@ -289,20 +313,11 @@ Meteor.methods({
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
-
-    async "patient.getSystolicBloodPressureMetrics"(patientID, pageNumber = 1, count = 100) {
+    
+    async "patient.getBloodPressureMetrics"(patientID, pageNumber = 1, count = 100) {
         this.unblock();
         try {
-            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID, pageNumber, count);
-        } catch (error) {
-            throw new Meteor.Error("FHIR-Server-Error", error.message);
-        }
-    },
-
-    async "patient.getDiastolicBloodPressureMetrics"(patientID, pageNumber = 1, count = 100) {
-        this.unblock();
-        try {
-            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID, pageNumber, count);
+            return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE, patientID, pageNumber, count);
         } catch (error) {
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
