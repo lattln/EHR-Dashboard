@@ -5,4 +5,5 @@ import "../imports/api/User/userMethods";
 import "../imports/startup/accounts-config.js"
 import "../imports/startup/initRoles";
 import "../imports/startup/initUsers.js"
-import "../imports/api/OpenAI/openaiMethods.js";
+import "../imports/api/OpenAI/openaiMethods";
+import "../imports/api/Ozwell/ozwellMethods.js";
