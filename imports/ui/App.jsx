@@ -1,12 +1,12 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import Login from "./pages/LoginPages/Login";
-import DashBoard from "./pages/DashBoard";
+import { AnimatePresence } from "framer-motion";
+import AuthPage from "./pages/LoginPages/AuthPage";
+import DashBoard from "./pages/DashBoard/DashBoard";
 import NotFound from "./pages/NotFound";
-import DevLanding from "./pages/DevLanding";
+import DevLanding from "./pages/DevLandingPage/DevLanding";
 import Layout from "./Layout";
-import Register from "./pages/LoginPages/Register";
-import UserSettings from './components/DashBoard/UserSettings';
+import UserSettings from './pages/DashBoard/Components/UserSettings';
 
 // Define your routes
 const router = createBrowserRouter(
@@ -20,8 +20,7 @@ const router = createBrowserRouter(
                 { path: "user", element: <UserSettings /> },
             ],
         },
-        { path: "/login", element: <Login /> },
-        { path: "/register", element: <Register /> },
+        { path: "/auth", element: <AuthPage /> },
         { path: "dev", element: <DevLanding /> },
         { path: "*", element: <NotFound /> },
     ],
@@ -39,7 +38,11 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-    return <RouterProvider router={router} />;
+    return (
+        <AnimatePresence>
+                <RouterProvider router={router} />;
+        </AnimatePresence>
+    )
 };
 
 export default App;

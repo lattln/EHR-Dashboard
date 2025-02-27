@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import SideNavBar from './components/DashBoard/SideNavBar'
+import SideNavBar from './pages/DashBoard/Components/SideNavBar'
 
 
 const Layout = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { NAV_LINKS } from '../../constants/dashBoard'
+import { NAV_LINKS } from '../../../constants/dashBoard'
 
 const SideNavBar = () => {
     return (

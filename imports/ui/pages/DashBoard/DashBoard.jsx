@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import Header from '../components/DashBoard/Header';
-import ChartList from '../charts';
-import { PLACEHOLDER, USER_INFO } from '../constants/dashBoard';
-import { IconSave } from '../constants/svgLibrary';
+import Header from './Components/Header';
+import ChartList from '../../charts';
+import { PLACEHOLDER, USER_INFO } from '../../constants/dashBoard';
+import { IconSave } from '../../constants/svgLibrary';
 import { useState } from 'react';
 
 

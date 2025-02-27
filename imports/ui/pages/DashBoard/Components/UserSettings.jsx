@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { USER_INFO } from '../../constants/dashBoard';
+import { USER_INFO } from '../../../constants/dashBoard';
 
 const UserSettings = () => {
     const [settings, setSettings] = useState({
