@@ -27,12 +27,8 @@ const loggerTransports = pino.transport(
 
 export const logger = pino(
     {
-        formatters: {
-            level: (label) => {return {level: label.toUpperCase()}},
-        },
-        timestamp: () => {return `,"time":"${new Date(Date.now()).toISOString()}"`;},
+        timestamp: pino.stdTimeFunctions.isoTime,
         nestedKey: "payload",
-
     },
     loggerTransports
 );
