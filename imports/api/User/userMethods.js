@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'; 
 import { Roles } from 'meteor/alanning:roles';
 import { UserRoles } from './userRoles';
+import { logger } from '../Logging/logger-config';
 
 async function patientHandler(options) {
     const {
@@ -14,9 +15,11 @@ async function patientHandler(options) {
     } = options;
     
     if (!firstName || !lastName || !phoneNumber || !dob) {
-
-        throw new Meteor.Error("Not Enough Information", 
+        
+        let error =  new Meteor.Error("Not Enough Information", 
             "the provided user information is not enough to create a patient account");
+        logger.error(error, error.reason);
+        throw error;
     }
 
     let fhirID = 0;
@@ -32,9 +35,10 @@ async function patientHandler(options) {
     } 
     catch (error) {
         if (error instanceof Meteor.Error) {
+            logger.error(error, error.reason);
             throw error;
         } else {
-            console.error(error.message);
+            logger.error(error, error.message);
             throw new Meteor.Error("Account-Creation-Internal-Error");
         }
     }
@@ -62,7 +66,7 @@ async function patientHandler(options) {
             });
     }
     catch (error){
-        console.error(error.message);
+        logger.error(error);
         if (error.error === 403 && error.reason === 'Email already exists.') {
             throw new Meteor.Error('Email Already Exists', 
                 'The email address is already in use. Please use a different email.');
@@ -89,13 +93,18 @@ async function clinicianHandler(options) {
     } = options;
 
     if (!firstName || !lastName ||  !password) {
-        throw new Meteor.Error("Not Enough Information", 
+
+        let error = new Meteor.Error("Not Enough Information", 
             "the provided user information is not enough to create a clinician account");
+        logger.error(error, error.reason);
+        throw error;
     }
 
     let userID;
     try {
+        logger.info(`Attempting clinician creation`)
         userID = await Accounts.createUserAsync(options);
+        logger.info(`successfully created clinician account for ${userID}`);
     }
     catch (error) {
         if (error.error === 403 && error.reason === 'Email already exists.') {
@@ -106,7 +115,7 @@ async function clinicianHandler(options) {
             throw error;
         }
         else {
-            console.error(error.message);
+            logger.error(error, error.message);
             throw new Meteor.Error("Account-Creation-Internal-Error", "Something unexpected happened");
         }
     }
@@ -120,11 +129,17 @@ function adminHandler(options) {
 Meteor.methods({
     async 'user.signup'(userInformation) {
 
+        logger.info("beginning user creation via user.signup")
+
         const {email, password, role} = userInformation;
         
         if(!email || !password || !role){
-            throw new Meteor.Error("Not Enough Information", 
-                "the provided user information is not enough for account creation.")
+
+            let error = new Meteor.Error("Not Enough Information", 
+                "the provided user information is not enough for account creation.");
+            logger.error(error, error.message);
+            throw error;
+
         }
         //let userId = Accounts.createUser({ email, password, firstName, lastName, dob, phoneNumber});
         let userID;
@@ -132,9 +147,11 @@ Meteor.methods({
         try {
             switch (role) {
                 case UserRoles.PATIENT:
-                    userID = await patientHandler(userInformation)
+                    logger.info(`patient user creation starting.`)
+                    userID = await patientHandler(userInformation);
                     break;
                 case UserRoles.CLINICIAN:
+                    logger.info(`clinician user creation starting.`)
                     userID = await clinicianHandler(userInformation);
                     break;
                 case UserRoles.ADMIN:
@@ -146,12 +163,12 @@ Meteor.methods({
             }
     
             await Roles.addUsersToRolesAsync(userID, [role]);
-            console.log(`${userID} given role: ${role}.`);
-            console.log(`User created with id: ${userID} and role ${role}.`);   // this should be logged later on
+            logger.info(`User created with id: ${userID} and role ${role}.`);   // this should be logged later on
             return userID;
         }
         catch (error) {
             if (error instanceof Meteor.Error) {
+                logger.error(error, error.reason);
                 throw error;
             }
         }

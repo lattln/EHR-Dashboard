@@ -160,8 +160,10 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
     let offset = 0;
     
     try {
+        logger.info({loincCode, patientID, pageNumber, count}, `Getting Health Metrics for Patient/${patientID}`);
 
         if (!(loincCode && patientID && pageNumber && count)) {
+            logger.warn("Required health metric arguments were not present.");
             return metrics;
         }
 
@@ -172,6 +174,7 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
         
 
         if (pageNumber <= 0 || count <= 0) {
+            logger.warn("Page number and count out of bounds.");
             return metrics;
         }
 
@@ -201,6 +204,7 @@ async function getPatientHealthMetrics(loincCode, patientID, pageNumber, count) 
     } 
     catch (error) {
         console.error(error.message);
+        logger.error(error);
         throw error;
     }
 }
@@ -214,6 +218,7 @@ async function getRecentPatientLabs(patientID, pageNumber, count) {
     let labs = [];
     let offset = (pageNumber - 1) * count;
     try {
+        logger.info({patientID: patientID, pageNumber: pageNumber, count: count}, `retrieving patient labs for Patient/${patientID}`)
         let searchResponse;
 
         if (count <= 0 || pageNumber <= 0) {
@@ -261,6 +266,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(loincCode, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -274,6 +280,7 @@ Meteor.methods({
         try {
             return await getPatientRecordByID(patientID);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -283,6 +290,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -292,6 +300,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -301,6 +310,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -310,6 +320,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -319,6 +330,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -328,6 +340,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -337,6 +350,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -346,6 +360,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -355,6 +370,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -364,6 +380,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -373,6 +390,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -382,6 +400,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -391,6 +410,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -400,6 +420,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -409,6 +430,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -418,6 +440,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -427,6 +450,7 @@ Meteor.methods({
         try {
             return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -442,6 +466,7 @@ Meteor.methods({
         try {
             return await getRecentPatientLabs(patientID, labReturnLimit, pageNumber, count);
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
@@ -459,6 +484,7 @@ Meteor.methods({
         try {
             return await findPatientByInfo({ patientGivenName, patientFamilyName, patientPhoneNumber, patientDOB });
         } catch (error) {
+            logger.error(error, "FHIR-Server-Error");
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
