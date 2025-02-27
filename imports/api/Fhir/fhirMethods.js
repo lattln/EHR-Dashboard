@@ -5,6 +5,7 @@
  */
 import { fhirClient } from './fhirclient.js';
 import { Meteor } from 'meteor/meteor';
+import { logger } from '../Logging/logger-config.js';
 import { LOINC_MAPPING } from '../Loinc/loincConstants.js';
 
 // takes only the useful information about the given observation
