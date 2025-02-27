@@ -132,3 +132,5 @@ Meteor.methods({
         }
     },
 });
+
+export { callOpenAI };

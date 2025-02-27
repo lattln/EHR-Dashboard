@@ -60,7 +60,7 @@ function Gauge({ max, min, loinc, className, label }){
                     height: height,
                     weight: weight
                 }
-                const rangeRes = await Meteor.callAsync('openai.getMinMax', label, userData);
+                const rangeRes = await Meteor.callAsync('ozwell.getMinMax', label, userData);
                 
                 if (rangeRes.status === 'success') {
                     setGaugeMax(rangeRes.data.max);

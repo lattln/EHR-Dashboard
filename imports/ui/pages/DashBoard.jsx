@@ -5,7 +5,7 @@ import ChartList from '../charts';
 import { PLACEHOLDER, USER_INFO } from '../constants/dashBoard';
 import { IconSave } from '../constants/svgLibrary';
 import { useState } from 'react';
-
+import Summary from '../components/DashBoard/Summary';
 
 const DashBoard = () => {
     const [charts, setCharts] = useState([
@@ -100,6 +100,8 @@ const DashBoard = () => {
                             <IconSave className="hover:fill-secondary hover:cursor-pointer" onClick={saveCharts} />
                         </div>
                     </div>
+
+                    <Summary />
 
                     <div className="grid grid-cols-1 grid-rows-4 lg:grid-cols-3 gap-5">
 
