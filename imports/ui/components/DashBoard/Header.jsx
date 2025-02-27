@@ -17,7 +17,6 @@ const Header = () => {
                     className="input input-bordered w-48"
                     onChange={handleInputChange}
                 />
-                <button onClick={handleSend} style={{ marginLeft: '10px' }}>Send to OpenAI</button>
             </div>
         </div>
     );
