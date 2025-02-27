@@ -80,8 +80,8 @@ function VBar({ loinc, label, className }){
             try {
                 // this is hard coded in for LDL and HDL for now, but we should get a way
                 // to pass in the loinc/label instead
-                const ldlRes = await Meteor.callAsync('openai.getRecommended', 'LDL', userData);
-                const hdlRes = await Meteor.callAsync('openai.getRecommended', 'HDL', userData);
+                const ldlRes = await Meteor.callAsync('ozwell.getRecommended', 'LDL', userData);
+                const hdlRes = await Meteor.callAsync('ozwell.getRecommended', 'HDL', userData);
 
                 if (ldlRes.status === 'success' && hdlRes.status === 'success') {
                     const ldlRecommended = ldlRes.data.recommended;
