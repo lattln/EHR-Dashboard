@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PAGES } from "../../constants/devLanding";
+import { PAGES } from "./ComponentsAndConstants/devLanding";
 
 const DevLanding = () => {
     const nav = useNavigate();

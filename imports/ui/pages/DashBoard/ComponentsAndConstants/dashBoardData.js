@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconHome, IconHistory, IconUser, IconSetting } from './svgLibrary';
+import { IconHome, IconHistory, IconUser, IconSetting } from '../../svgLibrary';
 
 export const NAV_LINKS = [
     {

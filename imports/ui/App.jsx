@@ -1,23 +1,36 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import AuthPage from "./pages/LoginPages/AuthPage";
 import DashBoard from "./pages/DashBoard/DashBoard";
 import NotFound from "./pages/NotFound";
 import DevLanding from "./pages/DevLandingPage/DevLanding";
-import Layout from "./Layout";
-import UserSettings from './pages/DashBoard/Components/UserSettings';
+import UserSettings from './pages/DashBoard/ComponentsAndConstants/UserSettings';
+import SideNavBar from "./pages/DashBoard/ComponentsAndConstants/SideNavBar";
 
-// Define your routes
+
+const AppLayout = () => (
+    <>
+        <div className="hidden sm:flex">
+            <SideNavBar />
+        </div>
+
+        <div className="ml-0 sm:ml-60">
+            <Outlet />
+        </div>
+    </>
+)
+
 const router = createBrowserRouter(
     [
         {
             path: "/",
-            element: <Layout />,
+            element: <AppLayout />,
             children: [
                 { index: true, element: <Navigate to="/dev" replace /> },
                 { path: "dashboard", element: <DashBoard /> },
                 { path: "user", element: <UserSettings /> },
+                { path: "*", element: <NotFound />},
             ],
         },
         { path: "/auth", element: <AuthPage /> },
@@ -40,7 +53,7 @@ const router = createBrowserRouter(
 const App = () => {
     return (
         <AnimatePresence>
-                <RouterProvider router={router} />;
+            <RouterProvider router={router} />;
         </AnimatePresence>
     )
 };

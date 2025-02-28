@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { IconEmail, IconLock, IconLockRepeat, IconUser } from "../../../constants/svgLibrary";
-
-// Framer Motion Animations
-const pageVariants = {
-    initial: { opacity: 0, x: 5 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -50 }
-};
+import { IconEmail, IconLock, IconLockRepeat, IconUser } from "../../svgLibrary";
 
 const Register = ({ toggleAuth }) => {
     const [username, setUsername] = useState("");

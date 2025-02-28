@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+import Login from "./ComponentsAndConstants/Login";
+import Register from "./ComponentsAndConstants/Register";
 
 // Framer Motion Variants
 const pageVariants = {
@@ -14,7 +14,7 @@ const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
 
     return (
-        <div className="h-screen w-screen bg-gray-100 flex items-center justify-center">
+        <div className="h-screen w-screen bg-gray-100 flex items-center justify-center p-8">
             <motion.div
                 layout
                 initial={{ opacity: 0, scale: 0.85 }}
