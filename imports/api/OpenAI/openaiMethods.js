@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod.mjs';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY || Meteor.settings.OPENAI_API_KEY
 });
 
 /**
@@ -34,8 +34,8 @@ async function callOpenAI(prompt, schema) {
     });
 
     const textResponse = response.choices[0].message.content.trim();
-    let parsedData;
 
+    let parsedData;
     try {
         parsedData = JSON.parse(textResponse);
     } catch (parseError) {

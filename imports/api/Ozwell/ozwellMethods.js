@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { callOpenAI } from '../OpenAI/openaiMethods.js';
+import { z } from 'zod';
 
 async function callOzwell(prompt, schema) {
     try {
@@ -61,12 +62,12 @@ async function callOzwell(prompt, schema) {
  * @param {*} schema 
  * @returns 
  */
-async function fallbackCall(prompt, schema) {
+async function fallbackCall(prompt, schema, fallbackSchema) {
     try {
         return await callOzwell(prompt, schema);
     } catch (ozwellError) {
         console.error("Ozwell failed, falling back to OpenAI:", ozwellError);
-        return await callOpenAI(prompt, schema);
+        return await callOpenAI(prompt, fallbackSchema);
     }
 }
 
@@ -90,8 +91,12 @@ Meteor.methods({
                 'type': 'number'
             }
         }
+        const fallbackSchema = z.object({
+            min: z.number().optional(),
+            max: z.number().optional()
+        });
 
-        const parsedData = await fallbackCall(prompt, schema);
+        const parsedData = await fallbackCall(prompt, schema, fallbackSchema);
         
         if (parsedData.min !== undefined && parsedData.max !== undefined) {
             return {
@@ -120,8 +125,11 @@ Meteor.methods({
                 'type': 'number'
             },
         }
+        const fallbackSchema = z.object({
+            recommended: z.number()
+        })
 
-        const parsedData = await fallbackCall(prompt, schema);
+        const parsedData = await fallbackCall(prompt, schema, fallbackSchema);
 
         if (parsedData.recommended !== undefined) {
             return {
@@ -136,33 +144,34 @@ Meteor.methods({
     },
 
     async 'ozwell.getSummary'(payload) {
-        // payload validation; each value can be optional in the event one of the calls failed
+        // really ugly check statement to type check
+        // everything here is optional, but maybe we dont want them to be
         check(payload, {
-            age: Number,
-            gender: String,
-            weight: Number,
-            height: Number,
-            bloodPressure: {
-                systolic: Match.OneOf(Number, null),
-                diastolic: Match.OneOf(Number, null),
-            },
-            heartRate: Match.OneOf(Number, null),
-            BMI: Match.OneOf(Number, null),
-            labResults: {
-                bodyTemp: Match.OneOf(Number, null),
-                oxygenSaturation: Match.OneOf(Number, null),
-                hemoglobin: Match.OneOf(Number, null),
-                hemoglobinA1C: Match.OneOf(Number, null),
-                ESR: Match.OneOf(Number, null),
-                glucose: Match.OneOf(Number, null),
-                potassium: Match.OneOf(Number, null),
-                cholesterolTotal: Match.OneOf(Number, null),
-                LDL: Match.OneOf(Number, null),
-                HDL: Match.OneOf(Number, null),
-                BUN: Match.OneOf(Number, null),
-                creatinine: Match.OneOf(Number, null),
-            }
-          });
+            age: Match.Maybe(Number),
+            gender: Match.Maybe(String),
+            weight: Match.Maybe(Number),
+            height: Match.Maybe(Number),
+            bloodPressure: Match.Maybe({
+                systolic: Match.Maybe(Match.OneOf(Number, null)),
+                diastolic: Match.Maybe(Match.OneOf(Number, null)),
+            }),
+            heartRate: Match.Maybe(Match.OneOf(Number, null)),
+            BMI: Match.Maybe(Match.OneOf(Number, null)),
+            labResults: Match.Maybe({
+                bodyTemp: Match.Maybe(Match.OneOf(Number, null)),
+                oxygenSaturation: Match.Maybe(Match.OneOf(Number, null)),
+                hemoglobin: Match.Maybe(Match.OneOf(Number, null)),
+                hemoglobinA1C: Match.Maybe(Match.OneOf(Number, null)),
+                ESR: Match.Maybe(Match.OneOf(Number, null)),
+                glucose: Match.Maybe(Match.OneOf(Number, null)),
+                potassium: Match.Maybe(Match.OneOf(Number, null)),
+                cholesterolTotal: Match.Maybe(Match.OneOf(Number, null)),
+                LDL: Match.Maybe(Match.OneOf(Number, null)),
+                HDL: Match.Maybe(Match.OneOf(Number, null)),
+                BUN: Match.Maybe(Match.OneOf(Number, null)),
+                creatinine: Match.Maybe(Match.OneOf(Number, null)),
+            }),
+        });
 
         // building the prompt; each field is using the medical abbreviation to minimiaze the amount of tokens used per-call
         const prompt =
@@ -195,8 +204,11 @@ Meteor.methods({
                 'type': 'string'
             }
         }
+        const fallbackSchema = z.object({
+            summary: z.string()
+        });
 
-        const parsedData = await fallbackCall(prompt, schema);
+        const parsedData = await fallbackCall(prompt, schema, fallbackSchema);
 
         if (parsedData.summary !== undefined) {
             return {

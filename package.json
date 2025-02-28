@@ -5,7 +5,7 @@
     "start": "meteor run",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "test": "meteor test --once --driver-package meteortesting:mocha"
+    "test": "meteor test --once --driver-package meteortesting:mocha --settings settings.json"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
@@ -15,10 +15,9 @@
     "chartjs-plugin-zoom": "^2.1.0",
     "date-fns": "^4.1.0",
     "fhir-kit-client": "^1.9.2",
-    "meteor-node-stubs": "^1.2.5",
-    "openai": "^4.85.0",
+    "meteor-node-stubs": "^1.2.13",
     "mocha": "^11.1.0",
-    "openai": "^4.80.0",
+    "openai": "^4.85.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",

@@ -446,69 +446,81 @@ Meteor.methods({
             throw new Meteor.Error("FHIR-Server-Error", error.message);
         }
     },
-    async "patient.getSummaryMetrics"(patientID) {
-        this.unblock();
 
-        const [
-            weightMetrics,
-            heightMetrics,
-            systolicMetrics,
-            diastolicMetrics,
-            heartRateMetrics,
-            BMIMetrics,
-            bodyTempMetrics,
-            oxygenSaturationMetrics,
-            hemoglobinMetrics,
-            hemoglobinA1CMetrics,
-            ESRMetrics,
-            glucoseMetrics,
-            potassiumMetrics,
-            cholesterolTotalMetrics,
-            LDLMetrics,
-            HDLMetrics,
-            BUNMetrics,
-            creatinineMetrics
-        ] = await Promise.all([
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID),
-            getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID)
-        ]);
-    
-        return {
-            weightMetrics,
-            heightMetrics,
-            systolicMetrics,
-            diastolicMetrics,
-            heartRateMetrics,
-            BMIMetrics,
-            bodyTempMetrics,
-            oxygenSaturationMetrics,
-            hemoglobinMetrics,
-            hemoglobinA1CMetrics,
-            ESRMetrics,
-            glucoseMetrics,
-            potassiumMetrics,
-            cholesterolTotalMetrics,
-            LDLMetrics,
-            HDLMetrics,
-            BUNMetrics,
-            creatinineMetrics
-        };
+    /**
+     * Used exclusively to wrap the important bits into a single payload for
+     * Ozwell/OpenAI health summaries
+     * 
+     * @param {number} patientID - A unique identifier for a patient
+     * @param {number} pageNumber - The page number with count number of objects.
+     * @param {number} [count=100] - The maximum number of lab reports to retrieve per page.
+     * @returns 
+     */
+    async "patient.getSummaryMetrics"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+        try {
+            const [
+                weightMetrics,
+                heightMetrics,
+                systolicMetrics,
+                diastolicMetrics,
+                heartRateMetrics,
+                BMIMetrics,
+                bodyTempMetrics,
+                oxygenSaturationMetrics,
+                hemoglobinMetrics,
+                hemoglobinA1CMetrics,
+                ESRMetrics,
+                glucoseMetrics,
+                potassiumMetrics,
+                cholesterolTotalMetrics,
+                LDLMetrics,
+                HDLMetrics,
+                BUNMetrics,
+                creatinineMetrics
+            ] = await Promise.all([
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_WEIGHT, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_SYSTOLIC, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE_DIASTOLIC, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID, pageNumber, count),
+                getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID, pageNumber, count)
+            ]);
+            return {
+                weightMetrics,
+                heightMetrics,
+                systolicMetrics,
+                diastolicMetrics,
+                heartRateMetrics,
+                BMIMetrics,
+                bodyTempMetrics,
+                oxygenSaturationMetrics,
+                hemoglobinMetrics,
+                hemoglobinA1CMetrics,
+                ESRMetrics,
+                glucoseMetrics,
+                potassiumMetrics,
+                cholesterolTotalMetrics,
+                LDLMetrics,
+                HDLMetrics,
+                BUNMetrics,
+                creatinineMetrics
+            };
+        } catch (error) {
+            throw new Meteor.Error("FHIR-Server-Error", error.message);
+        }
     }
 });
 
