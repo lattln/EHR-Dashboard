@@ -70,6 +70,7 @@ export async function getPatientRecordByID(patientID) {
     let response;
 
     try {
+        logger.info({patientID: patientID}, "retrieving patient record from FHIR server.")
         response = await fhirClient.read({
             resourceType: "Patient",
             id: patientID
