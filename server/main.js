@@ -6,4 +6,5 @@ import "../imports/api/Logging/Server/logger-config.js";
 import "../imports/startup/Server/accounts-config.js";
 import "../imports/startup/Server/initRoles.js";
 import "../imports/startup/Server/initUsers.js";
+import "../imports/api/User/Server/UserUtils.js"
 

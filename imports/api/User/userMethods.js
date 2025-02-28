@@ -5,7 +5,7 @@ import { Roles } from 'meteor/alanning:roles';
 Meteor.methods({
     async 'user.signup'(userInformation) {
         if (!this.isSimulation) {
-            let signupUser = await import("./Server/User/UserUtils.js");
+            let signupUser = await import("./Server/UserUtils.js");
             try {
                 await signupUser(userInformation)
             } catch (error) {

@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor'; 
 import { Roles } from 'meteor/alanning:roles';
-import { UserRoles } from "../../userRoles.js"
-import {findPatientByInfo} from '../../../Fhir/Server/FhirUtils.js';
-import { logger } from "../../../Logging/Server/logger-config.js";
+import { UserRoles } from "../userRoles.js"
+import {findPatientByInfo} from '../../Fhir/Server/FhirUtils.js';
+import { logger } from "../../Logging/Server/logger-config.js";
 
 async function patientHandler(options) {
     const {
