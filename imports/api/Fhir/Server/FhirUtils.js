@@ -57,11 +57,12 @@ export async function transformDiagonosticReportInformation(diagnosticsReportRes
     
 }
 export function getPatientAge(birthdate) {
-    const dateNow = Date.now();
-    const patientBirthDateMs = Date.parse(birthdate);
-
-    const ageDate = new Date(dateNow - patientBirthDateMs);
-    return Math.abs(ageDate.getUTCFullYear() - 1970);
+    const dateNow = new Date();
+    const patientDob = new Date(birthdate);
+ 
+    const msDifference = dateNow.getTime() - patientDob.getTime();
+    const patientAge = Math.floor(msDifference / 3_600_000 / 24 / 365.25);
+    return patientAge
 }
 
 //returns the full FHIR patient record of the specified patientID
