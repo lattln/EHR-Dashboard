@@ -1,10 +1,11 @@
+import { Meteor } from 'meteor/meteor';
 import React, { useEffect } from 'react';
 import Header from '../components/DashBoard/Header';
 import ChartList from '../charts';
 import { PLACEHOLDER, USER_INFO } from '../constants/dashBoard';
 import { IconSave } from '../constants/svgLibrary';
 import { useState } from 'react';
-
+import Summary from '../components/DashBoard/Summary';
 
 const DashBoard = () => {
     const [charts, setCharts] = useState([
@@ -16,38 +17,6 @@ const DashBoard = () => {
             label: 'BMI',
             min: 16,
             max: 40,
-            steps: [
-                {
-                    color: '#FFA500',
-                    limit: 17,
-                    showTick: true
-                },
-                {
-                    color: '#FFFF00',
-                    limit: 18.5,
-                    showTick: true
-                },
-                {
-                    color: '#00FF00',
-                    limit: 25,
-                    showTick: true
-                },
-                {
-                    color: '#FFFF00',
-                    limit: 30,
-                    showTick: true
-                },
-                {
-                    color: '#FFA500',
-                    limit: 35,
-                    showTick: true
-                },
-                {
-                    color: '#FF0000',
-                    limit: 40, 
-                    showTick: true
-                }
-            ]
         },
         {
             type: 'Line',
@@ -131,6 +100,8 @@ const DashBoard = () => {
                             <IconSave className="hover:fill-secondary hover:cursor-pointer" onClick={saveCharts} />
                         </div>
                     </div>
+
+                    <Summary />
 
                     <div className="grid grid-cols-1 grid-rows-4 lg:grid-cols-3 gap-5">
 
