@@ -1,3 +1,4 @@
+
 import pino from "pino";
 
 const loggerTransports = pino.transport(
@@ -12,13 +13,13 @@ const loggerTransports = pino.transport(
                         useNewUrlParser: true,
                         useUnifiedTopology: true,
                     },
-                    
+
                 },
                 level: "info",
             },
             {
                 target: "pino-pretty",
-                options: {colorize: true,},
+                options: { colorize: true, },
                 level: "info",
             },
         ]
@@ -32,3 +33,5 @@ export const logger = pino(
     },
     loggerTransports
 );
+
+

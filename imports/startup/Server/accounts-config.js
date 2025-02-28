@@ -1,5 +1,5 @@
 import { Accounts } from 'meteor/accounts-base';
-import { UserRoles } from '../api/User/userRoles.js';
+import { UserRoles } from '../../api/User/userRoles.js';
 
 
 //WIP account creation hook. logic for adding roles, checking if an account already exists in the fhir server and doesnt already exist in the accounts db.
