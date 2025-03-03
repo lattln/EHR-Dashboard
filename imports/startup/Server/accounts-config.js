@@ -8,6 +8,8 @@ Accounts.onCreateUser((options, user) => {
   if (options.profile) {
     user.profile = options.profile;
   }
+  //global fields all user objects should have
+  user.config = {};
 
   //add any additional properties to the user object before adding it to the users collection.
   switch (options.role) {
@@ -19,9 +21,12 @@ Accounts.onCreateUser((options, user) => {
       user.profile.dob = dob;
       user.profile.phoneNumber = phoneNumber;
       user.fhirID = fhirID;
-
       break;
     case UserRoles.CLINICIAN:
+      user.profile.firstName = firstName;
+      user.profile.lastName = lastName;
+      user.patients = [];
+
       break;
     case UserRoles.ADMIN:
       break
