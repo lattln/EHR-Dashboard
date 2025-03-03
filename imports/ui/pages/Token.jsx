@@ -1,4 +1,4 @@
-import { getToken, refreshToken } from "../../api/FitBit/auth";
+import { getToken, isValidToken, refreshToken } from "../../api/FitBit/auth";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -17,7 +17,21 @@ const Token = ({}) => {
             }
         }
 
-        refreshToken();
+        const refresh = async () => {
+            let success = await refreshToken();
+            if(success.success){
+                nav('/user');
+            } else {
+                console.log(success.errors);
+                nav('/not-found');
+            }
+        }
+        if(!isValidToken()){
+            authorizeToken();
+            return;
+        } else {
+            refreshToken();
+        }
     }, [])
     return;
 }

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { USER_INFO } from './dashBoardData';
+import { getAuthUrl } from "../../../../api/FitBit/auth";
 
 const UserSettings = () => {
     const [settings, setSettings] = useState({
@@ -119,12 +120,8 @@ const UserSettings = () => {
                         Change Password
                     </button>
                     <footer>
-                        <button
-                            type="submit"
-                            className="btn btn-secondary"
-                            onClick={linkFitBit}
-                        >
-                            Link FitBit
+                        <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700" onClick={linkFitBit}>
+                            Link FitBit Account 
                         </button>
                     </footer>
                 </form>

@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import DevLanding from "./pages/DevLandingPage/DevLanding";
 import UserSettings from './pages/DashBoard/ComponentsAndConstants/UserSettings';
 import SideNavBar from "./pages/DashBoard/ComponentsAndConstants/SideNavBar";
+import Token from "./pages/Token";
 
 
 const AppLayout = () => (
@@ -35,7 +36,7 @@ const router = createBrowserRouter(
         },
         { path: "/auth", element: <AuthPage /> },
         { path: "dev", element: <DevLanding /> },
-        { path: "/auth", element: <Token />},
+        { path: "/toke", element: <Token />},
         { path: "*", element: <NotFound /> },
     ],
     {

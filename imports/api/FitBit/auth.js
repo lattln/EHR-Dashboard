@@ -1,7 +1,15 @@
+/*
+    CONSTANTS:
+
+        token duration: amount of time a token is valid for in milliseconds 
+*/
+
+const TOKEN_DURATION = 28800;
+
 function sha256(plain){
-  const encoder = new TextEncoder();
-  const data = encoder.encode(plain);
-  return window.crypto.subtle.digest('SHA-256', data);
+    const encoder = new TextEncoder();
+    const data = encoder.encode(plain);
+    return window.crypto.subtle.digest('SHA-256', data);
 }
 
 function base64urlencode(a){
@@ -20,9 +28,9 @@ function base64urlencode(a){
 }
 
 async function genCodeChallenge(v) {
-  let hashed = await sha256(v);
-  let challenge = base64urlencode(hashed);
-  return challenge;
+    let hashed = await sha256(v);
+    let challenge = base64urlencode(hashed);
+    return challenge;
 }
 
 function dec2hex(dec) {
@@ -73,11 +81,21 @@ async function getToken(code){
             errors: res.errors
         }
     } else {
-        localStorage.getItem('fit')
+        res.issued_at = Date.now();
+        localStorage.setItem('fitbit-token', JSON.stringify(res));
         return {
             success: true
         }
     }
+}
+
+function isValidToken(){
+    let token = localStorage.getItem('fitbit-token');
+    if(Date.now() - TOKEN_DURATION < JSON.parse(token).issued_at){
+        return true;
+    }
+
+    return false;
 }
 
 async function refreshToken(){
@@ -108,7 +126,7 @@ async function refreshToken(){
             errors: res.errors
         }
     } else {
-        console.log(res);
+        res.issued_at = Date.now();
         return {
             success: true
         }
@@ -118,5 +136,6 @@ async function refreshToken(){
 export {
     getAuthUrl,
     getToken,
+    isValidToken,
     refreshToken
 }
