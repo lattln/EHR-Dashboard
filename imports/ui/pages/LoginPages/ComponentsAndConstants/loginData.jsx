@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconLock, IconUser, IconLockRepeat, IconEmail } from './svgLibrary';
+import { IconLock, IconUser, IconLockRepeat, IconEmail } from '../../svgLibrary';
 
 
 //Test File --> Maybe we can use this? --> Scalability
@@ -46,24 +46,3 @@ export const LOGIN_PAGE = [
     },
 ]
 
-const TEST_SCALEABLE_RENDER = () => (
-    <div>
-        {LOGIN_PAGE.map((inputSection) => (
-            <div className='relative'>
-                <label className='label'>
-                    <span className='label-text text-primary'>
-                        {inputSection.text}
-                    </span>
-                </label>
-
-                <input
-                    type={inputSection.type}
-                    placeholder={inputSection.placeholder}
-                    className='input input-bordered w-full pl-10'
-                    required
-                />
-                {inputSection.icon}
-            </div>
-        ))}
-    </div>
-)
