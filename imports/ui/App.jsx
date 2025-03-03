@@ -7,6 +7,7 @@ import DevLanding from "./pages/DevLanding";
 import Layout from "./Layout";
 import Register from "./pages/LoginPages/Register";
 import UserSettings from './components/DashBoard/UserSettings';
+import Token from "./pages/Token";
 
 // Define your routes
 const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },
         { path: "dev", element: <DevLanding /> },
+        { path: "/auth", element: <Token />},
         { path: "*", element: <NotFound /> },
     ],
     {

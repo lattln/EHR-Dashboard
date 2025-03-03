@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { USER_INFO } from '../../constants/dashBoard';
+import { getAuthUrl } from "../../../api/FitBit/auth";
 
 const UserSettings = () => {
     const [settings, setSettings] = useState({
@@ -9,6 +10,8 @@ const UserSettings = () => {
         currentPassword: "",
         newPassword: "",
     });
+
+    const [fitBitUrl, setFitBitUrl] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,6 +44,19 @@ const UserSettings = () => {
             newPassword: "",
         }));
     };
+
+    const linkFitBit = (e) => {
+        e.preventDefault();
+        window.location.href = fitBitUrl;
+    }
+
+    useEffect(() => {
+        const getLink = async () => {
+            setFitBitUrl(await getAuthUrl());
+        }
+
+        getLink();
+    }, [])
 
     return (
         <div className="ml-28 p-6 bg-base-100 rounded-lg shadow-md">
@@ -129,6 +145,15 @@ const UserSettings = () => {
                     >
                         Change Password
                     </button>
+                    <footer>
+                        <button
+                            type="submit"
+                            className="btn btn-secondary"
+                            onClick={linkFitBit}
+                        >
+                            Link FitBit
+                        </button>
+                    </footer>
                 </form>
             </div>
         </div>
