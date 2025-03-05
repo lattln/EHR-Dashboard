@@ -165,3 +165,45 @@ export async function signupUser(userInformation){
         }
     }
 }
+
+export async function updateProfile(userID, {...profileProps}) {
+    const {firstName, LastName, email, password}
+    try {
+        logger.info(`updating profile for user: ${userID}`);
+        Meteor.users.updateAsync(userID, 
+            {
+                $set: 
+            })
+    }
+}
+
+export async function isAdmin(userID) {
+    try {
+        return await Roles.userIsInRoleAsync(userID, UserRoles.ADMIN);
+    }
+    catch (error) {
+        logger.error(error, "Issue checking if the user is an admin.")
+        return false;
+    }
+    
+}
+
+export async function isClinician(userID) {
+    try {
+        return await Roles.userIsInRoleAsync(userID, UserRoles.CLINICIAN);
+    }
+    catch (error) {
+        logger.error(error, "Issue checking if the user is a clinician.")
+        return false;
+    }
+}
+
+export async function isPatient(userID) {
+    try {
+        return await Roles.userIsInRoleAsync(userID, UserRoles.PATIENT);
+    }
+    catch (error) {
+        logger.error(error, "Issue checking if the user is an patient.");
+        return false;
+    }
+}

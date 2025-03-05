@@ -5,7 +5,7 @@ import { Roles } from 'meteor/alanning:roles';
 Meteor.methods({
     async 'user.signup'(userInformation) {
         if (!this.isSimulation) {
-            let signupUser = await import("./Server/UserUtils.js");
+            let { signupUser } = await import("./Server/UserUtils.js");
             try {
                 await signupUser(userInformation)
             } catch (error) {
@@ -26,5 +26,34 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         }
     },
+
+    async 'user.updateProfile'(profileProps = {}) {
+        {} = profileProps;
+        if(!Meteor.userId()) {
+            throw new Meteor.Error("not-authorized");
+        }
+
+        if (!this.isSimulation) {
+            let { updateUserProfile } = await import("./Server/UserUtils.js");
+            try {
+
+            } catch (error) {
+                
+            }
+        }
+    },
+
+    async 'user.updateConfig'(config = {}) {
+        {} = config;
+        if(!Meteor.userId()) {
+            throw new Meteor.Error("not-authorized");
+        }
+
+        if (!this.isSimulation) {
+            let { updateUserConfig } = await import("./Server/UserUtils.js"); 
+        }
+    },
+
+
 
 });
