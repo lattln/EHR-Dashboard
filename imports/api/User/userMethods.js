@@ -27,7 +27,7 @@ Meteor.methods({
         }
     },
 
-    async 'user.updateProfile'(profileProps = {}) {
+    async 'user.updateProfile'(profileProp = {}) {
         {} = profileProps;
         if(!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
@@ -36,7 +36,7 @@ Meteor.methods({
         if (!this.isSimulation) {
             let { updateUserProfile } = await import("./Server/UserUtils.js");
             try {
-
+                updateUserProfile(Meteor.userId(), profileProps);
             } catch (error) {
                 
             }

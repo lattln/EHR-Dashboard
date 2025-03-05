@@ -167,13 +167,15 @@ export async function signupUser(userInformation){
 }
 
 export async function updateProfile(userID, {...profileProps}) {
-    const {firstName, LastName, email, password}
+    const {firstName, LastName, email, fitbit} = profileProps
     try {
         logger.info(`updating profile for user: ${userID}`);
         Meteor.users.updateAsync(userID, 
             {
-                $set: 
+                $set: {firstName, LastName, email, fitbitToken}
             })
+    } catch (error) {
+        logger.error(error, `Error when trying to update profile for User:${userID}`);
     }
 }
 
