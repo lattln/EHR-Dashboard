@@ -19,7 +19,18 @@ Meteor.publish("createdUsers", async function(){
 
 Meteor.publish("userData", function () {
     if (this.userId) {
-        return Meteor.users.find({ _id: this.userId });
+        return Meteor.users.find({ _id: this.userId },
+            {
+                fields: {
+                    "profile": 1,
+                    "fhirID": 1,
+                    "patients": 1,
+                    "fitbitAccountAuth": 1,
+                    "config": 1,
+                    "emails.0": 1
+                }
+            }
+        );
     } else {
       this.ready();
     }

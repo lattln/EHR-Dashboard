@@ -12,10 +12,10 @@ Accounts.onCreateUser((options, user) => {
   user.config = {};
 
   //add any additional properties to the user object before adding it to the users collection.
+  const {firstName, lastName, dob, phoneNumber, fhirID} = options;
+
   switch (options.role) {
     case UserRoles.PATIENT:
-      const {firstName, lastName, dob, phoneNumber, fhirID} = options;
-
       user.profile.firstName = firstName;
       user.profile.lastName = lastName;
       user.profile.dob = dob;

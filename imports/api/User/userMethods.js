@@ -7,7 +7,7 @@ Meteor.methods({
         if (!this.isSimulation) {
             let { signupUser } = await import("./Server/UserUtils.js");
             try {
-                await signupUser(userInformation)
+                return await signupUser(userInformation)
             } catch (error) {
                 console.log(error.reason)
                 throw error;
@@ -27,33 +27,35 @@ Meteor.methods({
         }
     },
 
-    async 'user.updateProfile'(profileProp = {}) {
-        {} = profileProps;
+    async 'user.updateProfile'({firstName, lastName, fitbitAccountAuth}) {
         if(!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
 
         if (!this.isSimulation) {
-            let { updateUserProfile } = await import("./Server/UserUtils.js");
+            let { updateProfile } = await import("./Server/UserUtils.js");
             try {
-                updateUserProfile(Meteor.userId(), profileProps);
+                await updateProfile(Meteor.userId(), {firstName, lastName, fitbitAccountAuth});
             } catch (error) {
-                
+                throw error;
             }
         }
     },
 
-    async 'user.updateConfig'(config = {}) {
-        {} = config;
+    async 'user.updateEmail'(email){
+
         if(!Meteor.userId()) {
             throw new Meteor.Error("not-authorized");
         }
 
-        if (!this.isSimulation) {
-            let { updateUserConfig } = await import("./Server/UserUtils.js"); 
+        if(!this.isSimulation) {
+            let { updateEmail } = await import("./Server/UserUtils.js");
+            try {
+                await updateEmail(Meteor.userId(), email);
+            } catch (error) {
+                throw error;
+            }
         }
     },
-
-
 
 });

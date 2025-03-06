@@ -63,7 +63,7 @@ async function patientHandler(options) {
     }
     catch (error){
         logger.error(error);
-        if (error.error === 403 && error.reason === 'Email already exists.') {
+        if (error.error === 403 || error.reason === 'Email already exists.') {
             throw new Meteor.Error('Email Already Exists', 
                 'The email address is already in use. Please use a different email.');
         }
@@ -100,7 +100,7 @@ async function clinicianHandler(options) {
         logger.info(`successfully created clinician account for ${userID}`);
     }
     catch (error) {
-        if (error.error === 403 && error.reason === 'Email already exists.') {
+        if (error.error === 403 || error.reason === 'Email already exists.') {
             throw new Meteor.Error('Email Already Exists', 
                 'The email address is already in use. Please use a different email.');
         }
@@ -167,15 +167,68 @@ export async function signupUser(userInformation){
 }
 
 export async function updateProfile(userID, {...profileProps}) {
-    const {firstName, LastName, email, fitbit} = profileProps
+    const {firstName, lastName, fitbitAccountAuth} = profileProps;
+    
+    if(!userID || !firstName || !lastName) {
+        throw new Meteor.Error("Invalid-Account-Updating", "Missing Required properties to update the account. Cannot have undefined properties.")
+    }
+    logger.info(`Attempting Updating profile for user: ${userID}`);
     try {
-        logger.info(`updating profile for user: ${userID}`);
-        Meteor.users.updateAsync(userID, 
+        await Meteor.users.updateAsync({_id: userID}, 
             {
-                $set: {firstName, LastName, email, fitbitToken}
+                $set: {"profile.firstName": firstName, "profile.lastName":lastName,  fitbitAccountAuth: fitbitAccountAuth || null}
             })
+        logger.info(`Profile updated successfully for user: ${userID}`);
+
     } catch (error) {
         logger.error(error, `Error when trying to update profile for User:${userID}`);
+        throw new Meteor.Error('Profile-Update-Failed', `Error updating profile for user: ${userID}`, error.message);
+    }
+}
+
+export async function updateEmail(userID, email) {
+
+    if (!userID || !email) {
+        throw new Meteor.Error("Invalid-Account-Updating", "Missing required properties to update the email. Cannot have undefined arguments.");
+    }
+
+    logger.info(`Attempting Updating email for user: ${userID}`);
+    try {
+
+        const existingUser = await Meteor.users.findOneAsync({ "emails.0.address": email });
+        if (existingUser && existingUser._id !== userID) {
+            logger.warn(`User: ${userID} tried updating to an email address that already is associated with another user.`)
+            throw new Meteor.Error("Email-Taken", "The email address is already taken by another user.");
+        }
+
+        await Meteor.users.updateAsync({_id: userID}, {
+            $set: {
+                "emails.0": {address: email, verified: false}
+            }
+        });
+        logger.info(`Successfully updated User: ${userID} email address to ${email}`);
+        
+    } catch (error) {
+        logger.error(error, `Error when trying to update email for ${userID}`)
+        throw new Meteor.Error("Email-Update-Failed", error.message);
+    }
+}
+
+export async function updateConfig(userID, config) {
+    if (!userID || !config) {
+        throw new Meteor.Error("Invalid-Account-Updating", "Missing required properties to update the dashboard config. Cannot have undefined arguments.");
+    }
+
+    logger.info(`Attempting updating dashboard config for User: ${userID}`);
+    try {
+        await Meteor.users.updateAsync({_id: userID}, {
+            $set: config
+        });
+        logger.info(`Successfully updated dashboard config for User: ${userID}`);
+
+    } catch (error) {
+        logger.error(error, `Error when trying to update config for ${userID}`);
+        throw new Meteor.error("Config-Update-Failed", error.message)
     }
 }
 
@@ -205,7 +258,7 @@ export async function isPatient(userID) {
         return await Roles.userIsInRoleAsync(userID, UserRoles.PATIENT);
     }
     catch (error) {
-        logger.error(error, "Issue checking if the user is an patient.");
+        logger.error(error, "Issue checking if the user is a patient.");
         return false;
     }
 }
