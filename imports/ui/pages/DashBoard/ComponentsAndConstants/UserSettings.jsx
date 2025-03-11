@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { USER_INFO } from './dashBoardData';
-import { getAuthUrl } from "../../../../api/FitBit/auth";
+import { getAuthUrl, isValidToken, refreshToken } from "../../../../api/FitBit/auth";
 
 const UserSettings = () => {
     const [settings, setSettings] = useState({
@@ -12,6 +12,7 @@ const UserSettings = () => {
     });
 
     const [fitBitUrl, setFitBitUrl] = useState({});
+    const [fitBitLinked, setFitBitLinked] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,6 +52,17 @@ const UserSettings = () => {
         }
 
         getLink();
+    }, [])
+
+    useEffect(() => {
+        let token = localStorage.getItem('fitbit-token');
+
+        if(token != null){
+            if(!isValidToken(token)){
+                refreshToken(token);
+            }
+            setFitBitLinked(true);
+        }
     }, [])
 
     return (
@@ -104,6 +116,7 @@ const UserSettings = () => {
                             value={settings.currentPassword}
                             onChange={handleChange}
                             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            autoComplete="password"
                         />
                     </div>
                     <div>
@@ -114,13 +127,18 @@ const UserSettings = () => {
                             value={settings.newPassword}
                             onChange={handleChange}
                             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            autoComplete="new-password"
                         />
                     </div>
                     <button type="submit" className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700">
                         Change Password
                     </button>
                     <footer>
-                        <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700" onClick={linkFitBit}>
+                        <button 
+                            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700" 
+                            onClick={linkFitBit}
+                            disabled={fitBitLinked}
+                        >
                             Link FitBit Account 
                         </button>
                     </footer>
