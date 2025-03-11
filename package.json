@@ -16,6 +16,7 @@
     "date-fns": "^4.1.0",
     "fhir-kit-client": "^1.9.2",
     "framer-motion": "^12.4.7",
+    "jose": "^6.0.8",
     "meteor-node-stubs": "^1.2.5",
     "openai": "^4.85.0",
     "react": "^18.2.0",
