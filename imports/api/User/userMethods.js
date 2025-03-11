@@ -15,15 +15,35 @@ Meteor.methods({
         }
         
     },
-    /* example method for authorizing certain users to perform tasks
-    *  
-    *  this will be augmented later on to only permit admins to create clinician accounts/assign clinician & admin role
-    */
-    'user.assignRole'(userId, role) {
-        if (Meteor.userId() && Roles.userIsInRole(Meteor.userId, 'admin')) {
-            Roles.addUsersToRolesAsync(userId, [role]);
-        } else {
-            throw new Meteor.Error('not-authorized');
+
+    async 'user.assignRolesToUsers'(userIDsList, rolesList) {
+        if(!this.isSimulation) {
+            let { addUsersToRoles, isAdmin} = await import("./Server/UserUtils.js");
+            try {
+                if(this.userId && await isAdmin(this.userId)){
+                    await addUsersToRoles(this.userId, userIDsList, rolesList);
+                } else {
+                    throw new Meteor.Error("not-authorized");
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+    },
+
+    async 'user.removeRolesFromUsers'(userIDsList, rolesList) {
+
+        if(!this.isSimulation) {
+            let { removeUsersFromRoles, isAdmin} = await import("./Server/UserUtils.js");
+            try {
+                if(this.userId && await isAdmin(this.userId)){
+                    await removeUsersFromRoles(this.userId, userIDsList, rolesList);
+                } else {
+                    throw new Meteor.Error("not-authorized");
+                }
+            } catch (error) {
+                throw error;
+            }
         }
     },
 
@@ -57,5 +77,26 @@ Meteor.methods({
             }
         }
     },
+
+    async 'user.addClinician'(clinicianUserID){
+        if(!this.userId) {
+            throw new Meteor.Error("not authorized");
+        }
+
+        if(!this.isSimulation) {
+            let {addClinicianToPatient, isPatient, isClinician} = await import("./Server/UserUtils.js");
+
+            try {
+                if(await isPatient(this.userId) && await isClinician(clinicianUserID)) {
+                    await addClinicianToPatient(this.userId, clinicianUserID);
+                } else {
+                    throw new Meteor.Error("Add-Clinician-Error", "User is either not a patient or the clinicianID is not a registered clinician.")
+                }
+
+            } catch (error) {
+                throw error;
+            }
+        }
+    }
 
 });

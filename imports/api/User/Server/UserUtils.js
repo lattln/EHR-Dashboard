@@ -228,7 +228,7 @@ export async function updateConfig(userID, config) {
 
     } catch (error) {
         logger.error(error, `Error when trying to update config for ${userID}`);
-        throw new Meteor.error("Config-Update-Failed", error.message)
+        throw new Meteor.Error("Config-Update-Failed", error.message)
     }
 }
 
@@ -261,4 +261,78 @@ export async function isPatient(userID) {
         logger.error(error, "Issue checking if the user is a patient.");
         return false;
     }
+}
+
+export async function addUsersToRoles(adminUserID, usersList, rolesList) {
+    if(!usersList || !Array.isArray(usersList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "usersList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+    if(!rolesList || !Array.isArray(rolesList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "rolesList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+    
+    try {
+        await Roles.addUsersToRolesAsync(usersList, rolesList);
+        logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} added users to roles.`);
+    } catch (error) {
+        logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
+        throw new Meteor.Error("Promote-User-Error", error.message);
+    }
+}
+
+export async function removeUsersFromRoles(adminUserID, usersList, rolesList) {
+
+    if(!usersList || !Array.isArray(usersList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "usersList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+    if(!rolesList || !Array.isArray(rolesList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "rolesList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+
+    try {
+        await Roles.removeUsersFromRolesAsync(usersList, rolesList);
+        logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} removed users from roles.`);
+    } catch (error) {
+        logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
+        throw new Meteor.Error("Demote-User-Error", error.message);
+    }
+}
+
+export async function addPatientToClinician(userPatientID, userClinicianID) {
+    if (!userPatientID || !userClinicianID) {
+        throw new Meteor.Error("Add-Clinician-Error", "provided arguments are undefined.");
+    }
+
+    try {
+        const patientList = Meteor.user({fields:{clinicians: 1}})?.clinicians || [];
+        const clinicianList = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+
+        if(!patientList.includes(userPatientID) ){
+            patientList.push(userPatientID)
+        }
+
+        if(!clinicianList.includes(userClinicianID)){
+            clinicianList.push(userClinicianID)
+        }
+
+        const patientUserPromise = Meteor.users.updateAsync({_id: userPatientID}, {$set: {clinicians: clinicianList}});
+        const clinicianUserPromise = Meteor.users.updateAsync({_id: userClinicianID}, {$set: {patients: patientList}});
+        await Promise.all([patientUserPromise, clinicianUserPromise]);
+
+    } catch (error) {
+        logger.error(error, `Issue adding clinician: ${userClinicianID} to patient: ${userPatientID}`);
+        if(error instanceof Meteor.Error){
+            throw new Meteor.Error("Add-Clinician-Error", error.reason);
+        }
+        throw new Meteor.Error("Add-Clinician-Error", error.message);
+    }
+
 }

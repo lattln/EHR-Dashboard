@@ -21,6 +21,7 @@ Accounts.onCreateUser((options, user) => {
       user.profile.dob = dob;
       user.profile.phoneNumber = phoneNumber;
       user.fhirID = fhirID;
+      user.clinicians = [];
       
       break;
     case UserRoles.CLINICIAN:
