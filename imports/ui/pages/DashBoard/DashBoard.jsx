@@ -4,28 +4,30 @@ import { USER_INFO } from './ComponentsAndConstants/dashBoardData';
 import { IconSave } from '../svgLibrary';
 import ChartContainer from './ComponentsAndConstants/ChartContainer';
 import { dashboardConfig } from "./ComponentsAndConstants/dashBoardConfig";
-import { Appointments, HealthOverview, SleepTracking, BloodTracking, HeartRate, Hydration, BloodCells } from "./ComponentsAndConstants/Widgets";
+import { Appointments, HealthOverview, SleepTracking, Steps, BloodTracking, HeartRate, Hydration, BloodCells } from "./ComponentsAndConstants/Widgets";
 import { createSwapy, utils } from 'swapy'
+import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 
 const widgetComponents = {
     Appointments,
-    HealthOverview,
-    SleepTracking,
+    BloodCells,
     BloodTracking,
+    HealthOverview,
     HeartRate,
     Hydration,
-    BloodCells
+    SleepTracking,
+    Steps
 };
 
 const DashBoard = () => {
 
-    const [widgets, setWidgets] = useState(dashboardConfig)
-    const [slotItemMap, setSlotItemMap] = useState(utils.initSlotItemMap(widgets, 'id'))
-    const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap])
-    useEffect(() => utils.dynamicSwapy(swapyRef.current, widgets, 'id', slotItemMap, setSlotItemMap), [widgets])
-    const swapyRef = useRef(null)
-    const container = useRef(null)
-
+    const [widgets, setWidgets] = useState(dashboardConfig);
+    const [slotItemMap, setSlotItemMap] = useState(utils.initSlotItemMap(widgets, 'id'));
+    const [fitBitLinked, setFitBitLinked] = useState(false);
+    const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
+    useEffect(() => utils.dynamicSwapy(swapyRef.current, widgets, 'id', slotItemMap, setSlotItemMap), [widgets]);
+    const swapyRef = useRef(null);
+    const container = useRef(null);
 
     useEffect(() => {
         // If container element is loaded
@@ -47,9 +49,17 @@ const DashBoard = () => {
         }
     }, [])
 
-
-
-
+    //refreshes token if one exists
+    useEffect(() => {
+        let token = localStorage.getItem('fitbit-token');
+        if(token != null){
+            if(!isValidToken(token)){
+                refreshToken(token);
+            }
+            
+            setFitBitLinked(true);
+        }
+    })
     return (
         <div className="flex min-h-screen bg-base-200 bg-gray-100">
             <div className="flex flex-col flex-1">
@@ -78,9 +88,7 @@ const DashBoard = () => {
                                 }
                             }}></input>
                         </div>
-
                     </div>
-
 
                     <div
                         ref={container}
@@ -114,11 +122,6 @@ const DashBoard = () => {
                         const newWidget = { id: `appointment`, type: `Appointments` }
                         setWidgets([...widgets, newWidget])
                     }}>+</div>
-
-
-
-                    <ChartContainer />
-
                 </div>
             </div>
         </div>

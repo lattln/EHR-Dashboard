@@ -34,4 +34,8 @@ export const dashboardConfig = [
         type: "HealthOverview",
 
     },
+    {
+        id: "steps",
+        type: "Steps"
+    }
 ];

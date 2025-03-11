@@ -1,4 +1,5 @@
 import React from "react";
+import StepGauge from "../../../charts/StepGauge";
 
 export const Appointments = () => (
     <div>
@@ -7,17 +8,10 @@ export const Appointments = () => (
     </div>
 );
 
-export const HealthOverview = () => (
+export const BloodCells = () => (
     <div>
-        <h2 className="text-lg font-bold">Daily Health Overview</h2>
-        <p>Weight, steps, and key stats</p>
-    </div>
-);
-
-export const SleepTracking = () => (
-    <div>
-        <h2 className="text-lg font-bold">Sleep Tracking</h2>
-        <p>Sleep analysis and trends</p>
+        <h2 className="text-lg font-bold">Blood Cells</h2>
+        <p>White and red blood cell count</p>
     </div>
 );
 
@@ -25,6 +19,13 @@ export const BloodTracking = () => (
     <div>
         <h2 className="text-lg font-bold">Blood Tracking</h2>
         <p>Cholesterol, sugar levels, and more</p>
+    </div>
+);
+
+export const HealthOverview = () => (
+    <div>
+        <h2 className="text-lg font-bold">Daily Health Overview</h2>
+        <p>Weight, steps, and key stats</p>
     </div>
 );
 
@@ -42,9 +43,16 @@ export const Hydration = () => (
     </div>
 );
 
-export const BloodCells = () => (
+export const SleepTracking = () => (
     <div>
-        <h2 className="text-lg font-bold">Blood Cells</h2>
-        <p>White and red blood cell count</p>
+        <h2 className="text-lg font-bold">Sleep Tracking</h2>
+        <p>Sleep analysis and trends</p>
+    </div>
+);
+
+export const Steps = () => (
+    <div>
+        <h2 className="text-lg font-bold">Steps</h2>
+        <StepGauge />
     </div>
 );
