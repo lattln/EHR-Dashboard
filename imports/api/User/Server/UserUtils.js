@@ -147,7 +147,7 @@ export async function signupUser(userInformation){
                 userID = await clinicianHandler(userInformation);
                 break;
             case UserRoles.ADMIN:
-                throw new Meteor.Error("Unauthorized",
+                throw new Meteor.Error("not-authorized",
                     "Cannot create admin accounts from this method.");
             default:
                 throw new Meteor.Error("Invalid Role Assignment",
@@ -209,6 +209,9 @@ export async function updateEmail(userID, email) {
         logger.info(`Successfully updated User: ${userID} email address to ${email}`);
         
     } catch (error) {
+        if(error instanceof Meteor.Error) {
+            throw error;
+        }
         logger.error(error, `Error when trying to update email for ${userID}`)
         throw new Meteor.Error("Email-Update-Failed", error.message);
     }
@@ -306,26 +309,28 @@ export async function removeUsersFromRoles(adminUserID, usersList, rolesList) {
     }
 }
 
-export async function addPatientToClinician(userPatientID, userClinicianID) {
+export async function addClinicianToPatient(userPatientID, userClinicianID) {
     if (!userPatientID || !userClinicianID) {
         throw new Meteor.Error("Add-Clinician-Error", "provided arguments are undefined.");
     }
 
     try {
-        const patientList = Meteor.user({fields:{clinicians: 1}})?.clinicians || [];
+        const patientList = Meteor.users.findOne({_id: userPatientID},{fields:{clinicians: 1}})?.clinicians || [];
         const clinicianList = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
 
-        if(!patientList.includes(userPatientID) ){
-            patientList.push(userPatientID)
+        if(!patientList.includes(userClinicianID) ){
+            patientList.push(userClinicianID)
         }
 
-        if(!clinicianList.includes(userClinicianID)){
-            clinicianList.push(userClinicianID)
+        if(!clinicianList.includes(userPatientID)){
+            clinicianList.push(userPatientID)
         }
 
-        const patientUserPromise = Meteor.users.updateAsync({_id: userPatientID}, {$set: {clinicians: clinicianList}});
-        const clinicianUserPromise = Meteor.users.updateAsync({_id: userClinicianID}, {$set: {patients: patientList}});
+        const patientUserPromise = Meteor.users.updateAsync({_id: userPatientID}, {$set: {clinicians: patientList}});
+        const clinicianUserPromise = Meteor.users.updateAsync({_id: userClinicianID}, {$set: {patients: clinicianList}});
         await Promise.all([patientUserPromise, clinicianUserPromise]);
+        logger.info({patient: userPatientID, clinician: userClinicianID, action: "patient and clinician ids have been added to each other's list."}, 
+            `added patient and clinician to each others list `);
 
     } catch (error) {
         logger.error(error, `Issue adding clinician: ${userClinicianID} to patient: ${userPatientID}`);
@@ -336,3 +341,36 @@ export async function addPatientToClinician(userPatientID, userClinicianID) {
     }
 
 }
+
+export async function removeClinicianFromPatient(userPatientID, userClinicianID) {
+    if (!userPatientID || !userClinicianID) {
+        throw new Meteor.Error("Remove-Clinician-Error", "provided arguments are undefined.");
+    }
+
+    try {
+        const patientList = Meteor.users.findOne({_id: userPatientID},{fields:{clinicians: 1}})?.clinicians || [];
+        const clinicianList = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+
+        if(patientList.includes(userClinicianID) ){
+            patientList = patientList.filter((id) => id !== userClinicianID);
+        }
+
+        if(clinicianList.includes(userPatientID)){
+            clinicianList = clinicianList.filter((id) => id !== userPatientID);
+        }
+
+        const patientUserPromise = Meteor.users.updateAsync({_id: userPatientID}, {$set: {clinicians: patientList}});
+        const clinicianUserPromise = Meteor.users.updateAsync({_id: userClinicianID}, {$set: {patients: clinicianList}});
+        await Promise.all([patientUserPromise, clinicianUserPromise]);
+        logger.info({patient: userPatientID, clinician: userClinicianID, action: "patient and clinician ids have been removed from eachother's list."}, 
+            `removed patient and clinician from each others list `);
+
+    } catch(error){
+        logger.error(error, `Issue removing clinician: ${userClinicianID} from patient: ${userPatientID}`);
+        if(error instanceof Meteor.Error){
+            throw new Meteor.Error("Remove-Clinician-Error", error.reason);
+        }
+        throw new Meteor.Error("Remove-Clinician-Error", error.message);
+    }
+}
+

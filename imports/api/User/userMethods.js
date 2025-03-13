@@ -80,7 +80,7 @@ Meteor.methods({
 
     async 'user.addClinician'(clinicianUserID){
         if(!this.userId) {
-            throw new Meteor.Error("not authorized");
+            throw new Meteor.Error("not-authorized");
         }
 
         if(!this.isSimulation) {
@@ -93,6 +93,28 @@ Meteor.methods({
                     throw new Meteor.Error("Add-Clinician-Error", "User is either not a patient or the clinicianID is not a registered clinician.")
                 }
 
+            } catch (error) {
+                throw error;
+            }
+        }
+    },
+
+    async 'user.removeClinician'(clinicianUserID){
+        if(!this.userId) {
+            throw new Meteor.Error("not-authorized");
+        }
+
+        if(!this.isSimulation) {
+
+            let {removeClinicianFromPatient, isPatient, isClinician } = await import("./Server/UserUtils.js");
+
+            try {
+                if(await isPatient(this.userId) && await isClinician(clinicianUserID)) {
+                    await removeClinicianFromPatient(this.userId, clinicianUserID);
+                } else {
+                    throw new Meteor.Error("Add-Clinician-Error", "User is either not a patient or the clinicianID is not a registered clinician.")
+                }
+                
             } catch (error) {
                 throw error;
             }
