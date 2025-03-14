@@ -60,7 +60,20 @@ async function getCurrentSteps(){
 }
 
 async function getHeartRate(){
-    return await makeRequest('/1/user/-/activities/heart/date/today/1d.json');
+    let yesterday = fitBitUtils.yesterday();
+    let res = await makeRequest(`/1/user/-/activities/heart/date/${yesterday}/1d.json`);
+
+    let timeSpentInZones = [{
+        label: "Minutes",
+        data: res['activities-heart'][0].value.heartRateZones.map((z) => {
+            return z.minutes;
+        }),
+        backgroundColor: chartColors
+    }]
+
+    return {
+        timeData: timeSpentInZones
+    }
 }
 
 //formats returned data for ChartJS
