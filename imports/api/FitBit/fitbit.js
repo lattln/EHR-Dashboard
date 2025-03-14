@@ -1,7 +1,8 @@
 import fitBitUtils from "./utils";
 import { decJWT } from "./auth";
 
-/*Scopes we ask for:
+/*
+Scopes we ask for:
     1. respiratory_rate
     2. heartrate
     3. activity
@@ -10,6 +11,16 @@ import { decJWT } from "./auth";
     6. sleep
     7. oxygen_saturation
 */
+
+const chartColors = [
+    'rgb(255, 99, 132)',
+    'rgb(53, 162, 235)',
+    '#c51d34',
+    '#6c6960',
+    '#1c1c1c',
+    '#734222',
+    '#8673a1'
+]
 
 async function makeRequest(url){
     let jwt = await decJWT(localStorage.getItem('fitbit-token'));
@@ -40,11 +51,11 @@ async function getCalories(){
 async function getCurrentSteps(){
     let today = fitBitUtils.today();
     let res = await makeRequest(`/1/user/-/activities/date/${today}.json`);
-    console.log(today);
 
     return {
         goal: res.goals.steps,
-        steps: res.summary.steps
+        steps: res.summary.steps,
+        distance: res.summary.distances[0].distance
     }
 }
 
@@ -52,8 +63,42 @@ async function getHeartRate(){
     return await makeRequest('/1/user/-/activities/heart/date/today/1d.json');
 }
 
+//formats returned data for ChartJS
 async function getSleepLog(){
-    return await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json');
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    
+    let stack = sleepGoal.goal.minDuration - sleepLog.summary.totalMinutesAsleep;
+    let summaryData = [{
+        label: "Minutes",
+        data: [sleepLog.summary.stages.deep, sleepLog.summary.stages.light, sleepLog.summary.stages.rem, sleepLog.summary.stages.wake],
+        backgroundColor: chartColors
+    }]
+
+    if(stack < 0){
+        stack = 0;
+    }
+
+    let durationData = [
+        {
+            label: "Duration",
+            data: [sleepLog.summary.totalMinutesAsleep],
+            backgroundColor: [chartColors[0]]
+        },
+        {
+            label: "Goal",
+            data: [stack],
+            backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+        },
+    ]
+
+    return {
+        duration: sleepLog.summary.totalMinutesAsleep,
+        durationData: durationData, 
+        efficiency: sleepLog.sleep[0].efficiency,
+        goal: sleepGoal.goal.minDuration,
+        summary: summaryData
+    }
 }
 
 export {
@@ -62,4 +107,5 @@ export {
     getCurrentSteps,
     getHeartRate,
     getSleepLog,
+    minToHours
 };

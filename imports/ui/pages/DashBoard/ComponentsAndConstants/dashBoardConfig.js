@@ -1,17 +1,7 @@
 export const dashboardConfig = [
     {
-        id: "appointments",
-        type: "Appointments",
-
-    },
-    {
         id: "sleepTracking",
-        type: "SleepTracking",
-
-    },
-    {
-        id: "bloodTracking",
-        type: "BloodTracking",
+        type: "SleepLog",
 
     },
     {
@@ -19,23 +9,10 @@ export const dashboardConfig = [
         type: "HeartRate",
 
     },
-    {
-        id: "hydration",
-        type: "Hydration",
-
-    },
-    {
-        id: "bloodCells",
-        type: "BloodCells",
-
-    },
-    {
-        id: "healthOverview",
-        type: "HealthOverview",
-
-    },
+];
+/*
     {
         id: "steps",
         type: "Steps"
     }
-];
+*/

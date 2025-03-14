@@ -1,28 +1,28 @@
 import GaugeComponent from "react-gauge-component";
 import React, { useEffect, useState } from "react";
-import { getStepGoal, getCurrentSteps } from "../../api/FitBit/fitbit";
+import { getCurrentSteps } from "../../../../../api/FitBit/fitbit";
 
-function StepGauge({}){
+function Steps({ fitBitLinked }){
     const [steps, setSteps] = useState(0);
-    const [goalSteps, setGoalSteps ] = useState(10000);
-    const [fitBitLinked, setFitBitLinked] = useState(false);
+    const [goalSteps, setGoalSteps] = useState(10000);
+    const [dist, setDist] = useState(0);
 
     useEffect(() => {
         async function currSteps(){
             let s = await getCurrentSteps();
-            console.log(s);
             setSteps(s.steps);
             setGoalSteps(s.goal);
+            setDist(s.distance);
         }
 
-        if(localStorage.getItem('fitbit-token') != null){
-            setFitBitLinked(true);
+        if(fitBitLinked){
             currSteps();
         }
-    }, []);
+    }, [fitBitLinked]);
 
     return (
-        <div>
+        <>
+            <h2 className="text-lg font-bold">Steps</h2>
             {fitBitLinked ?
                 <GaugeComponent
                     minValue={0}
@@ -45,8 +45,9 @@ function StepGauge({}){
                 />
                 : 'Link your FitBit account to access this widget.'
             }
-        </div>
+            <h3>{dist} Mi.</h3>
+        </>
     )
-}
+};
 
-export default StepGauge;
+export default Steps;

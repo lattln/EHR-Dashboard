@@ -4,20 +4,9 @@ import { USER_INFO } from './ComponentsAndConstants/dashBoardData';
 import { IconSave } from '../svgLibrary';
 import ChartContainer from './ComponentsAndConstants/ChartContainer';
 import { dashboardConfig } from "./ComponentsAndConstants/dashBoardConfig";
-import { Appointments, HealthOverview, SleepTracking, Steps, BloodTracking, HeartRate, Hydration, BloodCells } from "./ComponentsAndConstants/Widgets";
+import Widgets from './ComponentsAndConstants/Widgets';
 import { createSwapy, utils } from 'swapy'
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
-
-const widgetComponents = {
-    Appointments,
-    BloodCells,
-    BloodTracking,
-    HealthOverview,
-    HeartRate,
-    Hydration,
-    SleepTracking,
-    Steps
-};
 
 const DashBoard = () => {
 
@@ -51,22 +40,26 @@ const DashBoard = () => {
 
     //refreshes token if one exists
     useEffect(() => {
-        let token = localStorage.getItem('fitbit-token');
-        if(token != null){
-            if(!isValidToken(token)){
-                refreshToken(token);
+        async function checkFitBitLinked(){
+            let token = localStorage.getItem('fitbit-token');
+            if(token != null){
+                if(!(await isValidToken(token))){
+                    refreshToken(token);
+                }
+                
+                setFitBitLinked(true);
             }
-            
-            setFitBitLinked(true);
         }
-    })
+
+        checkFitBitLinked();
+    }, [])
+
     return (
         <div className="flex min-h-screen bg-base-200 bg-gray-100">
             <div className="flex flex-col flex-1">
                 <Header />
 
                 <div className="p-6 space-y-6 overflow-y-auto">
-
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
                         <div>
                             <p className="font-semibold">{USER_INFO.name.label}: {USER_INFO.name.firstName} {USER_INFO.name.lastName}</p>
@@ -98,7 +91,7 @@ const DashBoard = () => {
                             if (!widget) {
                                 return null;
                             }
-                            const WidgetComponent = widgetComponents[widget.type];
+                            const WidgetComponent = Widgets[widget.type];
 
                             return (
                                 <div key={slotId} data-swapy-slot={slotId} className="bg-white/30 rounded-lg shadow-md">
@@ -106,7 +99,7 @@ const DashBoard = () => {
                                     {widget &&
                                         <div key={itemId} data-swapy-item={itemId} className="w-full h-full bg-white p-4">
                                             <div className="p-2">
-                                                <WidgetComponent />
+                                                <WidgetComponent fitBitLinked={fitBitLinked} />
                                             </div>
                                             <span className="delete" data-swapy-no-drag onClick={() => {
                                                 setWidgets(widgets.filter(i => i.id !== widget.id))

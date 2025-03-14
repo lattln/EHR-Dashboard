@@ -40,9 +40,17 @@ function getLastWeekString(){
     return format(lastWeek, DATE_FORMAT);
 }
 
+//Returns a string converting raw minutes into hours and min
+function minToHours(minutes){
+    let leftover = minutes % 60;
+    let hours = Math.floor(minutes / 60);
+    return `${hours}hr ${leftover}min`;
+}
+
 const fitBitUtils = {
     today: getTodayString,
     lastWeek: getLastWeekString,
+    minToHours: minToHours,
     replaceURLParams: replaceParams,
     yesterday: getYesterdayString,
 }
