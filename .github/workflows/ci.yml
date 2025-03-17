@@ -15,7 +15,7 @@ jobs:
       METEOR_ALLOW_SUPERUSER: "true"
       METEOR_DISABLE_TELEMETRY: "1"
       ENABLE_MONGO_LOG: "false"
-      MONGO_URL: "mongodb://localhost:3001/meteor"
+      MONGO_URL: "mongodb://127.0.0.1:3001/meteor"
 
     steps:
       - name: Checkout Repository
