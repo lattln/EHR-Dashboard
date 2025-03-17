@@ -1,4 +1,4 @@
-/*import { expect } from "chai";
+import { expect } from "chai";
 import { transformObservationInformation } from "../../imports/api/Fhir/Server/FhirUtils";
 
 
@@ -7,4 +7,4 @@ describe('transformObservationInformation', function() {
         const result = transformObservationInformation(null);
         expect(result).to.be.null;
     });
-}); */
+});
