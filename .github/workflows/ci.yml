@@ -15,8 +15,7 @@ jobs:
       mongo:
         image: mongo
         ports:
-          - 3001:3001
-        command: ["mongod", "--port", "3001"]
+          - 27017:27017
         options: >-
           --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
           --health-interval 10s 
@@ -26,7 +25,7 @@ jobs:
       METEOR_ALLOW_SUPERUSER: "true"
       METEOR_DISABLE_TELEMETRY: "1"
       ENABLE_MONGO_LOG: "false"
-      MONGO_URL: "mongodb://127.0.0.1:3001/meteor"
+      MONGO_URL: "mongodb://127.0.0.1:27017/meteor"
 
     steps:
       - name: Checkout Repository
