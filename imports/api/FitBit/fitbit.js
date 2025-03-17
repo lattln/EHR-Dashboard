@@ -76,17 +76,23 @@ async function getHeartRate(){
     }
 }
 
-//formats returned data for ChartJS
-async function getSleepLog(){
-    let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json');
+async function getSleepBreakdown(){
     let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
     
-    let stack = sleepGoal.goal.minDuration - sleepLog.summary.totalMinutesAsleep;
     let summaryData = [{
         label: "Minutes",
         data: [sleepLog.summary.stages.deep, sleepLog.summary.stages.light, sleepLog.summary.stages.rem, sleepLog.summary.stages.wake],
         backgroundColor: chartColors
     }]
+
+    return summaryData;
+}
+
+async function getSleepDuration(){
+    let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json');
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    
+    let stack = sleepGoal.goal.minDuration - sleepLog.summary.totalMinutesAsleep;
 
     if(stack < 0){
         stack = 0;
@@ -107,11 +113,15 @@ async function getSleepLog(){
 
     return {
         duration: sleepLog.summary.totalMinutesAsleep,
-        durationData: durationData, 
-        efficiency: sleepLog.sleep[0].efficiency,
-        goal: sleepGoal.goal.minDuration,
-        summary: summaryData
-    }
+        durationData: durationData,
+        goal: sleepGoal.goal.minDuration
+    };
+}
+
+async function getSleepEfficiency(){
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+
+    return sleepLog.sleep[0].efficiency;
 }
 
 export {
@@ -119,6 +129,7 @@ export {
     getCalories,
     getCurrentSteps,
     getHeartRate,
-    getSleepLog,
-    minToHours
+    getSleepBreakdown,
+    getSleepDuration,
+    getSleepEfficiency
 };

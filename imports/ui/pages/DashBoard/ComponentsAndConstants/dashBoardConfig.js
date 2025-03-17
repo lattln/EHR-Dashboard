@@ -1,18 +1,25 @@
 export const dashboardConfig = [
     {
-        id: "heartRate",
-        type: "HeartRate",
-
+        id: "sleepBreakdown",
+        type: "SleepBreakdown",
     },
-];
-/*
     {
-        id: "sleepTracking",
-        type: "SleepLog",
-
+        id: "sleepDuration",
+        type: "SleepDuration",
+    },
+    {
+        id: "sleepEfficiency",
+        type: "SleepEfficiency",
     },
     {
         id: "steps",
         type: "Steps"
     }
+];
+/*
+    {
+        id: "heartRate",
+        type: "HeartRate",
+
+    },
 */

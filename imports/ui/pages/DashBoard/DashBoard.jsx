@@ -98,7 +98,7 @@ const DashBoard = () => {
 
                                     {widget &&
                                         <div key={itemId} data-swapy-item={itemId} className="w-full h-full bg-white p-4">
-                                            <div className="p-2">
+                                            <div className={`col-span-width p-2`}>
                                                 <WidgetComponent fitBitLinked={fitBitLinked} />
                                             </div>
                                             <span className="delete" data-swapy-no-drag onClick={() => {
