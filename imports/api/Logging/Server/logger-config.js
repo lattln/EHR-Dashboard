@@ -7,7 +7,7 @@ const loggerTransports = pino.transport(
             {
                 target: "pino-mongodb",
                 options: {
-                    uri: "mongodb://localhost:3001/meteor",
+                    uri: process.env.MONGO_URL || "mongodb://127.0.0.1:3001/meteor",
                     collection: "logs",
                     mongoOptions: {
                         useNewUrlParser: true,
