@@ -23,7 +23,7 @@ Meteor.methods({
                 if(this.userId && await isAdmin(this.userId)){
                     await addUsersToRoles(this.userId, userIDsList, rolesList);
                 } else {
-                    throw new Meteor.Error("not-authorized");
+                    throw new Meteor.Error("Not-Authorized");
                 }
             } catch (error) {
                 throw error;
@@ -39,7 +39,7 @@ Meteor.methods({
                 if(this.userId && await isAdmin(this.userId)){
                     await removeUsersFromRoles(this.userId, userIDsList, rolesList);
                 } else {
-                    throw new Meteor.Error("not-authorized");
+                    throw new Meteor.Error("Not-Authorized");
                 }
             } catch (error) {
                 throw error;
@@ -49,7 +49,7 @@ Meteor.methods({
 
     async 'user.updateProfile'({firstName, lastName, fitbitAccountAuth}) {
         if(!Meteor.userId()) {
-            throw new Meteor.Error("not-authorized");
+            throw new Meteor.Error("Not-Authorized");
         }
 
         if (!this.isSimulation) {
@@ -65,7 +65,7 @@ Meteor.methods({
     async 'user.updateEmail'(email){
 
         if(!Meteor.userId()) {
-            throw new Meteor.Error("not-authorized");
+            throw new Meteor.Error("Not-Authorized");
         }
 
         if(!this.isSimulation) {
@@ -80,7 +80,7 @@ Meteor.methods({
 
     async 'user.addClinician'(clinicianUserID){
         if(!this.userId) {
-            throw new Meteor.Error("not-authorized");
+            throw new Meteor.Error("Not-Authorized");
         }
 
         if(!this.isSimulation) {
@@ -101,7 +101,7 @@ Meteor.methods({
 
     async 'user.removeClinician'(clinicianUserID){
         if(!this.userId) {
-            throw new Meteor.Error("not-authorized");
+            throw new Meteor.Error("Not-Authorized");
         }
 
         if(!this.isSimulation) {
