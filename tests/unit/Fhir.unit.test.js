@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { transformObservationInformation } from "../../imports/api/Fhir/fhirMethods.js";
+import { transformObservationInformation } from "../../imports/api/Fhir/Server/FhirUtils";
+
 
 describe('transformObservationInformation', function() {
     it('should return null if observation is null', function() {
