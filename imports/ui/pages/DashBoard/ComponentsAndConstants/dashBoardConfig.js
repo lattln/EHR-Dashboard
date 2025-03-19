@@ -1,37 +1,25 @@
 export const dashboardConfig = [
     {
-        id: "appointments",
-        type: "Appointments",
-
+        id: "sleepBreakdown",
+        type: "SleepBreakdown",
     },
     {
-        id: "sleepTracking",
-        type: "SleepTracking",
-
+        id: "sleepDuration",
+        type: "SleepDuration",
     },
     {
-        id: "bloodTracking",
-        type: "BloodTracking",
-
+        id: "sleepEfficiency",
+        type: "SleepEfficiency",
     },
+    {
+        id: "steps",
+        type: "Steps"
+    }
+];
+/*
     {
         id: "heartRate",
         type: "HeartRate",
 
     },
-    {
-        id: "hydration",
-        type: "Hydration",
-
-    },
-    {
-        id: "bloodCells",
-        type: "BloodCells",
-
-    },
-    {
-        id: "healthOverview",
-        type: "HealthOverview",
-
-    },
-];
+*/
