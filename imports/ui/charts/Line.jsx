@@ -71,12 +71,15 @@ function Line({ className, label, loinc }){
             if(dataPoints.length < 1){
                 return;
             }
+
             dataPoints.map((dataPoint) => {
-                newDataset.data.push({ 
+                newDataset.data.push({
                     x: format(new Date(dataPoint.dateIssued), 'y-MM-dd'),
-                    y: dataPoint.valueQuantity.value
+                    y: dataPoint.valueQuantities[0].value 
                 })
+                console.log(dataPoint);
             })
+
             setOptions({ ...options, 
                 scales: {
                     x: {
@@ -93,7 +96,7 @@ function Line({ className, label, loinc }){
                     y: {
                         title: {
                             display: true,
-                            text: dataPoints[0].valueQuantity.unit
+                            text: dataPoints[0].valueQuantities[0].unit
                         }
                     }
                 },
