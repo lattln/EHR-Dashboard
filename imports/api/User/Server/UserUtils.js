@@ -17,7 +17,7 @@ async function patientHandler(options) {
     
     if (!firstName || !lastName || !phoneNumber || !dob) {
         
-        let error =  new Meteor.Error("Not Enough Information", 
+        let error =  new Meteor.Error("Not-Enough-Information", 
             "the provided user information is not enough to create a patient account");
         logger.error(error, error.reason);
         throw error;
@@ -43,7 +43,7 @@ async function patientHandler(options) {
     //possible logic error here. fhirID could either be a list of ids that all were matching the patient information
     //a single id that corresponds with only a single patient or -1 for no patient found.
     if (fhirID === -1) {
-        throw new Meteor.Error("Patient Not Found", 
+        throw new Meteor.Error("Patient-Not-Found", 
             "A patient with the provided information does not exist in the fhir server.");
     } 
     
@@ -101,7 +101,7 @@ async function clinicianHandler(options) {
     }
     catch (error) {
         if (error.error === 403 || error.reason === 'Email already exists.') {
-            throw new Meteor.Error('Email Already Exists', 
+            throw new Meteor.Error('Email-Already-Exists', 
                 'The email address is already in use. Please use a different email.');
         }
         else if (error instanceof Meteor.Error) {
@@ -127,7 +127,7 @@ export async function signupUser(userInformation){
 
     if (!email || !password || !role) {
 
-        let error = new Meteor.Error("Not Enough Information",
+        let error = new Meteor.Error("Not-Enough-Information",
             "the provided user information is not enough for account creation.");
         logger.error(error, error.message);
         throw error;
@@ -147,7 +147,7 @@ export async function signupUser(userInformation){
                 userID = await clinicianHandler(userInformation);
                 break;
             case UserRoles.ADMIN:
-                throw new Meteor.Error("not-authorized",
+                throw new Meteor.Error("Not-Authorized",
                     "Cannot create admin accounts from this method.");
             default:
                 throw new Meteor.Error("Invalid Role Assignment",
@@ -344,6 +344,7 @@ export async function addClinicianToPatient(userPatientID, userClinicianID) {
 
 export async function removeClinicianFromPatient(userPatientID, userClinicianID) {
     if (!userPatientID || !userClinicianID) {
+        logger.error(`An error occurred while trying to add ${userPatientID} to ${userClinicianID} list of patients.`)
         throw new Meteor.Error("Remove-Clinician-Error", "provided arguments are undefined.");
     }
 
