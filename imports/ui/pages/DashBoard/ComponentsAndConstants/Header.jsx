@@ -20,7 +20,7 @@ const Header = ({ }) => {
 
 
             <div className="flex justify-evenly items-center">
-                <h3 className="text-xl font-bold text-gray-800">Hi, {USER_INFO.name.firstName} {USER_INFO.name.lastName}</h3>
+                <h3 className="text-lg font-bold text-gray-800">Hi, {USER_INFO.name.firstName} {USER_INFO.name.lastName}</h3>
                 <img src="/blank.webp" className="ml-3 w-10 h-10 sm:w-15 sm:h-15 rounded-full"></img>
             </div>
         </div>

@@ -1,24 +1,4 @@
 export const dashboardConfig = [
-    {
-        id: `dummyWidget-1`,
-        type: "DummyWidget"
-    },
-    {
-        id: `dummyWidget-2`,
-        type: "DummyWidget"
-    },
-    {
-        id: `dummyWidget-3`,
-        type: "DummyWidget"
-    },
-    {
-        id: `dummyWidget-4`,
-        type: "DummyWidget"
-    },
-    {
-        id: `dummyWidget-5`,
-        type: "DummyWidget"
-    },
     // {
     //     id: "sleepBreakdown",
     //     type: "SleepBreakdown",
@@ -34,7 +14,35 @@ export const dashboardConfig = [
     // {
     //     id: "steps",
     //     type: "Steps"
-    // }
+    // },
+    {
+        id: `dummyWidget-1`,
+        type: "DummyWidget",
+    },
+    {
+        id: `dummyWidget-2`,
+        type: "DummyWidget"
+    },
+    {
+        id: `dummyWidget-3`,
+        type: "DummyWidget"
+    },
+    {
+        id: `dummyWidget-4`,
+        type: "DummyWidget"
+    },
+    {
+        id: `dummyWidget-5`,
+        type: "DummyWidget",
+    },
+    {
+        id: `dummyWidget-6`,
+        type: "DummyWidget",
+    },
+    {
+        id: `dummyWidget-7`,
+        type: "DummyWidget",
+    },
 ];
 
 /*

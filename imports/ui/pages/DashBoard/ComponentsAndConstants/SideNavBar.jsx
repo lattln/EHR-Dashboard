@@ -14,10 +14,10 @@ const SideNavBar = () => {
         >
             <div className="fixed flex h-screen w-60 bg-blue-600 shadow-lg flex-col items-start px-6 py-4 space-y-7">
                 {/* Logo */}
-                <div className="mb-6 flex items-center">
+                <div className="pt-6 pb-6 pl-3">
                     <Link to="/dev">
-                        <div className="h-20 bg-white flex items-center justify-center rounded">
-                            <img src="/HealthBridge.png" className="px-4"></img>
+                        <div className="text-white ">
+                            <h1 className="text-2xl font-semibold">HEALTHBRIDGE</h1>
                         </div>
                     </Link>
                 </div>

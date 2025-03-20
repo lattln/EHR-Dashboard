@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getAuthUrl, isValidToken, refreshToken } from "../../../../api/FitBit/auth";
-import { dashboardConfig } from "../ComponentsAndConstants/dashBoardConfig";  
+import { dashboardConfig } from "../ComponentsAndConstants/dashBoardConfig";
 
 const Settings = () => {
     const [fitBitUrl, setFitBitUrl] = useState({});
     const [fitBitLinked, setFitBitLinked] = useState(false);
-    const [currentConfig, setCurrentConfig] = useState(dashboardConfig); 
+    const [currentConfig, setCurrentConfig] = useState(dashboardConfig);
 
     const linkFitBit = (e) => {
         e.preventDefault();
@@ -23,23 +23,65 @@ const Settings = () => {
     useEffect(() => {
         let token = localStorage.getItem('fitbit-token');
 
-        if(token != null){
-            if(!isValidToken(token)){
+        if (token != null) {
+            if (!isValidToken(token)) {
                 refreshToken(token);
             }
             setFitBitLinked(true);
+        }
+
+        // Check for persisted configuration in localStorage
+        const persistedConfig = localStorage.getItem("dashboardConfig");
+        if (persistedConfig) {
+            setCurrentConfig(JSON.parse(persistedConfig));
         }
     }, [])
 
     const handlePresetChange = (preset) => {
         setCurrentConfig(preset);
+        
+        // Persist the new config in localStorage
+        localStorage.setItem("dashboardConfig", JSON.stringify(preset));
     };
-
 
     // Example presets, these can be updated with specific layout configurations
     const presets = [
-        { id: 1, name: "Preset 1", layout: [/*RANDOM CONFIG MABYE? */] },
-        { id: 2, name: "Preset 2", layout: [/*SAME HERE */] },
+        {
+            id: 1, name: "Preset 1", layout:
+                [
+                    { id: `dummyWidget-1`, type: "DummyWidget" },
+                    { id: `dummyWidget-2`, type: "DummyWidget" },
+                    { id: `dummyWidget-3`, type: "DummyWidget" },
+                    { id: `dummyWidget-4`, type: "DummyWidget" },
+                    { id: `dummyWidget-5`, type: "DummyWidget" },
+                    { id: `dummyWidget-6`, type: "DummyWidget" },
+                    { id: `dummyWidget-7`, type: "DummyWidget" },
+                ]
+        },
+        {
+            id: 1, name: "Preset 2", layout:
+                [
+                    { id: `dummyWidget-7`, type: "DummyWidget" },
+                    { id: `dummyWidget-6`, type: "DummyWidget" },
+                    { id: `dummyWidget-5`, type: "DummyWidget" },
+                    { id: `dummyWidget-4`, type: "DummyWidget" },
+                    { id: `dummyWidget-3`, type: "DummyWidget" },
+                    { id: `dummyWidget-2`, type: "DummyWidget" },
+                    { id: `dummyWidget-1`, type: "DummyWidget" },
+                ]
+        },
+        {
+            id: 2, name: "Preset 3", layout:
+                [
+                    { id: `dummyWidget-4`, type: "DummyWidget" },
+                    { id: `dummyWidget-3`, type: "DummyWidget" },
+                    { id: `dummyWidget-1`, type: "DummyWidget" },
+                    { id: `dummyWidget-6`, type: "DummyWidget" },
+                    { id: `dummyWidget-5`, type: "DummyWidget" },
+                    { id: `dummyWidget-2`, type: "DummyWidget" },
+                    { id: `dummyWidget-7`, type: "DummyWidget" },
+                ]
+        },
     ];
 
     return (

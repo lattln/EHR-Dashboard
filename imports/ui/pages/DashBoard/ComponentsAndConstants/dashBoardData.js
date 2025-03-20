@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconHome, IconHistory, IconUser, IconSetting } from '../../svgLibrary';
+import { IconHome, IconFlask, IconUser, IconSetting } from '../../svgLibrary';
 
 export const NAV_LINKS = [
     {
@@ -8,13 +8,13 @@ export const NAV_LINKS = [
         icon: <IconHome className="w-6 h-6 text-primary-content" />
     },
     {
-        name: 'History',
-        route: '/history',
-        icon: <IconHistory className="w-6 h-6 text-primary-content" />
+        name: 'Lab History',
+        route: '/labsHistory',
+        icon: <IconFlask className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'User',
-        route: '/user',
+        route: '/userSettings',
         icon: <IconUser className="w-6 h-6 text-primary-content" />
     },
     {
