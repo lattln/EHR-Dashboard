@@ -92,7 +92,6 @@ const DashBoard = () => {
                                 return null;
                             }
                             const WidgetComponent = Widgets[widget.type];
-                            console.log(widget);
 
                             return (
                                 <div 

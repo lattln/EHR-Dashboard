@@ -101,7 +101,7 @@ function Weight({ }){
 		<>
 			<h2 className="text-lg font-bold">Weight</h2>
 			<div>
-				<Line height={300} options={options} data={data} />
+				<Line height={250} options={options} data={data} />
 			</div>
 		</>
 	)
