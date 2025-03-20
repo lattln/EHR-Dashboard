@@ -1,5 +1,5 @@
 export const dashboardConfig = [
-    {
+    /*{
         id: "sleepBreakdown",
         type: "SleepBreakdown",
     },
@@ -14,12 +14,5 @@ export const dashboardConfig = [
     {
         id: "steps",
         type: "Steps"
-    }
-];
-/*
-    {
-        id: "heartRate",
-        type: "HeartRate",
-
-    },
-*/
+    }*/
+]

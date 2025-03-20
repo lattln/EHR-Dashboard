@@ -124,6 +124,23 @@ async function getSleepEfficiency(){
     return sleepLog.sleep[0].efficiency;
 }
 
+async function getSleepHeatMap(){
+    let today = fitBitUtils.today();
+    let lastWeek = fitBitUtils.lastWeek();
+
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
+    sleepLog.sleep = sleepLog.sleep.reverse();
+
+    return {
+        data: sleepLog.sleep.map((log) => {
+            return log.efficiency;
+        }),
+        days: sleepLog.sleep.map((log) => {
+            return new Date(log.dateOfSleep).toUTCString().substring(0, 2);
+        })
+    }
+}
+
 export {
     getActivityLog,
     getCalories,
@@ -131,5 +148,6 @@ export {
     getHeartRate,
     getSleepBreakdown,
     getSleepDuration,
-    getSleepEfficiency
+    getSleepEfficiency,
+    getSleepHeatMap
 };

@@ -116,7 +116,7 @@ async function encJWT(token){
 async function isValidToken(jwe){
     let jwt = await decJWT(jwe);
     let expiresAt = jwt.iat + TOKEN_DURATION;
-    let dateInSeconds = Math.floor(Date.now / 1000);
+    let dateInSeconds = Math.floor(Date.now() / 1000);
     if(dateInSeconds >= expiresAt){
         return false;
     }
