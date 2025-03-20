@@ -40,13 +40,13 @@ const DashBoard = () => {
 
     //refreshes token if one exists
     useEffect(() => {
-        async function checkFitBitLinked(){
+        async function checkFitBitLinked() {
             let token = localStorage.getItem('fitbit-token');
-            if(token != null){
-                if(!(await isValidToken(token))){
+            if (token != null) {
+                if (!(await isValidToken(token))) {
                     refreshToken(token);
                 }
-                
+
                 setFitBitLinked(true);
             }
         }
@@ -60,7 +60,7 @@ const DashBoard = () => {
                 <Header />
 
                 <div className="p-6 space-y-6 overflow-y-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
                         <div>
                             <p className="font-semibold">{USER_INFO.name.label}: {USER_INFO.name.firstName} {USER_INFO.name.lastName}</p>
                             <p className="font-semibold">{USER_INFO.birth.label}: {USER_INFO.birth.value}</p>
@@ -72,7 +72,7 @@ const DashBoard = () => {
                         <div className="flex items-center justify-between">
                             <p className="font-semibold">{USER_INFO.lastAppt.label}: {USER_INFO.lastAppt.value}</p>
                             <input type="checkbox" onChange={(event) => {
-                                if(event.target.checked) {
+                                if (event.target.checked) {
                                     console.log("this shit is true")
                                     swapyRef.current.enable(true)
                                 }
@@ -85,7 +85,7 @@ const DashBoard = () => {
 
                     <div
                         ref={container}
-                        className="Container-Grid grid grid-cols-4 gap-4 min-h-screen text-black">
+                        className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 text-black overflow-clip">
 
                         {slottedItems.map(({ slotId, itemId, item: widget }) => {
                             if (!widget) {
@@ -94,16 +94,19 @@ const DashBoard = () => {
                             const WidgetComponent = Widgets[widget.type];
 
                             return (
-                                <div key={slotId} data-swapy-slot={slotId} className="bg-white/30 rounded-lg shadow-md">
+                                <div key={slotId} data-swapy-slot={slotId} className="bg-white/30 rounded-lg shadow-md h-80">
 
                                     {widget &&
-                                        <div key={itemId} data-swapy-item={itemId} className="w-full h-full bg-white p-4">
+                                        <div key={itemId} data-swapy-item={itemId} className="w-full h-full bg-white p-4 rounded-lg">
                                             <div className={`col-span-width p-2`}>
+                                                <div>
+                                                    {itemId}
+                                                </div>
                                                 <WidgetComponent fitBitLinked={fitBitLinked} />
                                             </div>
-                                            <span className="delete" data-swapy-no-drag onClick={() => {
+                                            {/* <span className="delete" data-swapy-no-drag onClick={() => {
                                                 setWidgets(widgets.filter(i => i.id !== widget.id))
-                                            }}>Delete</span>
+                                            }}>Delete</span> */}
                                         </div>
                                     }
 
@@ -111,10 +114,12 @@ const DashBoard = () => {
                             );
                         })}
                     </div>
-                    <div className="" onClick={() => {
+                    {/* <div className="" onClick={() => {
                         const newWidget = { id: `appointment`, type: `Appointments` }
                         setWidgets([...widgets, newWidget])
-                    }}>+</div>
+                    }}>
+                        +
+                    </div> */}
                 </div>
             </div>
         </div>

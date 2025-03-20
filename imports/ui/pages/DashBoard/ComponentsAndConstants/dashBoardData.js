@@ -34,6 +34,11 @@ export const USER_INFO = {
         label: "Email",
         value: "johnsmith@example.com",
     },
+    phone: {
+        label: "Phone Number",
+        value: "260-999-9999"
+    },
+    bio: "N/A Edit",
     gender: {
         label: "Gender",
         value: "Male",
@@ -50,9 +55,15 @@ export const USER_INFO = {
         label: "Last Appointment",
         value: "10/18/2024",
     },
+    address: {
+        country: "United States",
+        cityState: "Fort Wayne, IN",
+        postalCode: "46816"
+    }
 };
 
 export const PLACEHOLDER = {
     chart: "Chart Placeholder",
     placeHolder: "PLACE HOLDER BOX",
 };
+

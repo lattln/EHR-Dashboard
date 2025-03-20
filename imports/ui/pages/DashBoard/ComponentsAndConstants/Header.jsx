@@ -1,8 +1,10 @@
 import React from "react";
+import { USER_INFO } from "./dashBoardData";
 
 const Header = ({ }) => {
+
     return (
-        <div className="bg-white shadow-md p-4 flex justify-between items-center">
+        <div className="bg-white shadow-md p-4 flex justify-between items-center sm:justify-end">
             {/* Mobile Menu Button */}
             <button
                 className="text-2xl sm:hidden"
@@ -16,14 +18,10 @@ const Header = ({ }) => {
                 ☰
             </button>
 
-            <h1 className="text-xl font-bold text-gray-800">Dashboard</h1>
 
-            <div>
-                <input
-                    type="text"
-                    placeholder="Search"
-                    className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            <div className="flex justify-evenly items-center">
+                <h3 className="text-xl font-bold text-gray-800">Hi, {USER_INFO.name.firstName} {USER_INFO.name.lastName}</h3>
+                <img src="/blank.webp" className="ml-3 w-10 h-10 sm:w-15 sm:h-15 rounded-full"></img>
             </div>
         </div>
     );
