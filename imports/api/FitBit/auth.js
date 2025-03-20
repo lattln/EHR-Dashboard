@@ -116,7 +116,7 @@ async function encJWT(token){
 async function isValidToken(jwe){
     let jwt = await decJWT(jwe);
     let expiresAt = jwt.iat + TOKEN_DURATION;
-    let dateInSeconds = Math.floor(Date.now / 1000);
+    let dateInSeconds = Math.floor(Date.now() / 1000);
     if(dateInSeconds >= expiresAt){
         return false;
     }
@@ -125,6 +125,7 @@ async function isValidToken(jwe){
 
 //Grabs the current access token and uses the refresh_token property to request a new access token. Used when access expires
 async function refreshToken(token){
+    console.log('refreshing');
     let jwt = await decJWT(token);
     let res = await fetch('https://api.fitbit.com/oauth2/token', {
         method: 'POST',
