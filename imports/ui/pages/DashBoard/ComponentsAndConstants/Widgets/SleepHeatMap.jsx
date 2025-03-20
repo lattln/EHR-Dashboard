@@ -19,6 +19,7 @@ function SleepHeatMap({ fitBitLinked }){
 
 	return (
 		<>
+			<h2 className="text-lg font-bold">Last Week's Sleep Efficiency</h2>
 			{
 					fitBitLinked ? 
 					<HeatMapGrid

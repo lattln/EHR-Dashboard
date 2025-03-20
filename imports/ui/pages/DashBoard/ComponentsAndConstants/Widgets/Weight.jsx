@@ -32,17 +32,13 @@ function Weight({ }){
 		responsive: true,
 		maintainAspectRatio: false,
 		plugins: {
-			title: {
-					display: true,
-					text: label
-			},
 			zoom: {
-					zoom: {
-						wheel: {
-							enabled: true,
-						},
-						mode: 'xy',
-					}
+				zoom: {
+					wheel: {
+						enabled: true,
+					},
+					mode: 'xy',
+				}
 			}
 		}
 	})
@@ -61,20 +57,19 @@ function Weight({ }){
 		async function getWeight(){
 			let data = await Meteor.callAsync('patient.getWeightMetrics', 1);
 			let newDataset = {
-				label: label,
+				label: 'Weight',
 				data: [],
 				pointRadius: 3,
 				pointBackgroundColor: lineColors[0],
 				borderColor: lineColors[0],
 				backgroundColor: lineColors[0]
 			}
-			console.log(data);
-			/*(dataPoints.map((dataPoint) => {
+			data.map((dataPoint) => {
 				newDataset.data.push({ 
 					x: format(new Date(dataPoint.dateIssued), 'y-MM-dd'),
-					y: dataPoint.valueQuantity.value
+					y: dataPoint.valueQuantities[0].value
 				})
-			})*/
+			})
 			setOptions({ ...options, 
 				scales: {
 					x: {
@@ -91,7 +86,7 @@ function Weight({ }){
 					y: {
 						title: {
 							display: true,
-							text: dataPoints[0].valueQuantity.unit
+							text: data[0].valueQuantities[0].unit
 						}
 					}
 				},
@@ -105,6 +100,9 @@ function Weight({ }){
 	return (
 		<>
 			<h2 className="text-lg font-bold">Weight</h2>
+			<div>
+				<Line height={300} options={options} data={data} />
+			</div>
 		</>
 	)
 };

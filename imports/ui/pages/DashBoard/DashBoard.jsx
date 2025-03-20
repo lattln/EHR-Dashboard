@@ -92,9 +92,15 @@ const DashBoard = () => {
                                 return null;
                             }
                             const WidgetComponent = Widgets[widget.type];
+                            console.log(widget);
 
                             return (
-                                <div key={slotId} data-swapy-slot={slotId} className="bg-white/30 rounded-lg shadow-md">
+                                <div 
+                                    key={slotId}
+                                    data-swapy-slot={slotId}
+                                    className="bg-white/30 rounded-lg shadow-md h-fit"
+                                    style={{ gridColumnStart: `span ${widget.width}`, gridRowStart: `span ${widget.height}` }}
+                                >
 
                                     {widget &&
                                         <div key={itemId} data-swapy-item={itemId} className="w-full h-full bg-white p-4">

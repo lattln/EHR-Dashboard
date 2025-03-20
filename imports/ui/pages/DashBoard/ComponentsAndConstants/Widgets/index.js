@@ -4,6 +4,7 @@ import SleepEfficiency from './SleepEfficiency';
 import Steps from "./Steps";
 import HeartRate from "./HeartRate";
 import SleepHeatMap from './SleepHeatMap';
+import Weight from './Weight';
 
 export default Widgets = {
     'HeartRate': HeartRate,
@@ -12,4 +13,5 @@ export default Widgets = {
     'SleepEfficiency': SleepEfficiency,
     'SleepHeatMap': SleepHeatMap,
     'Steps': Steps,
+    'Weight': Weight,
 };
