@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const LabHistory = () => {
     // Example data for lab results
@@ -9,7 +10,6 @@ const LabHistory = () => {
         { name: 'Vitamin D', value: 50, unit: 'ng/ml', minValue: 30, maxValue: 100 },
         { name: 'TSH', value: 7, unit: 'uU/ml', minValue: 0.4, maxValue: 4.5 }
     ];
-
 
     const calculateProgress = (value, maxValue) => {
         const percentage = (value / maxValue) * 100;
@@ -34,32 +34,45 @@ const LabHistory = () => {
                 {/* Lab Results */}
                 <div className="space-y-6">
                     {labResults.map((result, index) => (
-                        <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+                        <motion.div
+                            key={index}
+                            className="bg-white p-4 rounded-lg shadow-md"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.2 }} // Stagger animation for each lab result
+                        >
                             <div className="flex justify-between items-center">
                                 <p className="font-semibold">{result.name}</p>
                                 <p className="font-semibold">{result.value} {result.unit}</p>
                             </div>
 
-                            {/* Full-width progress bar */}
-                            <div className="mt-2 w-full bg-gray-300 rounded-full h-2">
-                                <div
-                                    className="bg-blue-500 h-2 rounded-full"
-                                    style={{ width: `${calculateProgress(result.value, result.maxValue)}%` }}
-                                ></div>
-                            </div>
+                            {/* Progress Bar Animation */}
+                            <motion.div
+                                className="mt-2 w-full bg-gray-300 rounded-full h-2"
+                                initial={{ width: '0%' }}
+                                animate={{ width: `${calculateProgress(result.value, result.maxValue)}%` }}
+                                transition={{ duration: 1, ease: 'easeOut' }} // Smooth progress bar animation
+                            >
+                                <div className="bg-blue-500 h-2 rounded-full"></div>
+                            </motion.div>
+
                             <div className="flex justify-between mt-2 text-xs text-gray-500">
                                 <span>{result.minValue} {result.unit}</span>
                                 <span>{result.maxValue} {result.unit}</span>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
 
                 {/* Download Button */}
                 <div className="my-6 flex justify-end">
-                    <button className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600">
+                    <motion.button
+                        className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600"
+                        whileHover={{ scale: 1.1 }} // Button hover animation
+                        whileTap={{ scale: 0.95 }} // Button tap animation
+                    >
                         Download Results
-                    </button>
+                    </motion.button>
                 </div>
 
                 {/* Recommended Supplements & Prescriptions */}
