@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconHome, IconHistory, IconUser, IconSetting } from '../../svgLibrary';
+import { IconHome, IconFlask, IconUser, IconSetting } from '../../svgLibrary';
 
 export const NAV_LINKS = [
     {
@@ -8,13 +8,13 @@ export const NAV_LINKS = [
         icon: <IconHome className="w-6 h-6 text-primary-content" />
     },
     {
-        name: 'History',
-        route: '/history',
-        icon: <IconHistory className="w-6 h-6 text-primary-content" />
+        name: 'Lab History',
+        route: '/labsHistory',
+        icon: <IconFlask className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'User',
-        route: '/user',
+        route: '/userSettings',
         icon: <IconUser className="w-6 h-6 text-primary-content" />
     },
     {
@@ -34,6 +34,11 @@ export const USER_INFO = {
         label: "Email",
         value: "johnsmith@example.com",
     },
+    phone: {
+        label: "Phone Number",
+        value: "260-999-9999"
+    },
+    bio: "N/A Edit",
     gender: {
         label: "Gender",
         value: "Male",
@@ -50,9 +55,15 @@ export const USER_INFO = {
         label: "Last Appointment",
         value: "10/18/2024",
     },
+    address: {
+        country: "United States",
+        cityState: "Fort Wayne, IN",
+        postalCode: "46816"
+    }
 };
 
 export const PLACEHOLDER = {
     chart: "Chart Placeholder",
     placeHolder: "PLACE HOLDER BOX",
 };
+

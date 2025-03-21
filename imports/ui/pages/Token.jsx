@@ -10,7 +10,7 @@ const Token = ({}) => {
         const authorizeToken = async () => {
             let success = await getToken(urlParams.get('code'));
             if(success.success){
-                nav('/user');
+                nav('/settings');
             } else {
                 console.log(success.errors);
                 nav('/not-found');
