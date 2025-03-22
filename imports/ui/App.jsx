@@ -7,15 +7,18 @@ import NotFound from "./pages/NotFound";
 import DevLanding from "./pages/DevLandingPage/DevLanding";
 import UserSettings from './pages/DashBoard/ComponentsAndConstants/UserSettings';
 import SideNavBar from "./pages/DashBoard/ComponentsAndConstants/SideNavBar";
+import Token from "./pages/Token";
+import Settings from "./pages/DashBoard/ComponentsAndConstants/Settings";
+import LabsHistory from "./pages/DashBoard/ComponentsAndConstants/LabsHistory";
 
 
 const AppLayout = () => (
     <>
-        <div className="hidden sm:flex">
+        <div className="hidden md:flex">
             <SideNavBar />
         </div>
 
-        <div className="ml-0 sm:ml-60">
+        <div className="ml-0 md:ml-60 ">
             <Outlet />
         </div>
     </>
@@ -29,12 +32,16 @@ const router = createBrowserRouter(
             children: [
                 { index: true, element: <Navigate to="/dev" replace /> },
                 { path: "dashboard", element: <DashBoard /> },
-                { path: "user", element: <UserSettings /> },
+                { path: "userSettings", element: <UserSettings /> },
+                { path: "settings", element: <Settings />},
+                { path: "labsHistory", element: <LabsHistory />},
                 { path: "*", element: <NotFound />},
+                { path: "not-found", element: <NotFound />}
             ],
         },
         { path: "/auth", element: <AuthPage /> },
         { path: "dev", element: <DevLanding /> },
+        { path: "/toke", element: <Token />},
         { path: "*", element: <NotFound /> },
     ],
     {

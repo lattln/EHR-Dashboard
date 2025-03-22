@@ -1,37 +1,55 @@
 export const dashboardConfig = [
+    // {
+    //     id: "sleepBreakdown",
+    //     type: "SleepBreakdown",
+    // },
+    // {
+    //     id: "sleepDuration",
+    //     type: "SleepDuration",
+    // },
+    // {
+    //     id: "sleepEfficiency",
+    //     type: "SleepEfficiency",
+    // },
+    // {
+    //     id: "steps",
+    //     type: "Steps"
+    // },
     {
-        id: "appointments",
-        type: "Appointments",
-
+        id: `dummyWidget-1`,
+        type: "DummyWidget",
     },
     {
-        id: "sleepTracking",
-        type: "SleepTracking",
-
+        id: `dummyWidget-2`,
+        type: "DummyWidget"
     },
     {
-        id: "bloodTracking",
-        type: "BloodTracking",
-
+        id: `dummyWidget-3`,
+        type: "DummyWidget"
     },
+    {
+        id: `dummyWidget-4`,
+        type: "DummyWidget"
+    },
+    {
+        id: `dummyWidget-5`,
+        type: "DummyWidget",
+    },
+    {
+        id: `dummyWidget-6`,
+        type: "DummyWidget",
+    },
+    {
+        id: `dummyWidget-7`,
+        type: "DummyWidget",
+    },
+];
+
+/*
     {
         id: "heartRate",
         type: "HeartRate",
 
     },
-    {
-        id: "hydration",
-        type: "Hydration",
+*/
 
-    },
-    {
-        id: "bloodCells",
-        type: "BloodCells",
-
-    },
-    {
-        id: "healthOverview",
-        type: "HealthOverview",
-
-    },
-];
