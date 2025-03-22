@@ -2,24 +2,49 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { IconEmail, IconLock, IconLockRepeat, IconUser } from "../../svgLibrary";
+import { UserRoles } from '../../../../api/User/userRoles';
 
 const Register = ({ toggleAuth }) => {
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordMatch, setPasswordMatch] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState(0);
     const [error, setError] = useState("");
+    const [first, setFirst] = useState("")
+    const [last, setLast] = useState("")
+    const [dob, setDOB] = useState("");
+    const [phone, setPhone] = useState("");
     const navigate = useNavigate();
 
     const handleRoleSelection = (selectedRole) => {
-        setRole(selectedRole);
+        if(selectedRole = 0){
+            setRole(UserRoles.CLINICIAN);
+        } else if(selectedRole = 1){
+            setRole(UserRoles.PATIENT);
+        }
     };
 
-    const handleSignUp = (e) => {
-        e.preventDefault();
+    const handlePhoneChange = (phoneNumber) => {
+        if(phoneNumber.length > 4 && phoneNumber[3] != '-'){
+            phoneNumber = phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3);
+        }
 
-        if (!email || !username || !password || !role) {
+        if(phoneNumber.length > 7 && phoneNumber[7] != '-'){
+            phoneNumber = phoneNumber.substring(0, 7) + '-' + phoneNumber.substring(7);
+        }
+
+        if(phoneNumber.length > 12){
+            phoneNumber = phoneNumber.substring(0, 12);
+        }
+
+        setPhone(phoneNumber);
+    }
+
+    const handleSignUp = async (e) => {
+        e.preventDefault();
+        console.log(dob);
+
+        if (!email || !password || !role) {
             setError("All fields are required. Please fill in your email, username, password, and role.");
             return;
         }
@@ -28,15 +53,31 @@ const Register = ({ toggleAuth }) => {
             return;
         }
 
-        Meteor.call("user.signup", email, password, role, (err) => {
-            if (err) {
-                setError(err.reason);
-            } else {
-                setError("");
-                alert("Signup successful!");
-                navigate("/dashboard");
+        if(!phone.match(/^\d{3}-\d{3}-\d{4}$/) && role == 'Patient'){
+            setError("Phone number must be in 123-456-7891 format.");
+        }
+
+        if(role === 'patient'){
+            let userData = {
+                email: email,
+                firstName: first,
+                phoneNumber: phone,
+                lastName: last,
+                dob: dob,
+                password: password,
+                role: role
             }
-        });
+
+            console.log(userData)
+
+            try {
+                let result = await Meteor.callAsync("user.signup", userData);
+                console.log(result);
+            } catch (e) {
+                console.log(e);
+            }
+
+        }
     };
 
     return (
@@ -59,22 +100,6 @@ const Register = ({ toggleAuth }) => {
                             required
                         />
                         <IconEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                    </div>
-                </div>
-
-                {/* Username Input */}
-                <div className="space-y-1">
-                    <label className="text-gray-700 text-sm font-medium">Username</label>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Enter your username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
-                            required
-                        />
-                        <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
                     </div>
                 </div>
 
@@ -110,6 +135,65 @@ const Register = ({ toggleAuth }) => {
                     </div>
                 </div>
 
+                {/* Extra patient information */}
+                <div className="space-y-1">
+                    <div className="flex gap-4">
+                        <div>
+                            <label className="text-gray-700 text-sm font-medium">First</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={first}
+                                    onChange={(e) => setFirst(e.target.value)}
+                                    className="w-3/4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                    required
+                                />
+                                <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-gray-700 text-sm font-medium">Last</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    value={last}
+                                    onChange={(e) => setLast(e.target.value)}
+                                    className="w-3/4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                    required
+                                />
+                                <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <label className="space-y-1 text-gray-700 text-sm font-medium">Phone Number</label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="123-456-7891"
+                            value={phone}
+                            onChange={(e) => handlePhoneChange(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                            required
+                        />
+                        <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                    </div>
+                    
+                    <label className="space-y-1 text-gray-700 text-sm font-medium">Date of Birth</label>
+                    <div className="relative">
+                        <input
+                            type="date"
+                            value={dob}
+                            onChange={(e) => setDOB(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                            required
+                        />
+                        <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                    </div>
+                </div>
+
                 {/* Role Selection */}
                 <div className="space-y-1">
                     <label className="text-gray-700 text-sm font-medium">Select Your Role</label>
@@ -120,7 +204,7 @@ const Register = ({ toggleAuth }) => {
                                     ? "bg-blue-600 text-white"
                                     : "border border-gray-400 text-gray-600 hover:bg-gray-200"
                                 }`}
-                            onClick={() => handleRoleSelection("clinician")}
+                            onClick={() => handleRoleSelection(0)}
                         >
                             Clinician
                         </button>
@@ -130,7 +214,7 @@ const Register = ({ toggleAuth }) => {
                                     ? "bg-blue-600 text-white"
                                     : "border border-gray-400 text-gray-600 hover:bg-gray-200"
                                 }`}
-                            onClick={() => handleRoleSelection("patient")}
+                            onClick={() => handleRoleSelection(1)}
                         >
                             Patient
                         </button>

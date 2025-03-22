@@ -1,8 +1,11 @@
 import "../imports/api/Fhir/fhirMethods.js";
 import "../imports/api/Loinc/loincConstants.js";
 import "../imports/api/User/userMethods.js";
+import "../imports/api/User/Server/user-publications.js"
 import "../imports/api/Loinc/lioncMethods.js";
 import "../imports/api/Logging/Server/logger-config.js";
+import "../imports/api/Logging/logs-collection.js"
+import "../imports/api/Logging/Server/logs-publications.js"
 import "../imports/startup/Server/accounts-config.js";
 import "../imports/startup/Server/initRoles.js";
 import "../imports/startup/Server/initUsers.js";
