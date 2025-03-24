@@ -10,16 +10,18 @@ function SleepEfficiencey({ fitBitLinked }){
 			setEfficiency(res);
 		}
 
-		efficiency();
+		if(fitBitLinked){
+			efficiency();
+		}
 	}, [fitBitLinked])
 
 	return (
 		<>
 			<h2 className="text-lg font-bold">Sleep Efficiency</h2>
 			{
-					fitBitLinked ? 
-               <h1 className="text-9xl my-5 text-center">{ efficiency }</h1>
-					: "Link your FitBit account to access this widget"
+				fitBitLinked ? 
+				<h1 className="text-9xl my-5 text-center">{ efficiency }</h1> : 
+				"Link your FitBit account to access this widget"
 			}
 		</>
 	)

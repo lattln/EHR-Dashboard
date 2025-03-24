@@ -26,16 +26,18 @@ function SleepBreakdown({ fitBitLinked }){
 			setStageData({...stageData, datasets: summary });
 		}
 
-		sleep();
+		if(fitBitLinked){
+			sleep();
+		}
 	}, [fitBitLinked])
 
 	return (
 		<>
 			<h2 className="text-lg font-bold">Sleep Breakdown</h2>
 			{
-					fitBitLinked ? 
-					<Doughnut data={stageData} />
-					: "Link your FitBit account to access this widget"
+				fitBitLinked ? 
+				<Doughnut data={stageData} /> : 
+				"Link your FitBit account to access this widget"
 			}
 		</>
 	)

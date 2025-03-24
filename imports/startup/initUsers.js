@@ -36,8 +36,6 @@ const createClinician = async function({email, password, firstName, lastName}) {
     catch (error) {
         throw error;
     }
-    
-
 }
 
 Meteor.startup(() =>{

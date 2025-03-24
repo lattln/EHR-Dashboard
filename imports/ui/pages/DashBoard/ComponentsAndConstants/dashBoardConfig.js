@@ -16,10 +16,3 @@ export const dashboardConfig = [
         type: "Steps"
     }
 ];
-/*
-    {
-        id: "heartRate",
-        type: "HeartRate",
-
-    },
-*/

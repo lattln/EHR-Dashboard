@@ -37,7 +37,9 @@ function SleepDuration({ fitBitLinked }){
 			setGoal(res.goal);
 		}
 
-		sleep();
+		if(fitBitLinked){
+			sleep();
+		}
 	}, [fitBitLinked])
 
 	return (

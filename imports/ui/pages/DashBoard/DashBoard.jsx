@@ -42,7 +42,9 @@ const DashBoard = () => {
     useEffect(() => {
         async function checkFitBitLinked(){
             let token = localStorage.getItem('fitbit-token');
+            console.log(token);
             if(token != null){
+                console.log('not null');
                 if(!(await isValidToken(token))){
                     refreshToken(token);
                 }
