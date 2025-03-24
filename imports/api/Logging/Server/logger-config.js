@@ -9,11 +9,11 @@ const targets = [
     }
 ];
 
-if (process.env.ENABLE_MONGO_LOG === "true"){
+if (process.env.ENABLE_MONGO_LOG === "true" || Meteor.settings.private.ENABLE_MONGO_LOG === "true"){
     targets.push({
         target: "pino-mongodb",
         options: {
-            uri: process.env.MONGO_URL || "mongodb://127.0.0.1:3001/meteor",
+            uri: process.env.MONGO_URL || Meteor.settings.private.MONGO_URL,
             collection: "logs",
             mongoOptions: {
                 useNewUrlParser: true,

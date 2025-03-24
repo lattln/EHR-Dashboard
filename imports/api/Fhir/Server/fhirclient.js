@@ -1,4 +1,5 @@
  import Client from 'fhir-kit-client';
+ import {Meteor} from "meteor/meteor";
 
 /**
  * object for accessing the specified fhir server.
@@ -6,5 +7,5 @@
  * server supports the actions.
  */
 export const fhirClient = new Client({
-    baseUrl: `http://localhost:8080/fhir`
+    baseUrl: Meteor.settings.private.FHIR_SERVER_URL
 })
