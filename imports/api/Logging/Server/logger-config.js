@@ -9,7 +9,8 @@ const targets = [
     }
 ];
 
-if (process.env.ENABLE_MONGO_LOG === "true" || Meteor.settings.private.ENABLE_MONGO_LOG === "true"){
+const enableMongoLogging = process.env.ENABLE_MONGO_LOG || "false"
+if (enableMongoLogging){
     targets.push({
         target: "pino-mongodb",
         options: {
