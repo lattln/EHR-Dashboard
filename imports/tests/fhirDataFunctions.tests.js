@@ -10,7 +10,7 @@ import {
     getPatientHealthMetrics,
     getRecentPatientLabs,
     getPatientRecordByID
-} from '/imports/api/Fhir/fhirMethods.js';
+} from '/imports/api/Fhir/Server/FhirUtils.js';
 
 describe('FHIR Data Functions', function () {
     describe('transformObservationInformation', function () {
