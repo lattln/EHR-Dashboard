@@ -60,22 +60,23 @@ function genVerifier(){
 }
 
 //Generates the URL for the user to click on to start the OAuth2 process.
-async function getAuthUrl(){
+async function getAuthUrl(currUrl){
     let chall = await genCodeChallenge(genVerifier());
     let url = 'https://www.fitbit.com/oauth2/authorize?' + new URLSearchParams({
         client_id: Meteor.settings.public.FITBIT_CLIENT_ID,
         scope: 'activity cardio_fitness heartrate oxygen_saturation respiratory_rate sleep temperature',
         code_challenge: chall,
         code_challenge_method: 'S256',
+        redirect_uri: currUrl + '/toke',
         response_type: 'code',
-        redirect_uri: 'https://healthbridge.meteorapp.com/toke'
+        state: currUrl
     });
 
     return url;
 }
 
 //Uses the access code given by FitBit to request an access token for the user, encrypts the token an puts in in localStorage
-async function getToken(code){
+async function getToken(code, url){
     let res = await fetch('https://api.fitbit.com/oauth2/token', {
         method: 'POST',
         headers: new Headers({
@@ -83,7 +84,7 @@ async function getToken(code){
         }),
         body: new URLSearchParams({
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https://healthbridge.meteorapp.com/toke',
+            'redirect_uri': url + '/toke',
             'code': code,
             'client_id': Meteor.settings.public.FITBIT_CLIENT_ID,
             'code_verifier': sessionStorage.getItem('verifier')
