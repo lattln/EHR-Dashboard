@@ -7,5 +7,5 @@
  * server supports the actions.
  */
 export const fhirClient = new Client({
-    baseUrl: Meteor.settings.private.FHIR_SERVER_URL || process.env.FHIR_SERVER_URL || "http://localhost:8080/fhir"
+    baseUrl: "http://localhost:8080/fhir"
 })
