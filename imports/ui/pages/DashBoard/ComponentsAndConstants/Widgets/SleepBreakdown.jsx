@@ -31,7 +31,6 @@ function SleepBreakdown({ fitBitLinked }){
 
 	return (
 		<>
-			<h2 className="text-lg font-bold">Sleep Breakdown</h2>
 			{
 					fitBitLinked ? 
 					<Doughnut data={stageData} />

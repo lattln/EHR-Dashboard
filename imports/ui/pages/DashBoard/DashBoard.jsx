@@ -133,6 +133,8 @@ const DashBoard = () => {
                                 }
 
                                 const WidgetComponent = Widgets[widget.type];
+                                const label = widget.label;
+                                
 
                                 return (
                                     <motion.div
@@ -151,7 +153,7 @@ const DashBoard = () => {
                                                 data-swapy-item={itemId}
                                                 className="w-full h-full bg-white p-4 rounded-lg">
                                                 <div className={`col-span-width p-2`}>
-                                                    <div>{itemId}</div>
+                                                    <div className='font-bold text-base'>{label}</div>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
                                                 </div>
                                             </div>

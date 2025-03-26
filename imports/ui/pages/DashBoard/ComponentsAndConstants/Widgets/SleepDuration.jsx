@@ -42,7 +42,6 @@ function SleepDuration({ fitBitLinked }){
 
 	return (
 		<>
-			<h2 className="text-lg font-bold">Sleep Tracking</h2>
 			{
 					fitBitLinked ? 
 					<>

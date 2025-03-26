@@ -22,7 +22,6 @@ function Steps({ fitBitLinked }){
 
     return (
         <>
-            <h2 className="text-lg font-bold">Steps</h2>
             {fitBitLinked ?
                 <GaugeComponent
                     minValue={0}
