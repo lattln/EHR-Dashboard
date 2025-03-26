@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { transformObservationInformation } from "../../imports/api/Fhir/Server/FhirUtils";
+import { transformObservationInformation } from "../../imports/api/Fhir/Server/FhirUtils.js";
 
 
 describe('transformObservationInformation', function() {
