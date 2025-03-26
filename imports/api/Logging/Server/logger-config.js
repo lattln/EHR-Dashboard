@@ -1,7 +1,13 @@
 
 import pino from "pino";
 
-const targets = [];
+const targets = [
+    {
+        target: "pino-pretty",
+        options: { colorize: true, },
+        level: "info",
+    }
+];
 
 const enableMongoLogging = process.env.ENABLE_MONGO_LOG !== undefined ? process.env.ENABLE_MONGO_LOG : "false"
 if (enableMongoLogging === "true"){
