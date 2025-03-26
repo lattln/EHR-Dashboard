@@ -8,4 +8,4 @@
  */
 export const fhirClient = new Client({
     baseUrl: process.env.FHIR_SERVER_URL !== undefined ? process.env.FHIR_SERVER_URL : "http://localhost:8080/fhir"
-})
+});
