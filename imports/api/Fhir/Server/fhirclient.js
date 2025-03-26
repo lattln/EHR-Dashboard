@@ -7,5 +7,5 @@
  * server supports the actions.
  */
 export const fhirClient = new Client({
-    baseUrl: "http://localhost:8080/fhir"
+    baseUrl: process.env.FHIR_SERVER_URL !== undefined ? process.env.FHIR_SERVER_URL : "http://localhost:8080/fhir"
 })
