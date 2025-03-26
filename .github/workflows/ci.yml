@@ -34,11 +34,6 @@ jobs:
       - name: Install Meteor
         run: curl https://install.meteor.com/ | sh
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-
       - name: Nuke npm Cache
         run: meteor npm cache clean --force
 
