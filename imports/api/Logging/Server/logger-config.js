@@ -3,8 +3,8 @@ import pino from "pino";
 
 const targets = [];
 
-const enableMongoLogging = process.env.ENABLE_MONGO_LOG || "false"
-if (enableMongoLogging){
+const enableMongoLogging = process.env.ENABLE_MONGO_LOG !== undefined ? process.env.ENABLE_MONGO_LOG : "false"
+if (enableMongoLogging === "true"){
     targets.push({
         target: "pino-mongodb",
         options: {
