@@ -5,8 +5,13 @@ export const PAGES = [
         route: '/auth'
     },
     { 
-        id: 'dashboard', 
-        name: 'Dashboard', 
-        route: '/dashboard'
+        id: 'dashboard-patient', 
+        name: 'Patient', 
+        route: '/patient'
     },
+    {
+        id: 'dashboard-clinician',
+        name: 'Clinician',
+        route: '/clinician'
+    }
 ]

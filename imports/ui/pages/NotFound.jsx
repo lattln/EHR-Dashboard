@@ -16,7 +16,7 @@ const NotFound = () => {
                     <p className="mb-4 text-lg font-light text-gray-700">
                         {NOTFOUND.l2}
                     </p>
-                    <Link to='/dashboard'>
+                    <Link to='/dev'>
                         <button className='px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition'>
                             {NOTFOUND.textBtn}
                         </button>

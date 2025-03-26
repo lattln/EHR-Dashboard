@@ -1,42 +1,47 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import AuthPage from "./pages/LoginPages/AuthPage";
-import DashBoard from "./pages/DashBoard/DashBoard";
-import NotFound from "./pages/NotFound";
 import DevLanding from "./pages/DevLandingPage/DevLanding";
-import UserSettings from './pages/DashBoard/ComponentsAndConstants/UserSettings';
-import SideNavBar from "./pages/DashBoard/ComponentsAndConstants/SideNavBar";
+import AuthPage from "./pages/LoginPages/AuthPage";
 import Token from "./pages/Token";
-import Settings from "./pages/DashBoard/ComponentsAndConstants/Settings";
-import LabsHistory from "./pages/DashBoard/ComponentsAndConstants/LabsHistory";
 
+import PatientDashboardLayout from "./PatientDashboardLayout";
+import DashBoard from "./pages/Dashboard_Patient/DashBoard";
+import NotFound from "./pages/NotFound";
+import UserSettings from './pages/Dashboard_Patient/ComponentsAndConstants/UserSettings';
+import Settings from "./pages/Dashboard_Patient/ComponentsAndConstants/Settings";
+import LabsHistory from "./pages/Dashboard_Patient/ComponentsAndConstants/LabsHistory";
 
-const AppLayout = () => (
-    <>
-        <div className="hidden md:flex">
-            <SideNavBar />
-        </div>
+import ClinicianDashboardLayout from "./ClinicianDashboardLayout";
+import ClinicianHome from "./pages/Dashboard_Clinician/ClinicianHome";
+import PatientRecords from "./pages/Dashboard_Clinician/ComponentsAndConstants/PatientRecords";
+import ClinicianSettings from "./pages/Dashboard_Clinician/ComponentsAndConstants/ClinicianSettings";
 
-        <div className="ml-0 md:ml-60 ">
-            <Outlet />
-        </div>
-    </>
-)
 
 const router = createBrowserRouter(
     [
         {
-            path: "/",
-            element: <AppLayout />,
+            path: "/patient",
+            element: <PatientDashboardLayout />,
             children: [
-                { index: true, element: <Navigate to="/dev" replace /> },
-                { path: "dashboard", element: <DashBoard /> },
+                { index: true, element: <Navigate to="/patient/dashboard" replace /> },
+                { path: "home", element: <DashBoard /> },
                 { path: "userSettings", element: <UserSettings /> },
                 { path: "settings", element: <Settings />},
                 { path: "labsHistory", element: <LabsHistory />},
                 { path: "*", element: <NotFound />},
                 { path: "not-found", element: <NotFound />}
+            ],
+        },
+        {
+            path: "/clinician",
+            element: <ClinicianDashboardLayout />,
+            children: [
+                { index: true, element: <ClinicianHome /> },
+                { path: "home", element: < ClinicianHome />},
+                { path: "patientRecords", element: <PatientRecords /> },
+                { path: "clinicianSettings", element: <ClinicianSettings /> },
+                { path: "*", element: <NotFound /> },
             ],
         },
         { path: "/auth", element: <AuthPage /> },

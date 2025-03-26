@@ -4,22 +4,22 @@ import { IconHome, IconFlask, IconUser, IconSetting } from '../../svgLibrary';
 export const NAV_LINKS = [
     {
         name: 'Home',
-        route: '/dashboard',
+        route: 'home',
         icon: <IconHome className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'Lab History',
-        route: '/labsHistory',
+        route: 'labsHistory',
         icon: <IconFlask className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'User',
-        route: '/userSettings',
+        route: 'userSettings',
         icon: <IconUser className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'Settings',
-        route: '/settings',
+        route: 'settings',
         icon: <IconSetting className="w-6 h-6 text-primary-content" />
     },
 ];
