@@ -1,18 +1,7 @@
 
 import pino from "pino";
-import pinoPretty from 'pino-pretty';
 
-const prettyStream = pinoPretty({
-    colorize: true
-});
-
-const targets = [
-    {
-        target: "pino-pretty",
-        options: { colorize: true, },
-        level: "info",
-    }
-];
+const targets = [];
 
 const enableMongoLogging = process.env.ENABLE_MONGO_LOG || "false"
 if (enableMongoLogging){
