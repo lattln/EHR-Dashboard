@@ -39,6 +39,12 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Nuke npm Cache
+      - run: meteor npm cache clean --force
+
+      - name: Remove Meteor Local Build Cache
+      - run: rm -rf .meteor/local
+
       - name: Install Dependencies
         run: meteor npm install
 
