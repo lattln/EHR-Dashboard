@@ -7,11 +7,13 @@ export const PAGES = [
     { 
         id: 'dashboard-patient', 
         name: 'Patient', 
-        route: '/patient'
+        route: '/patient',
+        role: 'patient'
     },
     {
         id: 'dashboard-clinician',
         name: 'Clinician',
-        route: '/clinician'
+        route: '/clinician',
+        role: 'clinician'
     }
 ]

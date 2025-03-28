@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAuthUrl, isValidToken, refreshToken } from "../../../../api/FitBit/auth";
-import { dashboardConfig } from "../ComponentsAndConstants/dashBoardConfig";
+import { dashboardConfig } from "../../dashBoardConfig";
 
 const Settings = () => {
     const [fitBitUrl, setFitBitUrl] = useState({});

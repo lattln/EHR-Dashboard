@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import Header from './ComponentsAndConstants/Header';
-import { USER_INFO } from './ComponentsAndConstants/dashBoardData';
-import ChartContainer from './ComponentsAndConstants/ChartContainer';
-import { dashboardConfig } from "./ComponentsAndConstants/dashBoardConfig";
-import Widgets from './ComponentsAndConstants/Widgets';
+import Header from './Components/Header';
+import { USER_INFO } from '../Constants';
+import ChartContainer from './Components/ChartContainer';
+import { dashboardConfig } from "../dashBoardConfig";
+import Widgets from './Components/Widgets';
 import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';

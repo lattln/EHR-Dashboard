@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { USER_INFO } from './dashBoardData';
+import { USER_INFO } from '../../Constants';
 
 const UserSettings = () => {
     const [isEditing, setIsEditing] = useState(false); // State to manage edit mode

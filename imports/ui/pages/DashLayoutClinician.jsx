@@ -1,10 +1,11 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
+import SideNavBar from './SideNavBar';
 
 const ClinicianDashboardLayout = () => (
     <>
         <div className="hidden md:flex">
-            {/** <ClinicianSideNavBar /> */}
+            <SideNavBar /> 
         </div>
 
         <div className="ml-0 md:ml-60 ">

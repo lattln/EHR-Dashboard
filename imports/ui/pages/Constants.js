@@ -1,7 +1,7 @@
 import React from 'react';
-import { IconHome, IconFlask, IconUser, IconSetting } from '../../svgLibrary';
+import { IconHome, IconFlask, IconUser, IconSetting } from './svgLibrary';
 
-export const NAV_LINKS = [
+export const SIDEBAR_DATA_PATIENT = [
     {
         name: 'Home',
         route: 'home',
@@ -23,6 +23,14 @@ export const NAV_LINKS = [
         icon: <IconSetting className="w-6 h-6 text-primary-content" />
     },
 ];
+
+export const SIDEBAR_DATA_CLINICIAN = [
+    {
+        name: 'Home',
+        route: 'home',
+        icon: <IconHome className="w-6 h-6 text-primary-content" />
+    }
+]
 
 export const USER_INFO = {
     name: {

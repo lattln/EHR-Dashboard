@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PAGES } from "./ComponentsAndConstants/devLanding";
+import { useRole } from '../../RoleContext';
 
 const DevLanding = () => {
+
+    const { setRole } = useRole();
     const nav = useNavigate();
 
-    const handleClick = (route) => {
+    const handleClick = (route, role) => {
+        setRole(role)
         nav(route);
     };
 
@@ -21,7 +25,7 @@ const DevLanding = () => {
                         <button
                             key={page.id}
                             className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-                            onClick={() => handleClick(page.route)}
+                            onClick={() => handleClick(page.route, page.role)}
                         >
                             {page.name}
                         </button>

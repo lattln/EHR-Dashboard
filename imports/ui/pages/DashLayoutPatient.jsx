@@ -1,6 +1,7 @@
 import React from 'react'
-import SideNavBar from './pages/Dashboard_Patient/ComponentsAndConstants/SideNavBar'
 import { Outlet } from 'react-router-dom';
+import SideNavBar from './SideNavBar'
+
 
 const PatientDashboardLayout = () => (
     <>
