@@ -1,28 +1,36 @@
 import React from 'react';
-import { IconHome, IconFlask, IconUser, IconSetting } from '../../svgLibrary';
+import { IconHome, IconFlask, IconUser, IconSetting } from './svgLibrary';
 
-export const NAV_LINKS = [
+export const SIDEBAR_DATA_PATIENT = [
     {
         name: 'Home',
-        route: '/dashboard',
+        route: 'home',
         icon: <IconHome className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'Lab History',
-        route: '/labsHistory',
+        route: 'labsHistory',
         icon: <IconFlask className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'User',
-        route: '/userSettings',
+        route: 'userSettings',
         icon: <IconUser className="w-6 h-6 text-primary-content" />
     },
     {
         name: 'Settings',
-        route: '/settings',
+        route: 'settings',
         icon: <IconSetting className="w-6 h-6 text-primary-content" />
     },
 ];
+
+export const SIDEBAR_DATA_CLINICIAN = [
+    {
+        name: 'Home',
+        route: 'home',
+        icon: <IconHome className="w-6 h-6 text-primary-content" />
+    }
+]
 
 export const USER_INFO = {
     name: {
@@ -67,3 +75,10 @@ export const PLACEHOLDER = {
     placeHolder: "PLACE HOLDER BOX",
 };
 
+export const NOTFOUND = 
+{
+    error404: "404",
+    l1: `Something's missing`,
+    l2: `Sorry, We have not implented that page or we can't find that page. You'll find lots to explore on the home page`,
+    textBtn: 'Back to Homepage' 
+}

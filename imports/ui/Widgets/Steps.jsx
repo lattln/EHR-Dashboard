@@ -1,6 +1,6 @@
 import GaugeComponent from "react-gauge-component";
 import React, { useEffect, useState } from "react";
-import { getCurrentSteps } from "../../../../../api/FitBit/fitbit";
+import { getCurrentSteps } from "../../api/FitBit/fitbit";
 
 function Steps({ fitBitLinked }){
     const [steps, setSteps] = useState(0);
@@ -22,7 +22,6 @@ function Steps({ fitBitLinked }){
 
     return (
         <>
-            <h2 className="text-lg font-bold">Steps</h2>
             {fitBitLinked ?
                 <>
                     <GaugeComponent

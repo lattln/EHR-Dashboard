@@ -1,9 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { NAV_LINKS } from "./dashBoardData";
 import { motion } from "framer-motion";
+import { useRole } from "../RoleContext";
+import { SIDEBAR_DATA_CLINICIAN } from "./constantsPages";
+import { SIDEBAR_DATA_PATIENT } from "./constantsPages";
+
+
 
 const SideNavBar = () => {
+
+    const { role } = useRole();
+
+    const sidebarData = role === 'patient' ? SIDEBAR_DATA_PATIENT : SIDEBAR_DATA_CLINICIAN
+
     return (
         <motion.div
             layout
@@ -22,7 +31,7 @@ const SideNavBar = () => {
                     </Link>
                 </div>
 
-                {NAV_LINKS.map((link, index) => (
+                {sidebarData.map((link, index) => (
                     <motion.div
                         key={link.name}
                         initial={{ opacity: 0, x: -40 }}

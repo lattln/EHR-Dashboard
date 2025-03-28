@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { getHeartRate } from "../../../../../api/FitBit/fitbit";
+import { getHeartRate } from "../../api/FitBit/fitbit";
 
 function HeartRate({}){
     const [timeData, setTimeData] = useState({

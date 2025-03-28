@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Login from "./ComponentsAndConstants/Login";
-import Register from "./ComponentsAndConstants/Register";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
 
 // Framer Motion Variants
 const pageVariants = {

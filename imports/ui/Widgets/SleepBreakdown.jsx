@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { getSleepBreakdown } from "../../../../../api/FitBit/fitbit";
+import { getSleepBreakdown } from "../../api/FitBit/fitbit";
 import {
 	Chart,
 	ArcElement,
@@ -37,7 +37,6 @@ function SleepBreakdown({ fitBitLinked }){
 
 	return (
 		<>
-			<h2 className="text-lg font-bold">Sleep Breakdown</h2>
 			{
 				fitBitLinked ? 
 				sleepLogExists ? <Doughnut data={stageData} /> : <p>No Data Available</p> 

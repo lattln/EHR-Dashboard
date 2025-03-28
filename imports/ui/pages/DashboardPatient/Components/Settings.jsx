@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAuthUrl, isValidToken, refreshToken } from "../../../../api/FitBit/auth";
-import { dashboardConfig } from "../ComponentsAndConstants/dashBoardConfig";
+import { dashboardConfig } from "../../dashBoardConfig";
 
 const Settings = () => {
     const [fitBitUrl, setFitBitUrl] = useState({});
@@ -49,37 +49,37 @@ const Settings = () => {
         {
             id: 1, name: "Preset 1", layout:
                 [
-                    { id: `dummyWidget-1`, type: "DummyWidget" },
-                    { id: `dummyWidget-2`, type: "DummyWidget" },
-                    { id: `dummyWidget-3`, type: "DummyWidget" },
-                    { id: `dummyWidget-4`, type: "DummyWidget" },
-                    { id: `dummyWidget-5`, type: "DummyWidget" },
-                    { id: `dummyWidget-6`, type: "DummyWidget" },
-                    { id: `dummyWidget-7`, type: "DummyWidget" },
+                    { id: `dummyWidget-1`, label: "Place Holder Widget 1", type: "DummyWidget" },
+                    { id: `dummyWidget-2`, label: "Place Holder Widget 2", type: "DummyWidget" },
+                    { id: `dummyWidget-3`, label: "Place Holder Widget 3", type: "DummyWidget" },
+                    { id: `dummyWidget-4`, label: "Place Holder Widget 4", type: "DummyWidget" },
+                    { id: `dummyWidget-5`, label: "Place Holder Widget 5", type: "DummyWidget" },
+                    { id: `dummyWidget-6`, label: "Place Holder Widget 6", type: "DummyWidget" },
+                    { id: `dummyWidget-7`, label: "Place Holder Widget 7", type: "DummyWidget" },
                 ]
         },
         {
             id: 2, name: "Preset 2", layout:
                 [
-                    { id: `dummyWidget-7`, type: "DummyWidget" },
-                    { id: `dummyWidget-6`, type: "DummyWidget" },
-                    { id: `dummyWidget-5`, type: "DummyWidget" },
-                    { id: `dummyWidget-4`, type: "DummyWidget" },
-                    { id: `dummyWidget-3`, type: "DummyWidget" },
-                    { id: `dummyWidget-2`, type: "DummyWidget" },
-                    { id: `dummyWidget-1`, type: "DummyWidget" },
+                    { id: `dummyWidget-7`, label: "Place Holder Widget 7", type: "DummyWidget" },
+                    { id: `dummyWidget-6`, label: "Place Holder Widget 6", type: "DummyWidget" },
+                    { id: `dummyWidget-5`, label: "Place Holder Widget 5", type: "DummyWidget" },
+                    { id: `dummyWidget-4`, label: "Place Holder Widget 4", type: "DummyWidget" },
+                    { id: `dummyWidget-3`, label: "Place Holder Widget 3", type: "DummyWidget" },
+                    { id: `dummyWidget-2`, label: "Place Holder Widget 2", type: "DummyWidget" },
+                    { id: `dummyWidget-1`, label: "Place Holder Widget 1", type: "DummyWidget" },
                 ]
         },
         {
             id: 3, name: "Preset 3", layout:
                 [
-                    { id: `dummyWidget-4`, type: "DummyWidget" },
-                    { id: `dummyWidget-3`, type: "DummyWidget" },
-                    { id: `dummyWidget-1`, type: "DummyWidget" },
-                    { id: `dummyWidget-6`, type: "DummyWidget" },
-                    { id: `dummyWidget-5`, type: "DummyWidget" },
-                    { id: `dummyWidget-2`, type: "DummyWidget" },
-                    { id: `dummyWidget-7`, type: "DummyWidget" },
+                    { id: `dummyWidget-4`, label: "Place Holder Widget 4", type: "DummyWidget" },
+                    { id: `dummyWidget-3`, label: "Place Holder Widget 3", type: "DummyWidget" },
+                    { id: `dummyWidget-1`, label: "Place Holder Widget 1", type: "DummyWidget" },
+                    { id: `dummyWidget-6`, label: "Place Holder Widget 6", type: "DummyWidget" },
+                    { id: `dummyWidget-5`, label: "Place Holder Widget 5", type: "DummyWidget" },
+                    { id: `dummyWidget-2`, label: "Place Holder Widget 2", type: "DummyWidget" },
+                    { id: `dummyWidget-7`, label: "Place Holder Widget 7", type: "DummyWidget" },
                 ]
         },
     ];

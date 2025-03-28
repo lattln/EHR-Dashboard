@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getSleepEfficiency } from "../../../../../api/FitBit/fitbit";
+import { getSleepEfficiency } from "../../api/FitBit/fitbit";
 
 function SleepEfficiencey({ fitBitLinked }){
 	const [efficiency, setEfficiency] = useState(0);
