@@ -20,7 +20,16 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess } = await import("./../User/Server/UserUtils.js");
+
+            if(this.userId === null || isAdmin(this.userId)) {
+                throw new Meteor.Error("Not-Authorized");
+            }
+
+            if(isClinician(this.userId) && hasPatientRecordAccess(this.userId, patientID))
+
             try {
+
                 return await getPatientHealthMetrics(loincCode, patientID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);

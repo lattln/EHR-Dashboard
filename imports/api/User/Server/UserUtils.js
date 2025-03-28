@@ -342,6 +342,25 @@ export async function addClinicianToPatient(userPatientID, userClinicianID) {
 
 }
 
+export async function getFhirIDFromUserAccount(userPatientID) {
+    try {
+       return Meteor.users.findOne({_id: userPatientID}, {fields: {fhirID: 1}})?.fhirID || undefined;
+    } catch (error) {
+        logger.error(error, `An error occured while trying to get the fhir id of the specified user id: ${userPatientID}.`);
+        return undefined;
+    }
+}
+
+export async function hasPatientRecordAccess(userClinicianID, userPatientID) {
+    try {
+        const listOfPatients = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+        return listOfPatients.includes(userPatientID);
+
+    } catch (error) {
+        return false;
+    }
+}
+
 export async function removeClinicianFromPatient(userPatientID, userClinicianID) {
     if (!userPatientID || !userClinicianID) {
         logger.error(`An error occurred while trying to add ${userPatientID} to ${userClinicianID} list of patients.`)
