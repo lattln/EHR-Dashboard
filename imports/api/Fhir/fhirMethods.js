@@ -20,17 +20,24 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess } = await import("./../User/Server/UserUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
             if(this.userId === null || isAdmin(this.userId)) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
-            if(isClinician(this.userId) && hasPatientRecordAccess(this.userId, patientID))
+            const patientFhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(patientFhirID === undefined) {
+                throw new Meteor.Error("Access-Error", "There is no associated fhir id with the account");
+            }
+
+            if(await isClinician(this.userId) && !hasPatientRecordAccess(this.userId, patientID)){
+                throw new Meteor.Error("Not-Authorized");
+            }
 
             try {
-
-                return await getPatientHealthMetrics(loincCode, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(loincCode, patientFhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
