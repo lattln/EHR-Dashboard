@@ -23,28 +23,30 @@ function Steps({ fitBitLinked }){
     return (
         <>
             {fitBitLinked ?
-                <GaugeComponent
-                    minValue={0}
-                    maxValue={goalSteps}
-                    value={steps}
-                    type='radial'
-                    arc={{
-                        nbSubArcs: 100,
-                        colorArray: ['#EA4228', '#F5CD19', '#5BE12C'],
-                        gradient: true
-                    }}
-                    labels={{
-                        valueLabel: {
-                            style: {
-                                fill: 'black',
-                                textShadow: 'none'
+                <>
+                    <GaugeComponent
+                        minValue={0}
+                        maxValue={goalSteps}
+                        value={steps}
+                        type='radial'
+                        arc={{
+                            nbSubArcs: 100,
+                            colorArray: ['#EA4228', '#F5CD19', '#5BE12C'],
+                            gradient: true
+                        }}
+                        labels={{
+                            valueLabel: {
+                                style: {
+                                    fill: 'black',
+                                    textShadow: 'none'
+                                }
                             }
-                        }
-                    }}
-                />
+                        }}
+                    />
+                    <h3>{dist} Mi.</h3>
+                </>
                 : 'Link your FitBit account to access this widget.'
             }
-            <h3>{dist} Mi.</h3>
         </>
     )
 };

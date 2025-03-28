@@ -153,7 +153,6 @@ const DashBoard = () => {
                                                 data-swapy-item={itemId}
                                                 className="w-full h-full bg-white p-4 rounded-lg">
                                                 <div className={`col-span-width p-2`}>
-                                                    <div className='font-bold text-base'>{label}</div>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
                                                 </div>
                                             </div>

@@ -2,10 +2,11 @@
   "name": "meteor-app",
   "private": true,
   "scripts": {
-    "start": "meteor run",
+    "start": "meteor --settings settings.json",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer"
+    "visualize": "meteor --production --extra-packages bundle-visualizer",
+    "load-env-start": "npx dotenv -- meteor run --settings settings.json"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
@@ -15,11 +16,16 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-zoom": "^2.1.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0",
     "fhir-kit-client": "^1.9.2",
     "framer-motion": "^12.4.7",
     "jose": "^6.0.8",
     "meteor-node-stubs": "^1.2.5",
     "openai": "^4.85.0",
+    "pino": "^9.6.0",
+    "pino-mongodb": "^4.3.0",
+    "pino-pretty": "^13.0.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",

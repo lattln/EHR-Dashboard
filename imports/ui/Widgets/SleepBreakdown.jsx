@@ -19,22 +19,28 @@ function SleepBreakdown({ fitBitLinked }){
 		labels: ["Deep", "Light", "REM", "Awake"],
 		datasets: [{}] 
 	});
+	const [sleepLogExists, setSleepLogExists] = useState(false);
 
 	useEffect(() => {
 		async function sleep(){
 			let summary = await getSleepBreakdown();
-			setStageData({...stageData, datasets: summary });
+			if(summary.success){
+				setStageData({...stageData, datasets: summary.data });
+				setSleepLogExists(true);
+			}
 		}
 
-		sleep();
+		if(fitBitLinked){
+			sleep();
+		}
 	}, [fitBitLinked])
 
 	return (
 		<>
 			{
-					fitBitLinked ? 
-					<Doughnut data={stageData} />
-					: "Link your FitBit account to access this widget"
+				fitBitLinked ? 
+				sleepLogExists ? <Doughnut data={stageData} /> : <p>No Data Available</p> 
+				: "Link your FitBit account to access this widget"
 			}
 		</>
 	)
