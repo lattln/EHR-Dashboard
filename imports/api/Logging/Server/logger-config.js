@@ -1,35 +1,42 @@
 
 import pino from "pino";
 
-const targets = [
-    {
-        target: "pino-pretty",
-        options: { colorize: true, },
-        level: "info",
-    }
-];
+let loggerTransports;
 
-if (process.env.ENABLE_MONGO_LOG === "true"){
-    targets.push({
-        target: "pino-mongodb",
-        options: {
-            uri: process.env.MONGO_URL || "mongodb://127.0.0.1:3001/meteor",
-            collection: "logs",
-            mongoOptions: {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
+if (!Meteor.isTest) {
+    const targets = [
+        {
+            target: "pino-pretty",
+            options: { colorize: true, },
+            level: "info",
+        }
+    ];
+
+    const enableMongoLogging = process.env.ENABLE_MONGO_LOG !== undefined ? process.env.ENABLE_MONGO_LOG : "false"
+    if (enableMongoLogging === "true") {
+        targets.push({
+            target: "pino-mongodb",
+            options: {
+                uri: process.env.MONGO_URL || Meteor.settings.private.MONGO_URL,
+                collection: "logs",
+                mongoOptions: {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true,
+                },
+
             },
-
-        },
-        level: "info",
-    })
+            level: "info",
+        })
+    }
+    loggerTransports = pino.transport({ targets });
 }
-const loggerTransports = pino.transport({targets});
+
 
 export const logger = pino(
     {
         timestamp: pino.stdTimeFunctions.isoTime,
         nestedKey: "payload",
+        level: "info"
     },
     loggerTransports
 );
