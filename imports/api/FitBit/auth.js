@@ -1,13 +1,13 @@
 import { EncryptJWT, jwtDecrypt } from "jose";
+import { Meteor } from 'meteor/meteor';
 /*
     CONSTANTS:
 
         token duration: amount of time a token is valid for in seconds
-        jwt secret: until we figure out env
 */
 
 const TOKEN_DURATION = 28800;
-const JWT_SECRET = new Uint8Array([225, 141, 211, 39, 40, 184, 115, 65, 186, 157, 142, 105, 92, 110, 156, 143, 105, 85, 145, 239, 172, 35, 179, 190, 78, 223, 53, 224, 219, 249, 33, 143]);
+const JWT_SECRET = Meteor.settings.public.JWT_SECRET || process.env.JWT_SECRET;
 
 //helper functions to create code verifier/challenges for OAuth2
 function sha256(plain){
@@ -16,6 +16,13 @@ function sha256(plain){
     return window.crypto.subtle.digest('SHA-256', data);
 }
 
+function hexToUINT8(str){
+    const arr = new Uint8Array(str.length / 2);
+    for (let i = 0; i < str.length; i += 2) {
+        arr[i / 2] = parseInt(str.substring(i, i + 2), 16);
+    }
+    return arr;
+}
 
 function base64urlencode(a){
     let str = "";
@@ -53,21 +60,23 @@ function genVerifier(){
 }
 
 //Generates the URL for the user to click on to start the OAuth2 process.
-async function getAuthUrl(){
+async function getAuthUrl(currUrl){
     let chall = await genCodeChallenge(genVerifier());
     let url = 'https://www.fitbit.com/oauth2/authorize?' + new URLSearchParams({
-        client_id: '23Q7WF',
+        client_id: Meteor.settings.public.FITBIT_CLIENT_ID,
         scope: 'activity cardio_fitness heartrate oxygen_saturation respiratory_rate sleep temperature',
         code_challenge: chall,
         code_challenge_method: 'S256',
-        response_type: 'code' 
+        redirect_uri: currUrl + '/toke',
+        response_type: 'code',
+        state: currUrl
     });
 
     return url;
 }
 
 //Uses the access code given by FitBit to request an access token for the user, encrypts the token an puts in in localStorage
-async function getToken(code){
+async function getToken(code, url){
     let res = await fetch('https://api.fitbit.com/oauth2/token', {
         method: 'POST',
         headers: new Headers({
@@ -75,9 +84,9 @@ async function getToken(code){
         }),
         body: new URLSearchParams({
             'grant_type': 'authorization_code',
-            'redirect_uri': 'http://localhost:3000/auth',
+            'redirect_uri': url + '/toke',
             'code': code,
-            'client_id': '23Q7WF',
+            'client_id': Meteor.settings.public.FITBIT_CLIENT_ID,
             'code_verifier': sessionStorage.getItem('verifier')
         }).toString()
     })
@@ -102,13 +111,15 @@ async function getToken(code){
 
 //Decrypts the encrypted token
 async function decJWT(JWE){
-    const { payload } = await jwtDecrypt(JWE, JWT_SECRET);
+    const sec = hexToUINT8(JWT_SECRET);
+    const { payload } = await jwtDecrypt(JWE, sec);
     return payload;
 }
 
 //Encrypts the passed object
 async function encJWT(token){
-    const jwt = await new EncryptJWT(token).setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' }).setIssuedAt().encrypt(JWT_SECRET);
+    const sec = hexToUINT8(JWT_SECRET);
+    const jwt = await new EncryptJWT(token).setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' }).setIssuedAt().encrypt(sec);
     return jwt;
 }
 
@@ -116,7 +127,7 @@ async function encJWT(token){
 async function isValidToken(jwe){
     let jwt = await decJWT(jwe);
     let expiresAt = jwt.iat + TOKEN_DURATION;
-    let dateInSeconds = Math.floor(Date.now / 1000);
+    let dateInSeconds = Math.floor(Date.now() / 1000);
     if(dateInSeconds >= expiresAt){
         return false;
     }
@@ -125,6 +136,7 @@ async function isValidToken(jwe){
 
 //Grabs the current access token and uses the refresh_token property to request a new access token. Used when access expires
 async function refreshToken(token){
+    console.log('refreshing');
     let jwt = await decJWT(token);
     let res = await fetch('https://api.fitbit.com/oauth2/token', {
         method: 'POST',
@@ -133,7 +145,7 @@ async function refreshToken(token){
         }),
         body: new URLSearchParams({
             'grant_type': 'refresh_token',
-            'client_id': '23Q7WF',
+            'client_id': Meteor.settings.public.FITBIT_CLIENT_ID,
             'refresh_token': jwt.refresh_token 
         }).toString()
     })

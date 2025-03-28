@@ -8,6 +8,7 @@ function SleepDuration({ fitBitLinked }){
 		labels: ["Minutes"],
 		datasets: [{}]
 	});
+	const [sleepLogExists, setSleepLogExists] = useState(false);
 	const [goal, setGoal] = useState(480);
 	const [duration, setDuration] = useState(0);
 	
@@ -32,12 +33,18 @@ function SleepDuration({ fitBitLinked }){
 	useEffect(() => {
 		async function sleep(){
 			let res = await getSleepDuration();
-			setDurationData({...durationData, datasets: res.durationData })
-			setDuration(res.duration);
-			setGoal(res.goal);
+			
+			if(res.success){
+				setSleepLogExists(true);
+				setDurationData({...durationData, datasets: res.durationData })
+				setDuration(res.duration);
+				setGoal(res.goal);
+			}
 		}
 
-		sleep();
+		if(fitBitLinked){
+			sleep();
+		}
 	}, [fitBitLinked])
 
 	return (
@@ -45,10 +52,11 @@ function SleepDuration({ fitBitLinked }){
 			<h2 className="text-lg font-bold">Sleep Tracking</h2>
 			{
 					fitBitLinked ? 
+					sleepLogExists ? 
 					<>
 						<h2>Duration: {fitBitUtils.minToHours(duration)} / {fitBitUtils.minToHours(goal)}</h2>
 						<Bar data={durationData} options={durationOptions} /> 
-					</>
+					</> : <p>No Data Available</p>
 					: "Link your FitBit account to access this widget"
 			}
 		</>

@@ -14,7 +14,7 @@ const Settings = () => {
 
     useEffect(() => {
         const getLink = async () => {
-            setFitBitUrl(await getAuthUrl());
+            setFitBitUrl(await getAuthUrl(window.location.origin));
         }
 
         getLink();
@@ -59,7 +59,7 @@ const Settings = () => {
                 ]
         },
         {
-            id: 1, name: "Preset 2", layout:
+            id: 2, name: "Preset 2", layout:
                 [
                     { id: `dummyWidget-7`, type: "DummyWidget" },
                     { id: `dummyWidget-6`, type: "DummyWidget" },
@@ -71,7 +71,7 @@ const Settings = () => {
                 ]
         },
         {
-            id: 2, name: "Preset 3", layout:
+            id: 3, name: "Preset 3", layout:
                 [
                     { id: `dummyWidget-4`, type: "DummyWidget" },
                     { id: `dummyWidget-3`, type: "DummyWidget" },
