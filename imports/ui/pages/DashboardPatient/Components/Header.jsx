@@ -1,5 +1,5 @@
 import React from "react";
-import { USER_INFO } from "../../Constants";
+import { USER_INFO } from "../../constantsPages";
 
 const Header = ({ }) => {
 

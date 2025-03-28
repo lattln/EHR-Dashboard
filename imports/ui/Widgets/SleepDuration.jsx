@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { getSleepDuration } from "../../../../../api/FitBit/fitbit";
-import fitBitUtils from "../../../../../api/FitBit/utils";
+import { getSleepDuration } from "../../api/FitBit/fitbit";
+import fitBitUtils from "../../api/FitBit/utils";
 
 function SleepDuration({ fitBitLinked }){
 	const [durationData, setDurationData] = useState({

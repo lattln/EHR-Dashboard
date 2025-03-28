@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { getSleepBreakdown } from "../../../../../api/FitBit/fitbit";
+import { getSleepBreakdown } from "../../api/FitBit/fitbit";
 import {
 	Chart,
 	ArcElement,

@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useRole } from "../RoleContext";
-import { SIDEBAR_DATA_CLINICIAN } from "./Constants";
-import { SIDEBAR_DATA_PATIENT } from "./Constants";
+import { SIDEBAR_DATA_CLINICIAN } from "./constantsPages";
+import { SIDEBAR_DATA_PATIENT } from "./constantsPages";
 
 
 

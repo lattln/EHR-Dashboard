@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PAGES } from "./devLanding";
+import { PAGES } from './constantsDev';
 import { useRole } from '../../RoleContext';
 
 const DevLanding = () => {

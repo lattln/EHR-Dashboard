@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { NOTFOUND } from './general'
+import { NOTFOUND } from './constantsPages'
 
 const NotFound = () => {
     return (

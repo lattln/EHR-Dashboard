@@ -1,24 +1,24 @@
 export const dashboardConfig = [
-    // {
-    //     id: "sleepBreakdown",
-    //     label: "Sleep Breakdown",
-    //     type: "SleepBreakdown",
-    // },
-    // {
-    //     id: "sleepDuration",
-    //     label: "Sleep Duration",
-    //     type: "SleepDuration",
-    // },
-    // {
-    //     id: "sleepEfficiency",
-    //     label: "Sleep Efficiency",
-    //     type: "SleepEfficiency",
-    // },
-    // {
-    //     id: "steps",
-    //     label: "Steps",
-    //     type: "Steps"
-    // },
+    {
+        id: "sleepBreakdown",
+        label: "Sleep Breakdown",
+        type: "SleepBreakdown",
+    },
+    {
+        id: "sleepDuration",
+        label: "Sleep Duration",
+        type: "SleepDuration",
+    },
+    {
+        id: "sleepEfficiency",
+        label: "Sleep Efficiency",
+        type: "SleepEfficiency",
+    },
+    {
+        id: "steps",
+        label: "Steps",
+        type: "Steps"
+    },
     {
         id: `dummyWidget-1`,
         label: "Place Holder Widget 1",
@@ -55,12 +55,3 @@ export const dashboardConfig = [
         type: "DummyWidget",
     },
 ];
-
-/*
-    {
-        id: "heartRate",
-        type: "HeartRate",
-
-    },
-*/
-

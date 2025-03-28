@@ -5,16 +5,16 @@ import AuthPage from "./pages/LoginPages/AuthPage";
 import Token from "./pages/Token";
 
 import PatientDashboardLayout from "./pages/DashLayoutPatient";
-import DashBoard from "./pages/Dashboard_Patient/DashBoard";
+import DashBoard from "./pages/DashboardPatient/DashBoard";
 import NotFound from "./pages/NotFound";
-import UserSettings from './pages/Dashboard_Patient/Components/UserSettings';
-import Settings from "./pages/Dashboard_Patient/Components/Settings";
-import LabsHistory from "./pages/Dashboard_Patient/Components/LabsHistory";
+import UserSettings from './pages/DashboardPatient/Components/UserSettings';
+import Settings from "./pages/DashboardPatient/Components/Settings";
+import LabsHistory from "./pages/DashboardPatient/Components/LabsHistory";
 
 import ClinicianDashboardLayout from "./pages/DashLayoutClinician";
-import ClinicianHome from "./pages/Dashboard_Clinician/ClinicianHome";
-import PatientRecords from "./pages/Dashboard_Clinician/Components/PatientRecords";
-import ClinicianSettings from "./pages/Dashboard_Clinician/Components/ClinicianSettings";
+import ClinicianHome from "./pages/DashboardClinician/ClinicianHome";
+import PatientRecords from "./pages/DashboardClinician/Components/PatientRecords";
+import ClinicianSettings from "./pages/DashboardClinician/Components/ClinicianSettings";
 
 const Routes = () => {
     const router = createBrowserRouter(
