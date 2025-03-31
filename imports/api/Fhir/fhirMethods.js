@@ -127,7 +127,7 @@ Meteor.methods({
             }
             
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEIGHT, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -139,8 +139,24 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_HEART_RATE, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -152,8 +168,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BMI, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -166,8 +198,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_BLOOD_PRESSURE, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -179,8 +227,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_TEMP, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }    
@@ -191,8 +255,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.BODY_OXYGEN_SATURATION, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -204,8 +284,23 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_HGB, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -217,8 +312,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.HEMOGLOBIN_A1C, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -230,8 +341,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.ERYTHROCYTE_SEDIMENTATION_RT, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -243,8 +370,23 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.GLUCOSE_SERUM_PLASMA, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -256,8 +398,23 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.POTASSIUM_SERUM_PLASMA, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -269,8 +426,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.CHOLESTEROL_TOTAL, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -281,8 +454,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.LOW_DENS_LIPOPROTEIN, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -293,8 +482,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.HIGH_DENS_LIPOPROTEIN, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -305,8 +510,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -317,8 +538,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID, pageNumber, count);
+                return await getPatientHealthMetrics(LOINC_MAPPING.CREATININE, fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
@@ -326,7 +563,7 @@ Meteor.methods({
     },
     /**
      * Retrieves the most recent lab reports for a patient.
-     * @param {string} patientID - The unique ID of the patient.
+     * @param {string} patientID - The unique ID of the  patient user account.
      * @param {number} pageNumber - The page number with count number of objects.
      * @param {number} [count=100] - The maximum number of lab reports to retrieve per page.
      * @returns {Promise<Array>} A list of recent diagnostic reports.
@@ -335,8 +572,24 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getRecentPatientLabs } = await import("./Server/FhirUtils.js");
+            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+
+            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            if(await isPatient(this.userId) && this.userId !== patientID) {
+                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            }
+
+            const fhirID = await getFhirIDFromUserAccount(patientID);
+
+            if(fhirID === undefined){
+                throw new Meteor.Error("Access-Error", "The Provided ID does not have an associated fhir id mapping.")
+            }
+
             try {
-                return await getRecentPatientLabs(patientID, pageNumber, count);
+                return await getRecentPatientLabs(fhirID, pageNumber, count);
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
