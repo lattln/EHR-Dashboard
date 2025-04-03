@@ -15,6 +15,8 @@ import ClinicianDashboardLayout from "./pages/DashLayoutClinician";
 import ClinicianHome from "./pages/DashboardClinician/ClinicianHome";
 import PatientRecords from "./pages/DashboardClinician/Components/PatientRecords";
 import ClinicianSettings from "./pages/DashboardClinician/Components/ClinicianSettings";
+import PatientList from "./pages/DashboardClinician/Components/patientList";
+import Tasks from "./pages/DashboardClinician/Components/Tasks";
 
 const Routes = () => {
     const router = createBrowserRouter(
@@ -40,10 +42,13 @@ const Routes = () => {
                     { path: "home", element: <ClinicianHome />},
                     { path: "patientRecords", element: <PatientRecords /> },
                     { path: "clinicianSettings", element: <ClinicianSettings /> },
+                    { path: "patientList", element: <PatientList />},
+                    { path: "tasks", element: <Tasks /> },
                     { path: "*", element: <NotFound /> },
                 ],
             },
 
+            { index: true, element: < AuthPage to="/auth" />},
             { path: "/auth", element: <AuthPage /> },
             { path: "dev", element: <DevLanding /> },
             { path: "/toke", element: <Token />},

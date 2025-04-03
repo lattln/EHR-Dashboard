@@ -1,26 +1,26 @@
 import React from 'react';
-import { IconHome, IconFlask, IconUser, IconSetting } from './svgLibrary';
+import { IconHome, IconFlask, IconUser, IconSetting, IconPatients, IconTasks } from './svgLibrary';
 
 export const SIDEBAR_DATA_PATIENT = [
     {
         name: 'Home',
         route: 'home',
-        icon: <IconHome className="w-6 h-6 text-primary-content" />
+        icon: <IconHome className="w-6 h-6" />
     },
     {
         name: 'Lab History',
         route: 'labsHistory',
-        icon: <IconFlask className="w-6 h-6 text-primary-content" />
+        icon: <IconFlask className="w-6 h-6" />
     },
     {
         name: 'User',
         route: 'userSettings',
-        icon: <IconUser className="w-6 h-6 text-primary-content" />
+        icon: <IconUser className="w-6 h-6" />
     },
     {
         name: 'Settings',
         route: 'settings',
-        icon: <IconSetting className="w-6 h-6 text-primary-content" />
+        icon: <IconSetting className="w-6 h-6" />
     },
 ];
 
@@ -28,7 +28,18 @@ export const SIDEBAR_DATA_CLINICIAN = [
     {
         name: 'Home',
         route: 'home',
-        icon: <IconHome className="w-6 h-6 text-primary-content" />
+        icon: <IconHome className="w-6 h-6" />
+    },
+    {
+        name: "PatientList",
+        route: "patientList",
+        icon: <IconPatients className="w-6 h-6" />
+    },
+    {
+        name: "Tasks", 
+        route: "tasks",
+        icon: <IconTasks className="w-6 h-6" />
+
     }
 ]
 

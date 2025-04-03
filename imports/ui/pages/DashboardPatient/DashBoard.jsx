@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import Header from './Components/Header';
+import Header from '../Header';
 import { USER_INFO } from '../constantsPages';
-import ChartContainer from './Components/ChartContainer';
 import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
 import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+
+//import ChartContainer from './Components/ChartContainer';
 
 const DashBoard = () => {
     const [widgets, setWidgets] = useState([]);
