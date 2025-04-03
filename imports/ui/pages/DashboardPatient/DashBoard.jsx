@@ -8,6 +8,7 @@ import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import Summary from './Components/Summary';
+import { ChatBot } from './Components/ChatBot';
 
 const DashBoard = () => {
     const [widgets, setWidgets] = useState([]);
@@ -122,6 +123,7 @@ const DashBoard = () => {
                         </div>
                     </div>
                     <Summary />
+                    <ChatBot />
 
                     <div
                         ref={container}
