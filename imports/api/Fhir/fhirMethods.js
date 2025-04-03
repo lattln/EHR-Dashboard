@@ -22,11 +22,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if(this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))) {
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -55,11 +62,18 @@ Meteor.methods({
             let { getPatientRecordByID } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -84,11 +98,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -112,11 +133,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -141,11 +169,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -170,11 +205,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -200,11 +242,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -229,11 +278,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -257,11 +313,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -286,11 +349,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -314,11 +384,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -343,11 +420,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -372,11 +456,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -400,11 +491,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -428,11 +526,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -456,11 +561,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -484,11 +596,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -512,11 +631,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -540,11 +666,18 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
@@ -574,11 +707,18 @@ Meteor.methods({
             let { getRecentPatientLabs } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            if (this.userId === null || await isAdmin(this.userId) || (await isClinician(this.userId) && !await hasPatientRecordAccess(this.userId, patientID))){
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+                isPatient(this.userId), 
+                isAdmin(this.userId), 
+                isClinician(this.userId), 
+                hasPatientRecordAccess(this.userId, patientID)
+            ]);
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+                throw new Meteor.Error("Not-Authorized");
             }
 
-            if(await isPatient(this.userId) && this.userId !== patientID) {
+            if(isUserPatient && this.userId !== patientID) {
                 throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
             }
 
