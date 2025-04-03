@@ -22,7 +22,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -62,7 +62,7 @@ Meteor.methods({
             let { getPatientRecordByID } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -98,7 +98,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -133,7 +133,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -169,7 +169,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -205,7 +205,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -242,7 +242,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -278,7 +278,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -313,7 +313,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -349,7 +349,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -384,7 +384,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -420,7 +420,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -456,7 +456,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -491,7 +491,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -526,7 +526,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -561,7 +561,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -596,7 +596,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -631,7 +631,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -666,7 +666,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
@@ -707,7 +707,7 @@ Meteor.methods({
             let { getRecentPatientLabs } = await import("./Server/FhirUtils.js");
             let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = Promise.all([
+            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
                 isPatient(this.userId), 
                 isAdmin(this.userId), 
                 isClinician(this.userId), 
