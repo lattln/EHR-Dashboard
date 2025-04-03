@@ -7,6 +7,7 @@ import Widgets from '../../Widgets';
 import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+import Summary from './Components/Summary';
 
 const DashBoard = () => {
     const [widgets, setWidgets] = useState([]);
@@ -99,7 +100,6 @@ const DashBoard = () => {
                 >
                     <Header />
                 </motion.div>
-
                 <div className="p-6 space-y-6 overflow-y-auto">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
                         <div>
@@ -121,6 +121,7 @@ const DashBoard = () => {
                             }} />
                         </div>
                     </div>
+                    <Summary />
 
                     <div
                         ref={container}
