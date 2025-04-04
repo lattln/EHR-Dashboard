@@ -23,6 +23,8 @@ Meteor.startup(async () => {
         await Roles.createRoleAsync(UserRoles[role], {unlessExists: true})
     }
 
+    for (let perm in Permissions)
+
     await createAdmin({
         username: "ROOT",
         password: "LIGMA"
