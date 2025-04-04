@@ -265,6 +265,59 @@ export async function isPatient(userID) {
     }
 }
 
+export async function getRoles(userID){
+    try {
+        return await Roles.getRolesForUserAsync(userID);
+
+    } catch (error) {
+        logger.error(error, `Issue retrieving roles for ${userID}`);
+    }
+    return [];
+}
+
+export async function addUsersToRoles(adminUserID, usersList, rolesList) {
+    if(!usersList || !Array.isArray(usersList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "usersList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+    if(!rolesList || !Array.isArray(rolesList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "rolesList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+    
+    try {
+        await Roles.setUserRolesAsync(usersList, rolesList);
+        logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} added users to roles.`);
+    } catch (error) {
+        logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
+        throw new Meteor.Error("Promote-User-Error", error.message);
+    }
+}
+
+export async function removeUsersFromRoles(adminUserID, usersList, rolesList) {
+
+    if(!usersList || !Array.isArray(usersList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "usersList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+    if(!rolesList || !Array.isArray(rolesList)) {
+        const error = new Meteor.Error("Promoting-User-Error", "rolesList is either undefined or not an array.");
+        logger.error(error);
+        throw error;
+    }
+
+    try {
+        await Roles.removeUsersFromRolesAsync(usersList, rolesList);
+        logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} removed users from roles.`);
+    } catch (error) {
+        logger.error(error, `Issue removing users: ${usersList} from roles: ${rolesList}`);
+        throw new Meteor.Error("Demote-User-Error", error.message);
+    }
+}
+
 export async function isRootAdmin(userID){
     const userObj = await Meteor.users.findOneAsync({_id: userID});
 
