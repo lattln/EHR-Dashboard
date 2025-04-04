@@ -6,6 +6,7 @@
 
 import { Meteor } from 'meteor/meteor';
 import { LOINC_MAPPING } from '../Loinc/loincConstants.js';
+import { UserRoles } from '../User/userRoles.js';
 
 Meteor.methods({
     /**
@@ -20,21 +21,21 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
             if(isUserPatient && this.userId !== patientID) {
-                throw new Meteor.Error("Not-Authorized", "The User is not authorized to access this record.");
+                throw new Meteor.Error("Not-Authorized");
             }
 
             const patientFhirID = await getFhirIDFromUserAccount(patientID);
@@ -60,16 +61,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientRecordByID } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -96,16 +97,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -131,16 +132,16 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -167,16 +168,16 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -203,16 +204,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -240,16 +241,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -276,16 +277,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -311,16 +312,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -347,16 +348,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -382,16 +383,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -418,16 +419,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -454,16 +455,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -489,16 +490,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -524,16 +525,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -559,16 +560,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -594,16 +595,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -629,16 +630,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -664,16 +665,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 
@@ -705,16 +706,16 @@ Meteor.methods({
         this.unblock();
         if (!this.isSimulation) {
             let { getRecentPatientLabs } = await import("./Server/FhirUtils.js");
-            let { isPatient, isAdmin, isClinician, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
+            let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            const [isUserPatient, isAdminUser, isClinicianUser, hasAccess] = await Promise.all([
-                isPatient(this.userId), 
-                isAdmin(this.userId), 
-                isClinician(this.userId), 
-                hasPatientRecordAccess(this.userId, patientID)
-            ]);
+            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
-            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess)) {
+            const isAdminUser = roles.includes(UserRoles.ADMIN);
+            const isUserPatient = roles.includes(UserRoles.PATIENT);
+            const isClinicianUser = roles.includes(UserRoles.CLINICIAN);
+            const hasRole = roles.size !== 0;
+
+            if(this.userId === null || isAdminUser || (isClinicianUser && !hasAccess) || !hasRole) {
                 throw new Meteor.Error("Not-Authorized");
             }
 

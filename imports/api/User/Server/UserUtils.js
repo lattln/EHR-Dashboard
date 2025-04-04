@@ -266,6 +266,16 @@ export async function isPatient(userID) {
     }
 }
 
+export async function getRoles(userID){
+    try {
+        return await Roles.getRolesForUserAsync(userID);
+
+    } catch (error) {
+        logger.error(error, `Issue retrieving roles for ${userID}`);
+    }
+    return [];
+}
+
 export async function addUsersToRoles(adminUserID, usersList, rolesList) {
     if(!usersList || !Array.isArray(usersList)) {
         const error = new Meteor.Error("Promoting-User-Error", "usersList is either undefined or not an array.");
@@ -279,7 +289,7 @@ export async function addUsersToRoles(adminUserID, usersList, rolesList) {
     }
     
     try {
-        await Roles.addUsersToRolesAsync(usersList, rolesList);
+        await Roles.setUserRolesAsync(usersList, rolesList);
         logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} added users to roles.`);
     } catch (error) {
         logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
@@ -304,7 +314,7 @@ export async function removeUsersFromRoles(adminUserID, usersList, rolesList) {
         await Roles.removeUsersFromRolesAsync(usersList, rolesList);
         logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} removed users from roles.`);
     } catch (error) {
-        logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
+        logger.error(error, `Issue removing users: ${usersList} from roles: ${rolesList}`);
         throw new Meteor.Error("Demote-User-Error", error.message);
     }
 }
