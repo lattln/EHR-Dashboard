@@ -4,3 +4,4 @@ settings.json
 *.bat
 *.sh
 settings.json
+*.exe
