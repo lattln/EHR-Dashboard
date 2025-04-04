@@ -266,6 +266,16 @@ export async function isPatient(userID) {
     }
 }
 
+export async function getRoles(userID){
+    try {
+        return await Roles.getRolesForUserAsync(userID);
+
+    } catch (error) {
+        logger.error(error, `Issue retrieving roles for ${userID}`);
+    }
+    return [];
+}
+
 export async function addUsersToRoles(adminUserID, usersList, rolesList) {
     if(!usersList || !Array.isArray(usersList)) {
         const error = new Meteor.Error("Promoting-User-Error", "usersList is either undefined or not an array.");
@@ -279,7 +289,7 @@ export async function addUsersToRoles(adminUserID, usersList, rolesList) {
     }
     
     try {
-        await Roles.addUsersToRolesAsync(usersList, rolesList);
+        await Roles.setUserRolesAsync(usersList, rolesList);
         logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} added users to roles.`);
     } catch (error) {
         logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
@@ -304,7 +314,7 @@ export async function removeUsersFromRoles(adminUserID, usersList, rolesList) {
         await Roles.removeUsersFromRolesAsync(usersList, rolesList);
         logger.info({admin: adminUserID, usersList, rolesList}, `User: ${adminUserID} removed users from roles.`);
     } catch (error) {
-        logger.error(error, `Issue adding users: ${usersList} to roles: ${rolesList}`);
+        logger.error(error, `Issue removing users: ${usersList} from roles: ${rolesList}`);
         throw new Meteor.Error("Demote-User-Error", error.message);
     }
 }
@@ -340,6 +350,25 @@ export async function addClinicianToPatient(userPatientID, userClinicianID) {
         throw new Meteor.Error("Add-Clinician-Error", error.message);
     }
 
+}
+
+export async function getFhirIDFromUserAccount(userPatientID) {
+    try {
+       return Meteor.users.findOne({_id: userPatientID}, {fields: {fhirID: 1}})?.fhirID || undefined;
+    } catch (error) {
+        logger.error(error, `An error occured while trying to get the fhir id of the specified user id: ${userPatientID}.`);
+        return undefined;
+    }
+}
+
+export async function hasPatientRecordAccess(userClinicianID, userPatientID) {
+    try {
+        const listOfPatients = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+        return listOfPatients.includes(userPatientID);
+
+    } catch (error) {
+        return false;
+    }
 }
 
 export async function removeClinicianFromPatient(userPatientID, userClinicianID) {
