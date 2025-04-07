@@ -756,4 +756,8 @@ Meteor.methods({
             }
         }
     },
+
+    async "patient.getMedications"(patientID, pageNumber = 1, count = 100){
+        
+    }
 });
