@@ -1,9 +1,9 @@
 import { Roles } from 'meteor/alanning:roles';
 import { Meteor } from 'meteor/meteor';
-import { logger } from '../../Logging/Server/logger-config';
-import { TypeCheck } from '../../Validator/typechecking';
-import { UserRoles } from '../userRoles';
-import { isRootAdmin, removeClinicianFromPatient } from './UserUtils';
+import { logger } from '../../Logging/Server/logger-config.js';
+import { TypeCheck } from '../../Validator/typechecking.js';
+import { UserRoles } from '../userRoles.js';
+import { isRootAdmin, removeClinicianFromPatient } from './UserUtils.js';
 
 
 export async function addUsersToRoles(adminUserID, usersList, rolesList) {
