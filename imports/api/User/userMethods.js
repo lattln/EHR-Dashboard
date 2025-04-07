@@ -5,6 +5,7 @@ import {SchemaBuilder, Validator} from "./../Validator/validator.js"
 
 Meteor.methods({
     async 'user.signup'(userInformation) {
+        this.unblock();
         if (!this.isSimulation) {
             let { signupUser } = await import("./Server/UserUtils.js");
             try {
@@ -18,6 +19,7 @@ Meteor.methods({
     },
 
     async 'user.updateProfile'({firstName, lastName, fitbitAccountAuth}) {
+        this.unblock();
         if(!Meteor.userId()) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -41,6 +43,7 @@ Meteor.methods({
         }
     */
     async 'user.saveDashboardConfig'(config){
+        this.unblock();
         if (!Meteor.userId()){
             throw new Meteor.Error("Not-Authorized");
         }
@@ -57,7 +60,7 @@ Meteor.methods({
     },
 
     async 'user.updateEmail'(email){
-
+        this.unblock();
         if(!Meteor.userId()) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -73,6 +76,7 @@ Meteor.methods({
     },
 
     async 'user.addClinician'(clinicianUserID){
+        this.unblock();
         if(!this.userId) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -95,6 +99,7 @@ Meteor.methods({
     },
 
     async 'user.removeClinician'(clinicianUserID){
+        this.unblock();
         if(!this.userId) {
             throw new Meteor.Error("Not-Authorized");
         }

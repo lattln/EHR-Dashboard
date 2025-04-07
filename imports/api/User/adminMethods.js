@@ -5,6 +5,7 @@ import { TypeCheck } from "../Validator/typechecking.js";
 
 Meteor.methods({
     async 'admin.addRolesToUsers'(userIDList, rolesList){
+        this.unblock();
         const functionSchema = SchemaBuilder()
                                 .addParam("userIDList", "array", 
                                     {
@@ -40,6 +41,7 @@ Meteor.methods({
     },
 
     async 'admin.removeRolesFromUsers'(userIDList, rolesList){
+        this.unblock();
         const functionSchema = SchemaBuilder()
                                 .addParam("userIDList", "array", 
                                     {
@@ -76,6 +78,7 @@ Meteor.methods({
     },
 
     async 'admin.createClinicianUser'(clinicianUserInfo = {}){
+        this.unblock();
         const clinicianUserSchema = SchemaBuilder()
                                         .addParam("email", "string")
                                         .addParam("password", "string")
@@ -119,6 +122,7 @@ Meteor.methods({
     },
 
     async 'admin.createPatientUser'(patientUserInformation = {}){
+        this.unblock();
         const patientUserSchema = SchemaBuilder()
                                         .addParam("email", "string")
                                         .addParam("password", "string")
@@ -163,6 +167,7 @@ Meteor.methods({
     },
 
     async 'admin.removeUserAccount'(userID){
+        this.unblock();
         if(TypeCheck.isUndefined(userID) || !TypeCheck.isString(userID))
             throw new Meteor.Error("Invalid-Arguments", error.message);
 
