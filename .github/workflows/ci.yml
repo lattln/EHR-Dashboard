@@ -27,6 +27,8 @@ jobs:
       ENABLE_MONGO_LOG: "false"
       MONGO_URL: "mongodb://127.0.0.1:27017/meteor"
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OZWELL_SECRET_KEY: ${{ secrets.OZWELL_SECRET_KEY }}
+      OZWELL_PUBLIC_KEY: ${{ secrets.OZWELL_PUBLIC_KEY }}
 
     steps:
       - name: Checkout Repository
