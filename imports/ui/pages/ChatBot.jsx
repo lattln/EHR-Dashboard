@@ -132,7 +132,7 @@ export const ChatBot = () => {
 
                             {/* Header */}
                             <div className="flex justify-between items-center mb-3">
-                                <h2 className="text-sm font-bold">Abridge Assistant</h2>
+                                <h2 className="text-sm font-bold">Echo Assistant</h2>
                                 <button
                                     onClick={() => setIsOpen(false)}
                                     className="text-gray-500 hover:text-gray-700 text-sm"
@@ -178,7 +178,7 @@ export const ChatBot = () => {
                             <textarea
                                 value={question}
                                 onChange={(e) => setQuestion(e.target.value)}
-                                placeholder="Ask a health question..."
+                                placeholder="Ask a question..."
                                 className="w-full border p-2 rounded text-sm resize-none mt-2 mb-1"
                                 rows={2}
                             />
