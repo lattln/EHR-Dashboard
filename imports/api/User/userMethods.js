@@ -18,7 +18,7 @@ Meteor.methods({
         
     },
 
-    async 'user.updateProfile'({firstName, lastName, fitbitAccountAuth}) {
+    async 'user.updateProfile'({firstName, lastName, phoneNumber, fitbitAccountAuth}) {
         this.unblock();
         if(!Meteor.userId()) {
             throw new Meteor.Error("Not-Authorized");
@@ -27,7 +27,7 @@ Meteor.methods({
         if (!this.isSimulation) {
             let { updateProfile } = await import("./Server/UserUtils.js");
             try {
-                await updateProfile(Meteor.userId(), {firstName, lastName, fitbitAccountAuth});
+                await updateProfile(Meteor.userId(), {firstName, lastName, phoneNumber, fitbitAccountAuth});
             } catch (error) {
                 throw error;
             }

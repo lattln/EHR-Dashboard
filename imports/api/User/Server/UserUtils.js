@@ -168,14 +168,14 @@ export async function signupUser(userInformation){
 export async function updateProfile(userID, {...profileProps}) {
     const {firstName, lastName, fitbitAccountAuth} = profileProps;
     
-    if(!userID || !firstName || !lastName) {
+    if(!userID || !firstName || !lastName || phoneNumber) {
         throw new Meteor.Error("Invalid-Account-Updating", "Missing Required properties to update the account. Cannot have undefined properties.")
     }
     logger.info(`Attempting Updating profile for user: ${userID}`);
     try {
         await Meteor.users.updateAsync({_id: userID}, 
             {
-                $set: {"profile.firstName": firstName, "profile.lastName":lastName,  fitbitAccountAuth: fitbitAccountAuth || null}
+                $set: {"profile.firstName": firstName, "profile.lastName":lastName,  fitbitAccountAuth: fitbitAccountAuth || null, "profile.phoneNumber": phoneNumber}
             })
         logger.info(`Profile updated successfully for user: ${userID}`);
 
