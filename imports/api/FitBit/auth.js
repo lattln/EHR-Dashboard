@@ -60,7 +60,8 @@ async function getAuthUrl(){
         scope: 'activity cardio_fitness heartrate oxygen_saturation respiratory_rate sleep temperature',
         code_challenge: chall,
         code_challenge_method: 'S256',
-        response_type: 'code' 
+        response_type: 'code',
+        redirect_uri: 'http://localhost:3000/toke'
     });
 
     return url;
@@ -75,7 +76,7 @@ async function getToken(code){
         }),
         body: new URLSearchParams({
             'grant_type': 'authorization_code',
-            'redirect_uri': 'http://localhost:3000/auth',
+            'redirect_uri': 'http://localhost:3000/toke',
             'code': code,
             'client_id': '23Q7WF',
             'code_verifier': sessionStorage.getItem('verifier')

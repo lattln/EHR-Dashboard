@@ -1,0 +1,6 @@
+{
+    "public": {
+        "FITBIT_CLIENT_ID": "23Q7WF",
+        "JWT_SECRET": "0de6a9220a29f5f0508e217def8eb1080087061a56fe4714983717ff37143116" 
+    }
+}

@@ -77,7 +77,8 @@ async function getHeartRate(){
 }
 
 async function getSleepBreakdown(){
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let today = fitBitUtils.today();
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
     
     let summaryData = [{
         label: "Minutes",
@@ -89,8 +90,9 @@ async function getSleepBreakdown(){
 }
 
 async function getSleepDuration(){
+    let today = fitBitUtils.today();
     let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json');
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
     
     let stack = sleepGoal.goal.minDuration - sleepLog.summary.totalMinutesAsleep;
 
@@ -119,7 +121,8 @@ async function getSleepDuration(){
 }
 
 async function getSleepEfficiency(){
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let today = fitBitUtils.today();
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
 
     return sleepLog.sleep[0].efficiency;
 }
