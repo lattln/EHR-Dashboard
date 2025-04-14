@@ -16,7 +16,7 @@ const prompt = ChatPromptTemplate.fromMessages([
         {context}
     `.trim()],
     ["human", "{input}"]
-  ]);
+]);
 
 export async function askPatientQuestion({ question, vectorStore }) {
     const retriever = vectorStore.asRetriever();
@@ -29,7 +29,11 @@ export async function askPatientQuestion({ question, vectorStore }) {
     console.log("Question:", question);
     // -------------------------------
 
-    const llm = new ChatOpenAI({ temperature: 0 })
+    const llm = new ChatOpenAI(
+        {
+            temperature: 0,
+            apiKey: process.env.OPENAI_API_KEY || Meteor.settings.private.OPENAI_API_KEY
+        })
 
     const combineDocsChain = await createStuffDocumentsChain({
         llm,

@@ -5,9 +5,11 @@ import { z } from 'zod';
 import { zodResponseFormat } from 'openai/helpers/zod.mjs';
 import { countTokens } from './tokenCounter';
 
+
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || Meteor.settings.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY || Meteor.settings.private.OPENAI_API_KEY
 });
+
 
 /**
  * Calls the OpenAI API with a given prompt.

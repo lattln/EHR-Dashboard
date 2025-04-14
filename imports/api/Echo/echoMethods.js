@@ -26,7 +26,9 @@ Meteor.methods({
         const patientId = 1;
 
         const vectorStore = await PineconeStore.fromExistingIndex(
-            new OpenAIEmbeddings(),
+            new OpenAIEmbeddings({
+                apiKey: process.env.OPENAI_API_KEY || Meteor.settings.private.OPENAI_API_KEY
+            }),
             {
                 pineconeIndex: pinecone.index("ehr-index"),
                 filter: { patientId }
