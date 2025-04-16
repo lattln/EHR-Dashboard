@@ -77,7 +77,8 @@ async function getHeartRate(){
 }
 
 async function getSleepBreakdown(){
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let today = fitBitUtils.today();
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
     if(sleepLog.sleep.length < 1){
         return {
             success: false
@@ -152,34 +153,20 @@ async function getSleepEfficiency(){
 async function getSleepHeatMap(){
     let today = fitBitUtils.today();
     let lastWeek = fitBitUtils.lastWeek();
+    let days = [];
+    let data = [];
 
     let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
     sleepLog.sleep = sleepLog.sleep.reverse();
 
+    sleepLog.sleep.map((log) => {
+        days.push(new Date(log.dateOfSleep).toUTCString().substring(0, 2));
+        data.push(log.efficiency);
+    })
+    console.log(data, days);
     return {
-        data: sleepLog.sleep.map((log) => {
-            return log.efficiency;
-        }),
-        days: sleepLog.sleep.map((log) => {
-            return new Date(log.dateOfSleep).toUTCString().substring(0, 2);
-        })
-    }
-}
-
-async function getSleepHeatMap(){
-    let today = fitBitUtils.today();
-    let lastWeek = fitBitUtils.lastWeek();
-
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
-    sleepLog.sleep = sleepLog.sleep.reverse();
-
-    return {
-        data: sleepLog.sleep.map((log) => {
-            return log.efficiency;
-        }),
-        days: sleepLog.sleep.map((log) => {
-            return new Date(log.dateOfSleep).toUTCString().substring(0, 2);
-        })
+        data: data,
+        days: days
     }
 }
 
