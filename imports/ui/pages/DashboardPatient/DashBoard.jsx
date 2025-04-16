@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import Header from './Components/Header';
+import Header from '../Header';
 import { USER_INFO } from '../constantsPages';
 import ChartContainer from './Components/ChartContainer';
 import { dashboardConfig } from "../dashBoardConfig";
@@ -8,6 +8,7 @@ import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import Summary from './Components/Summary';
+import { ChatBot } from '../ChatBot';
 
 const DashBoard = () => {
     const [widgets, setWidgets] = useState([]);
@@ -98,7 +99,6 @@ const DashBoard = () => {
                     exit="hidden"
                     variants={headerVariants}
                 >
-                    <Header />
                 </motion.div>
                 <div className="p-6 space-y-6 overflow-y-auto">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
@@ -122,7 +122,6 @@ const DashBoard = () => {
                         </div>
                     </div>
                     <Summary />
-
                     <div
                         ref={container}
                         className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 text-black overflow-clip">
@@ -163,6 +162,7 @@ const DashBoard = () => {
                             })}
                         </AnimatePresence>
                     </div>
+                    <ChatBot />
                 </div>
             </div>
         </div>

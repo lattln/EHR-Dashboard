@@ -8,7 +8,7 @@ import { logger } from '../Logging/Server/logger-config.js';
 async function callOzwell(prompt, schema) {
     try {
         const url = 'https://ai.bluehive.com/api/v1/completion';
-        const token = process.env.OZWELL_SECRET_KEY;
+        const token = process.env.OZWELL_SECRET_KEY || Meteor.settings.private.OZWELL_SECRET_KEY;
 
         const response = await fetch(url, {
             method: 'POST',
