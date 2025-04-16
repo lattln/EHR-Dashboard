@@ -11,9 +11,24 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
     env:
       METEOR_ALLOW_SUPERUSER: "true"
       METEOR_DISABLE_TELEMETRY: "1"
+      ENABLE_MONGO_LOG: "false"
+      MONGO_URL: "mongodb://127.0.0.1:27017/meteor"
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OZWELL_SECRET_KEY: ${{ secrets.OZWELL_SECRET_KEY }}
+      OZWELL_PUBLIC_KEY: ${{ secrets.OZWELL_PUBLIC_KEY }}
 
     steps:
       - name: Checkout Repository
@@ -22,13 +37,17 @@ jobs:
       - name: Install Meteor
         run: curl https://install.meteor.com/ | sh
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Nuke npm Cache
+        run: meteor npm cache clean --force
+
+      - name: Remove Meteor Local Build Cache
+        run: rm -rf .meteor/local
 
       - name: Install Dependencies
         run: meteor npm install
+
+      - name: Install pino transports manually
+        run: meteor npm install pino-mongodb pino-pretty
 
       - name: Run Tests
         run: meteor test --driver-package meteortesting:mocha --once --allow-superuser

@@ -8,9 +8,9 @@ const Token = ({}) => {
 
     useEffect(() => {
         const authorizeToken = async () => {
-            let success = await getToken(urlParams.get('code'));
+            let success = await getToken(urlParams.get('code'), urlParams.get('state'));
             if(success.success){
-                nav('/user');
+                nav('/settings');
             } else {
                 console.log(success.errors);
                 nav('/not-found');

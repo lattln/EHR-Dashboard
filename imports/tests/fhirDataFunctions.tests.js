@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { assert } from 'chai';
+import { fhirClient } from '../api/Fhir/Server/fhirclient.js';
 import sinon from 'sinon';
 
 import {
@@ -20,3 +21,5 @@ describe('FHIR Data Functions', function () {
         })
     })
 })
+
+

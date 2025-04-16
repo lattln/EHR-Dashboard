@@ -77,8 +77,12 @@ async function getHeartRate(){
 }
 
 async function getSleepBreakdown(){
-    let today = fitBitUtils.today();
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    if(sleepLog.sleep.length < 1){
+        return {
+            success: false
+        }
+    }
     
     let summaryData = [{
         label: "Minutes",
@@ -86,7 +90,10 @@ async function getSleepBreakdown(){
         backgroundColor: chartColors
     }]
 
-    return summaryData;
+    return {
+        success: true,
+        data: summaryData
+    }
 }
 
 async function getSleepDuration(){
@@ -98,6 +105,12 @@ async function getSleepDuration(){
 
     if(stack < 0){
         stack = 0;
+    }
+
+    if(!(sleepLog.sleep.length > 0)){
+        return {
+            success: false
+        }
     }
 
     let durationData = [
@@ -114,6 +127,7 @@ async function getSleepDuration(){
     ]
 
     return {
+        success: true,
         duration: sleepLog.summary.totalMinutesAsleep,
         durationData: durationData,
         goal: sleepGoal.goal.minDuration
@@ -124,7 +138,32 @@ async function getSleepEfficiency(){
     let today = fitBitUtils.today();
     let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
 
-    return sleepLog.sleep[0].efficiency;
+    if(sleepLog.sleep.length > 0){
+        return {
+            efficiency: sleepLog.sleep[0].efficiency
+        }
+    }
+
+    return {
+        efficiency: -1
+    }
+}
+
+async function getSleepHeatMap(){
+    let today = fitBitUtils.today();
+    let lastWeek = fitBitUtils.lastWeek();
+
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
+    sleepLog.sleep = sleepLog.sleep.reverse();
+
+    return {
+        data: sleepLog.sleep.map((log) => {
+            return log.efficiency;
+        }),
+        days: sleepLog.sleep.map((log) => {
+            return new Date(log.dateOfSleep).toUTCString().substring(0, 2);
+        })
+    }
 }
 
 async function getSleepHeatMap(){
