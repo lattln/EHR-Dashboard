@@ -373,7 +373,7 @@ export async function getFhirIDFromUserAccount(userPatientID) {
 
 export async function hasPatientRecordAccess(userClinicianID, userPatientID) {
     try {
-        const listOfPatients = await (Meteor.users.findOneAsync({_id: userClinicianID}, {fields: {patients: 1}}))?.patients || [];
+        const listOfPatients = (await Meteor.users.findOneAsync({_id: userClinicianID}, {fields: {patients: 1}}))?.patients || [];
         return listOfPatients.includes(userPatientID);
 
     } catch (error) {
