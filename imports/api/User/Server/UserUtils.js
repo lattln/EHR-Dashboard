@@ -324,7 +324,7 @@ export async function isRootAdmin(userID){
     if(TypeCheck.isUndefined(userObj))
         return false;
 
-    if(await isAdmin(userID) && userObj.username === "ROOT"){
+    if((await isAdmin(userID)) && userObj.username === "ROOT"){
         return true;
     }
 
