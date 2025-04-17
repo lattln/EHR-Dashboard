@@ -42,6 +42,7 @@ export const ChatBot = () => {
         const userMessage = { role: "user", content: question };
         setMessages((prev) => [...prev, userMessage]);
         setLoading(true);
+        setQuestion("");
 
         Meteor.call("echo.ask", question, (err, res) => {
             setLoading(false);
@@ -50,7 +51,6 @@ export const ChatBot = () => {
                 content: err ? `Error: ${err.message}` : res,
             };
             setMessages((prev) => [...prev, botMessage]);
-            setQuestion("");
         });
     };
 
@@ -181,13 +181,19 @@ export const ChatBot = () => {
                                 placeholder="Ask a question..."
                                 className="w-full border p-2 rounded text-sm resize-none mt-2 mb-1"
                                 rows={2}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                      e.preventDefault();
+                                      askChatbot();
+                                    }
+                                }}
                             />
                             <button
                                 onClick={askChatbot}
                                 disabled={loading || !question.trim()}
                                 className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition w-fit self-end"
                             >
-                                Ask
+                                Send
                             </button>
                         </motion.div>
                     )}
