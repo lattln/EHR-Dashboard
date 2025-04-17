@@ -1,9 +1,11 @@
 import { Meteor } from 'meteor/meteor'; 
 import { Roles } from 'meteor/alanning:roles';
+import {SchemaBuilder, Validator} from "./../Validator/validator.js"
 
 
 Meteor.methods({
     async 'user.signup'(userInformation) {
+        this.unblock();
         if (!this.isSimulation) {
             let { signupUser } = await import("./Server/UserUtils.js");
             try {
@@ -16,38 +18,8 @@ Meteor.methods({
         
     },
 
-    async 'user.assignRolesToUsers'(userIDsList, rolesList) {
-        if(!this.isSimulation) {
-            let { addUsersToRoles, isAdmin} = await import("./Server/UserUtils.js");
-            try {
-                if(this.userId && await isAdmin(this.userId)){
-                    await addUsersToRoles(this.userId, userIDsList, rolesList);
-                } else {
-                    throw new Meteor.Error("Not-Authorized");
-                }
-            } catch (error) {
-                throw error;
-            }
-        }
-    },
-
-    async 'user.removeRolesFromUsers'(userIDsList, rolesList) {
-
-        if(!this.isSimulation) {
-            let { removeUsersFromRoles, isAdmin} = await import("./Server/UserUtils.js");
-            try {
-                if(this.userId && await isAdmin(this.userId)){
-                    await removeUsersFromRoles(this.userId, userIDsList, rolesList);
-                } else {
-                    throw new Meteor.Error("Not-Authorized");
-                }
-            } catch (error) {
-                throw error;
-            }
-        }
-    },
-
-    async 'user.updateProfile'({firstName, lastName, fitbitAccountAuth}) {
+    async 'user.updateProfile'({firstName, lastName, phoneNumber, fitbitAccountAuth}) {
+        this.unblock();
         if(!Meteor.userId()) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -55,15 +27,40 @@ Meteor.methods({
         if (!this.isSimulation) {
             let { updateProfile } = await import("./Server/UserUtils.js");
             try {
-                await updateProfile(Meteor.userId(), {firstName, lastName, fitbitAccountAuth});
+                await updateProfile(Meteor.userId(), {firstName, lastName, phoneNumber, fitbitAccountAuth});
             } catch (error) {
                 throw error;
             }
         }
     },
+    /*
+    config is expected to be in the form:
+        {
+            config1: [],
+            config2: [],
+            config3: [],
+            ...
+        }
+    */
+    async 'user.saveDashboardConfig'(config){
+        this.unblock();
+        if (!Meteor.userId()){
+            throw new Meteor.Error("Not-Authorized");
+        }
+
+        if(!this.isSimulation) {
+            let { updateConfig } = await import("./Server/UserUtils.js");
+            
+            try {
+                await updateConfig(this.userId, config)
+            } catch (error) {
+                throw error
+            }
+        }
+    },
 
     async 'user.updateEmail'(email){
-
+        this.unblock();
         if(!Meteor.userId()) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -79,6 +76,7 @@ Meteor.methods({
     },
 
     async 'user.addClinician'(clinicianUserID){
+        this.unblock();
         if(!this.userId) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -87,7 +85,8 @@ Meteor.methods({
             let {addClinicianToPatient, isPatient, isClinician} = await import("./Server/UserUtils.js");
 
             try {
-                if(await isPatient(this.userId) && await isClinician(clinicianUserID)) {
+                let [isPatientUser, isClinicianUser] = await Promise.all([isPatient(this.userId), isClinician(clinicianUserID)]);
+                if(isPatientUser && isClinicianUser) {
                     await addClinicianToPatient(this.userId, clinicianUserID);
                 } else {
                     throw new Meteor.Error("Add-Clinician-Error", "User is either not a patient or the clinicianID is not a registered clinician.")
@@ -100,6 +99,7 @@ Meteor.methods({
     },
 
     async 'user.removeClinician'(clinicianUserID){
+        this.unblock();
         if(!this.userId) {
             throw new Meteor.Error("Not-Authorized");
         }
@@ -107,14 +107,13 @@ Meteor.methods({
         if(!this.isSimulation) {
 
             let {removeClinicianFromPatient, isPatient, isClinician } = await import("./Server/UserUtils.js");
-
+            let [isPatientUser, isClinicianUser] = await Promise.all([isPatient(this.userId), isClinician(clinicianUserID)]);
             try {
-                if(await isPatient(this.userId) && await isClinician(clinicianUserID)) {
+                if(isPatientUser && isClinicianUser) {
                     await removeClinicianFromPatient(this.userId, clinicianUserID);
                 } else {
                     throw new Meteor.Error("Add-Clinician-Error", "User is either not a patient or the clinicianID is not a registered clinician.")
                 }
-                
             } catch (error) {
                 throw error;
             }
