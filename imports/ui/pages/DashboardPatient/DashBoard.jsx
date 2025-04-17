@@ -146,13 +146,16 @@ const DashBoard = () => {
                                         exit="hidden"
                                         variants={widgetVariants}
                                         custom={index}
+                                        style={{ gridColumn: 'span ' + widget.width }}
                                     >
                                         {widget && (
                                             <div
                                                 key={itemId}
                                                 data-swapy-item={itemId}
-                                                className="w-full h-full bg-white p-4 rounded-lg">
-                                                <div className={`col-span-width p-2`}>
+                                                className="w-full h-full bg-white p-4 rounded-lg"
+                                            >
+                                                <div className="col-span-width p-2 h-full">
+			                                        <h2 className="text-lg font-bold">{widget.label}</h2>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
                                                 </div>
                                             </div>

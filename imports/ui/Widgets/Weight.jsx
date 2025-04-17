@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { Meteor } from 'meteor/meteor';
 import { format } from 'date-fns';
 import 'chartjs-adapter-date-fns';
 import zoomPlugin from 'chartjs-plugin-zoom';
@@ -92,7 +93,6 @@ function Weight({ }){
 
 	return (
 		<>
-			<h2 className="text-lg font-bold">Weight</h2>
 			<div>
 				<Line height={250} options={options} data={data} />
 			</div>

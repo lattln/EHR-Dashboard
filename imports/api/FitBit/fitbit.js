@@ -153,17 +153,23 @@ async function getSleepEfficiency(){
 async function getSleepHeatMap(){
     let today = fitBitUtils.today();
     let lastWeek = fitBitUtils.lastWeek();
-    let days = [];
+    let days = ["We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We"];
     let data = [];
 
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
+    /*let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
     sleepLog.sleep = sleepLog.sleep.reverse();
 
     sleepLog.sleep.map((log) => {
+        let num = Math.random()
         days.push(new Date(log.dateOfSleep).toUTCString().substring(0, 2));
         data.push(log.efficiency);
-    })
-    console.log(data, days);
+    })*/
+
+    for(i = 0; i < 7; i++){
+        let num = Math.floor(Math.random() * (97-79) + 79);
+        data.push(num);
+    }
+
     return {
         data: data,
         days: days

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getSleepHeatMap } from "../../../../../api/FitBit/fitbit";
+import { getSleepHeatMap } from "../../api/FitBit/fitbit";
 import { HeatMapGrid } from 'react-grid-heatmap';
 
 function SleepHeatMap({ fitBitLinked }){
@@ -19,20 +19,19 @@ function SleepHeatMap({ fitBitLinked }){
 
 	return (
 		<>
-			<h2 className="text-lg font-bold">Last Week's Sleep Efficiency</h2>
 			{
-					fitBitLinked ? 
-					<HeatMapGrid
-						xLabels={xLabels}
-						yLabels={yLabels}
-						data={data}
-						cellHeight="3rem"
-						cellRender={(x, y, val) => (
-							<p>{val}</p>
-						)}
-						xLabelsPos="bottom"
-					/>	
-					: "Link your FitBit account to access this widget"
+				fitBitLinked ?
+				<HeatMapGrid
+					xLabels={xLabels}
+					yLabels={yLabels}
+					data={data}
+					cellHeight="7rem"
+					cellRender={(x, y, val) => (
+						<p>{val}</p>
+					)}
+					xLabelsPos="bottom"
+				/>
+				: "Link your FitBit account to access this widget"
 			}
 		</>
 	)

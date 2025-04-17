@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
-import colors from '../colors';
+import colors from './colors';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import {
     Chart,

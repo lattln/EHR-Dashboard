@@ -23,7 +23,6 @@ function BMI({ min=16, max=40 }){
 
     return (
         <>
-			<h2 className="text-lg font-bold">Body Mass Index</h2>
             {value ?
                 <GaugeComponent
                     minValue={min}
