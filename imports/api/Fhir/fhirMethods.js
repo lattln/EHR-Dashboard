@@ -23,7 +23,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -63,7 +63,7 @@ Meteor.methods({
             let { getPatientRecordByID } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -134,7 +134,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -170,7 +170,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -243,7 +243,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -279,7 +279,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -314,7 +314,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -350,7 +350,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -385,7 +385,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -421,7 +421,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -457,7 +457,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -492,7 +492,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -527,7 +527,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -562,7 +562,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -597,7 +597,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -632,7 +632,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -667,7 +667,7 @@ Meteor.methods({
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
@@ -708,7 +708,7 @@ Meteor.methods({
             let { getRecentPatientLabs } = await import("./Server/FhirUtils.js");
             let { getRoles, hasPatientRecordAccess, getFhirIDFromUserAccount} = await import("./../User/Server/UserUtils.js");
 
-            let [roles, hasAccess] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
+            let [hasAccess, roles] = await Promise.all([hasPatientRecordAccess(this.userId, patientID), getRoles(this.userId)]);
 
             const isAdminUser = roles.includes(UserRoles.ADMIN);
             const isUserPatient = roles.includes(UserRoles.PATIENT);
