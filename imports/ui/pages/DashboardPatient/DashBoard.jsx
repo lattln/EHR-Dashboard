@@ -9,6 +9,7 @@ import Summary from './Components/Summary';
 import { ChatBot } from '../ChatBot';
 import { Meteor } from 'meteor/meteor';
 import { useUser } from '../../User';
+import { useNavigate } from 'react-router-dom';
 
 const DashBoard = () => {
     const { user, userLoading } = useUser();
@@ -18,6 +19,7 @@ const DashBoard = () => {
     const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
     const swapyRef = useRef(null);
     const container = useRef(null);
+    const nav = useNavigate();
 
     useEffect(() => {
         if(Meteor.userId() == null){
