@@ -1,5 +1,6 @@
 import GaugeComponent from "react-gauge-component";
 import React, { useEffect, useState } from "react";
+import { useUser } from "../User";
 
 function BMI({ min=16, max=40 }){
     const [value, setVal] = useState(25);
@@ -11,15 +12,18 @@ function BMI({ min=16, max=40 }){
         { color: '#FFA500', limit: 35, showTick: true },
         { color: '#FF0000', limit: 40, showTick: true }
     ]);
+    const { user, userLoading, id } = useUser();
 
     useEffect(() => {
         async function getBMI(){
-            let res = await Meteor.callAsync('patient.getBMIMetrics', 1);
+            let res = await Meteor.callAsync('patient.getBMIMetrics', id);
             setVal(res[res.length - 1].valueQuantities[0].value);
         }
 
-        getBMI();
-    }, []);
+        if(!userLoading){
+            getBMI();
+        }
+    }, [userLoading]);
 
     return (
         <>
