@@ -15,6 +15,7 @@ const Login = ({ toggleAuth }) => {
         Meteor.loginWithPassword(email, password, (err) => {
             if (err) {
                 setError(err.reason);
+                console.log(error);
             } else {
                 setError("");
                 navigate("/patient/home");
