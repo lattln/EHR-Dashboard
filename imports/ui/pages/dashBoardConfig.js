@@ -1,5 +1,5 @@
 export const dashboardConfig = [
-    /*{
+    {
         id: "steps",
         label: "Steps",
         type: "Steps",
@@ -33,7 +33,7 @@ export const dashboardConfig = [
         type: "SleepEfficiency",
         height: 1,
         width: 1
-    },*/
+    },
     {
         id: "weight",
         label: "Weight",
