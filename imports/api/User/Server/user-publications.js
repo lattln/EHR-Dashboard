@@ -3,20 +3,6 @@ import { isAdmin } from "./UserUtils.js";
 import { logger } from "../../Logging/Server/logger-config.js";
 
 
-Meteor.publish("createdUsers", async function(){
-    try{
-        if(this.userId && await isAdmin(this.userId)) {
-            return Meteor.users.find({});
-        } else {
-            this.ready();
-        }
-    } catch (error) {
-        logger.error(error, "error trying to retrieve list of created users from database.");
-        throw new Meteor.Error("Internal-Server-Error", error.message);
-    }
-    
-});
-
 //set the document property name to 1 if you want it included on the frontend
 //make sure that it isn't something that is supposed to be secret.
 Meteor.publish("userData", function () {
