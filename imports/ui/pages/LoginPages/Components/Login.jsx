@@ -17,8 +17,7 @@ const Login = ({ toggleAuth }) => {
                 setError(err.reason);
             } else {
                 setError("");
-                alert("Login successful!");
-                navigate("/dashboard");
+                navigate("/patient/home");
             }
         });
     };

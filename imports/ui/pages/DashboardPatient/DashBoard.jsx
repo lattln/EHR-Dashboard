@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import Header from '../Header';
+import React, { useEffect, useRef, useState, useMemo, use } from 'react';
 import { USER_INFO } from '../constantsPages';
-import ChartContainer from './Components/ChartContainer';
 import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
 import { createSwapy, utils } from 'swapy';
@@ -9,14 +7,23 @@ import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import Summary from './Components/Summary';
 import { ChatBot } from '../ChatBot';
+import { Meteor } from 'meteor/meteor';
+import { useUser } from '../../User';
 
 const DashBoard = () => {
+    const { user, userLoading } = useUser();
     const [widgets, setWidgets] = useState([]);
     const [slotItemMap, setSlotItemMap] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
     const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
     const swapyRef = useRef(null);
     const container = useRef(null);
+
+    useEffect(() => {
+        if(Meteor.userId() == null){
+            nav('/auth')
+        }
+    }, [])
 
     useEffect(() => {
         // Load the persisted configuration from localStorage
@@ -103,8 +110,8 @@ const DashBoard = () => {
                 <div className="p-6 space-y-6 overflow-y-auto">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
                         <div>
-                            <p className="font-semibold">{USER_INFO.name.label}: {USER_INFO.name.firstName} {USER_INFO.name.lastName}</p>
-                            <p className="font-semibold">{USER_INFO.birth.label}: {USER_INFO.birth.value}</p>
+                            <p className="font-semibold">Name: {userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName}</p>
+                            <p className="font-semibold">Birthday: {userLoading ? "..." : user.profile.dob}</p>
                         </div>
                         <div>
                             <p className="font-semibold">{USER_INFO.physician.label}: {USER_INFO.physician.value}</p>
@@ -133,9 +140,6 @@ const DashBoard = () => {
                                 }
 
                                 const WidgetComponent = Widgets[widget.type];
-                                const label = widget.label;
-                                
-
                                 return (
                                     <motion.div
                                         key={slotId}

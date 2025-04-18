@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import 'chartjs-adapter-date-fns';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import colors from "./colors";
+import { useUser } from "../User";
 
 import { 
 	Chart,
@@ -26,10 +27,11 @@ Chart.register(
 	zoomPlugin
 );
 
-function Weight({ }){
+function Weight({}){
 	const [data, setData] = useState({
 		datasets: []
 	});
+	const { user, id } = useUser();
 
 	const [options, setOptions] = useState({
 		responsive: true,
@@ -49,7 +51,7 @@ function Weight({ }){
 
 	useEffect(() => {
 		async function getWeight(){
-			let data = await Meteor.callAsync('patient.getWeightMetrics', 1);
+			let data = await Meteor.callAsync('patient.getWeightMetrics', id);
 			let newDataset = {
 				label: 'Weight',
 				data: [],
@@ -92,11 +94,9 @@ function Weight({ }){
 	}, [])
 
 	return (
-		<>
-			<div>
-				<Line height={250} options={options} data={data} />
-			</div>
-		</>
+		<div>
+			<Line height={250} options={options} data={data} />
+		</div>
 	)
 };
 

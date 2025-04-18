@@ -1,15 +1,15 @@
 import React from "react";
 import { AnimatePresence } from "framer-motion";
 import Routes from "./Routes";
-import { RoleProvider } from "./RoleContext";
+import { UserProvider } from "./User";
 
 const App = () => {
     return (
-        <RoleProvider >
+        <UserProvider>
             <AnimatePresence>
                 <Routes />
             </AnimatePresence>
-        </RoleProvider>
+        </UserProvider>
     );
 };
 
