@@ -42,7 +42,6 @@ const Register = ({ toggleAuth }) => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        console.log(dob);
 
         if (!email || !password || !role) {
             setError("All fields are required. Please fill in your email, username, password, and role.");

@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { USER_INFO } from '../../constantsPages';
+import { Meteor } from "meteor/meteor";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../../User";
 
 const UserSettings = () => {
+    const { user, userLoading } = useUser();
     const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
-    const [settings, setSettings] = useState({
-        firstName: USER_INFO.name.firstName,
-        lastName: USER_INFO.name.lastName,
-        email: USER_INFO.email.value,
-        phone: USER_INFO.phone.value,
-        bio: USER_INFO.bio,
-        country: USER_INFO.address.country,
-        cityState: USER_INFO.address.cityState,
-        postalCode: USER_INFO.address.postalCode,
-    });
+    const nav = useNavigate();
+
+    useEffect(() => {
+        if(Meteor.userId() == null){
+            nav('/auth');
+        }
+    }, [])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,10 +29,19 @@ const UserSettings = () => {
 
     const handleSaveClick = () => {
         setIsEditing(false); // Disable editing mode and "save" changes
-        alert("Settings updated successfully!");
     };
 
-
+    const logout = (e) => {
+        e.preventDefault();
+        Meteor.logout((err) => {
+            if(err){
+                console.log(err);
+                alert("Error loggin out");
+            } else {
+                nav("/auth");
+            }
+        })
+    }
 
     return (
         <div className="p-5 h-screen bg-gray-100">
@@ -44,14 +53,17 @@ const UserSettings = () => {
             animate={{opacity: 1, y:0}}
             transition={{duration: 0.6}}
             >
-            <div className="flex items-center mb-4 p-8 rounded-lg shadow-md bg-white">
-                <img src="/blank.webp" alt="Profile" className="rounded-full w-16 h-16 mr-4" />
+            <div className="flex justify-between items-center mb-4 p-8 rounded-lg shadow-md bg-white">
                 <div>
-                    <h2 className="text-2xl font-semibold">{settings.firstName} {settings.lastName}</h2>
-                    <p className="text-sm text-gray-500">{settings.bio}</p>
-                    <p className="text-sm text-gray-500">{USER_INFO.location}</p>
+                    <img src="/blank.webp" alt="Profile" className="rounded-full w-16 h-16 mr-4" />
+                    <div>
+                        <h2 className="text-2xl font-semibold">{userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName}</h2>
+                    </div>
                 </div>
 
+                <button onClick={logout} className="w-fit bg-blue-600 text-white mt-4 p-2 rounded-lg hover:bg-blue-700">
+                    Log Out
+                </button>
             </div>
             </motion.div>
 
@@ -82,7 +94,7 @@ const UserSettings = () => {
                                     type="text"
                                     id="firstName"
                                     name="firstName"
-                                    value={settings.firstName}
+                                    value={userLoading ? "..." : user.profile.firstName}
                                     onChange={handleChange}
                                     className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     disabled={!isEditing} // Disable input if not in editing mode
@@ -94,7 +106,7 @@ const UserSettings = () => {
                                     type="text"
                                     id="lastName"
                                     name="lastName"
-                                    value={settings.lastName}
+                                    value={userLoading ? "..." : user.profile.lastName}
                                     onChange={handleChange}
                                     className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     disabled={!isEditing}
@@ -107,7 +119,7 @@ const UserSettings = () => {
                                 type="email"
                                 id="email"
                                 name="email"
-                                value={settings.email}
+                                value={userLoading ? "..." : user.emails[0].address}
                                 onChange={handleChange}
                                 className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 disabled={!isEditing}
@@ -119,7 +131,7 @@ const UserSettings = () => {
                                 type="text"
                                 id="phone"
                                 name="phone"
-                                value={settings.phone}
+                                value={userLoading ? "..." : user.profile.phoneNumber}
                                 onChange={handleChange}
                                 className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 disabled={!isEditing}
@@ -130,7 +142,7 @@ const UserSettings = () => {
                     </form>
 
 
-                    {/* Address Section */}
+                    {/* Address Section 
                     <h3 className="text-xl font-semibold mt-4 mb-4">Address</h3>
                     <form className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -173,7 +185,7 @@ const UserSettings = () => {
                                 />
                             </div>
                         </div>
-                    </form>
+                    </form>*/}
 
                     {isEditing && (
                         <button

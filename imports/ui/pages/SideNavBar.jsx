@@ -5,8 +5,8 @@ import { useRole } from "../RoleContext";
 import { SIDEBAR_DATA_CLINICIAN, SIDEBAR_DATA_PATIENT } from "./constantsPages";
 
 const SideNavBar = ({ onCloseMobile }) => {
-    const { role } = useRole();
-    const sidebarData = role === 'patient' ? SIDEBAR_DATA_PATIENT : SIDEBAR_DATA_CLINICIAN;
+    //const { role } = useRole();
+    const sidebarData = 'patient' === 'patient' ? SIDEBAR_DATA_PATIENT : SIDEBAR_DATA_CLINICIAN;
 
     return (
         <motion.div
