@@ -93,6 +93,14 @@ export async function askPatientQuestion({ question, vectorStore }) {
     console.log("Question:", question);
     // -------------------------------
 
+    // getting the loinc
+    const loincCodes = Array.from(
+        new Set(
+            docs.map((d) => d.metadata.loincCode)
+            .filter((code) => typeof code === "string" && code.length > 0)
+        )
+    )
+
     const llm = new ChatOpenAI(
         {
             temperature: 0,
@@ -104,5 +112,5 @@ export async function askPatientQuestion({ question, vectorStore }) {
 
     const response = await runWithMemory({ chain, memory, input: question });
     console.log(await memory.loadMemoryVariables({}));
-    return response;
+    return { response, loincCodes };
 }

@@ -354,7 +354,11 @@ export async function addClinicianToPatient(userPatientID, userClinicianID) {
 
 export async function getFhirIDFromUserAccount(userPatientID) {
     try {
-       return Meteor.users.findOneAsync({_id: userPatientID}, {fields: {fhirID: 1}})?.fhirID || undefined;
+        const user = await Meteor.users.findOneAsync(
+            { _id: userPatientID },
+            { fields: { fhirID: 1 } }
+          );
+          return user?.fhirID;
     } catch (error) {
         logger.error(error, `An error occured while trying to get the fhir id of the specified user id: ${userPatientID}.`);
         return undefined;

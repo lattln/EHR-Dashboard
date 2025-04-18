@@ -150,6 +150,9 @@ Meteor.methods({
     },
 
     async 'ozwell.getSummary'(patientID) {
+        const temp = await getFhirIDFromUserAccount(this.userId)
+        console.log("SDKLJFHSDJKHFKJSDHFKJSDHFJKSDHJKFHSDJKFHJSDKFH", temp)
+
         const metrics = await Meteor.callAsync('patient.getSummaryMetrics', patientID);
 
         const latestValue = (metrics) => {

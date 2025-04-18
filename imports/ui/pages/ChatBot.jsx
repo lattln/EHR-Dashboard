@@ -44,6 +44,13 @@ export const ChatBot = () => {
         setLoading(true);
         setQuestion("");
 
+        /**
+         * TODO: echo.ask now returns { botMessage<string>, loincCodes<Array> }.
+         *       loincCodes is an array of all the relevant LOINC codes 
+         *       (most relevant to least) that were in Echo's response.
+         *       Check if any widget uses any of the LOINCS. Stop at the first
+         *       widget that matches a LOINC and highlight/bold/something to make it stand out.
+         */
         Meteor.call("echo.ask", question, (err, res) => {
             setLoading(false);
             const botMessage = {
