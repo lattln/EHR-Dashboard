@@ -1,27 +1,29 @@
 import React from "react";
 import { USER_INFO } from "./constantsPages";
+import { useUser } from "../User";
 
-const Header = ({ }) => {
-
+const Header = ({ onMenuClick }) => {
+    const { user, userLoading } = useUser();
     return (
-        <div className="bg-white shadow-md p-4 flex justify-between items-center sm:justify-end">
-            {/* Mobile Menu Button */}
+        <div className="bg-white shadow-md p-4 flex justify-between items-center md:justify-end">
+            {/* Hamburger for mobile */}
             <button
-                className="text-2xl sm:hidden"
-                onClick={() => {
-                    console.log(window.innerWidth);
-                    console.log(window.outerWidth);
-                    console.log(document.documentElement.clientWidth);
-
-                }}
+                className="text-2xl md:hidden"
+                onClick={onMenuClick}
+                aria-label="Toggle menu"
             >
                 ☰
             </button>
 
-
-            <div className="flex justify-evenly items-center">
-                <h3 className="text-lg font-bold text-gray-800">Hi, {USER_INFO.name.firstName} {USER_INFO.name.lastName}</h3>
-                <img src="/blank.webp" className="ml-3 w-10 h-10 sm:w-15 sm:h-15 rounded-full"></img>
+            <div className="flex items-center">
+                <h3 className="text-lg font-bold text-gray-800">
+                    Hi, {userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName} 
+                </h3>
+                <img
+                    src="/blank.webp"
+                    className="ml-3 w-10 h-10 rounded-full"
+                    alt="User Avatar"
+                />
             </div>
         </div>
     );

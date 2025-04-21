@@ -3,4 +3,5 @@ node_modules/
 settings.json
 *.bat
 *.sh
-settings.json
+second_settins.json
+*.exe

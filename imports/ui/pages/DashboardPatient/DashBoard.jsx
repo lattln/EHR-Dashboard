@@ -1,21 +1,30 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import Header from '../Header';
 import { USER_INFO } from '../constantsPages';
 import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
 import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+import Summary from './Components/Summary';
+import { ChatBot } from '../ChatBot';
+import { Meteor } from 'meteor/meteor';
+import { useUser } from '../../User';
 
 //import ChartContainer from './Components/ChartContainer';
 
 const DashBoard = () => {
+    const { user, userLoading } = useUser();
     const [widgets, setWidgets] = useState([]);
     const [slotItemMap, setSlotItemMap] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
     const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
     const swapyRef = useRef(null);
     const container = useRef(null);
+
+    useEffect(() => {
+        if(Meteor.userId() == null){
+            nav('/auth')
+        }
+    }, [])
 
     useEffect(() => {
         // Load the persisted configuration from localStorage
@@ -98,14 +107,12 @@ const DashBoard = () => {
                     exit="hidden"
                     variants={headerVariants}
                 >
-                    <Header />
                 </motion.div>
-
                 <div className="p-6 space-y-6 overflow-y-auto">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
                         <div>
-                            <p className="font-semibold">{USER_INFO.name.label}: {USER_INFO.name.firstName} {USER_INFO.name.lastName}</p>
-                            <p className="font-semibold">{USER_INFO.birth.label}: {USER_INFO.birth.value}</p>
+                            <p className="font-semibold">Name: {userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName}</p>
+                            <p className="font-semibold">Birthday: {userLoading ? "..." : user.profile.dob}</p>
                         </div>
                         <div>
                             <p className="font-semibold">{USER_INFO.physician.label}: {USER_INFO.physician.value}</p>
@@ -122,7 +129,7 @@ const DashBoard = () => {
                             }} />
                         </div>
                     </div>
-
+                    <Summary />
                     <div
                         ref={container}
                         className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 text-black overflow-clip">
@@ -134,9 +141,6 @@ const DashBoard = () => {
                                 }
 
                                 const WidgetComponent = Widgets[widget.type];
-                                const label = widget.label;
-                                
-
                                 return (
                                     <motion.div
                                         key={slotId}
@@ -147,13 +151,16 @@ const DashBoard = () => {
                                         exit="hidden"
                                         variants={widgetVariants}
                                         custom={index}
+                                        style={{ gridColumn: 'span ' + widget.width }}
                                     >
                                         {widget && (
                                             <div
                                                 key={itemId}
                                                 data-swapy-item={itemId}
-                                                className="w-full h-full bg-white p-4 rounded-lg">
-                                                <div className={`col-span-width p-2`}>
+                                                className="w-full h-full bg-white p-4 rounded-lg"
+                                            >
+                                                <div className="col-span-width p-2 h-full">
+			                                        <h2 className="text-lg font-bold">{widget.label}</h2>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
                                                 </div>
                                             </div>
@@ -163,6 +170,7 @@ const DashBoard = () => {
                             })}
                         </AnimatePresence>
                     </div>
+                    <ChatBot />
                 </div>
             </div>
         </div>

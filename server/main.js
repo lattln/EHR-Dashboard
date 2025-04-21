@@ -9,3 +9,6 @@ import "../imports/api/Logging/Server/logs-publications.js"
 import "../imports/startup/Server/accounts-config.js";
 import "../imports/startup/Server/initRoles.js";
 import "../imports/api/User/Server/UserUtils.js"
+import "../imports/api/OpenAI/openaiMethods.js";
+import "../imports/api/Ozwell/ozwellMethods.js";
+import "../imports/api/Echo/echoMethods.js";

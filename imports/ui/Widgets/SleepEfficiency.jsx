@@ -11,7 +11,7 @@ function SleepEfficiencey({ fitBitLinked }){
 
 			if(res.efficiency != -1){
 				setSleepLogExists(true);
-				setEfficiency(res);
+				setEfficiency(res.efficiency);
 			}
 		}
 
@@ -22,10 +22,11 @@ function SleepEfficiencey({ fitBitLinked }){
 
 	return (
 		<>
-			<h2 className="text-lg font-bold">Sleep Efficiency</h2>
 			{
 				fitBitLinked ? 
-				sleepLogExists ? <h1 className="text-9xl my-5 text-center">{ efficiency }</h1> : <p>No Data Available</p> 
+					sleepLogExists ? 
+					<h1 className="text-9xl my-5 text-center">{ efficiency }</h1> 
+					: <p>No Data Available</p> 
 				: "Link your FitBit account to access this widget"
 			}
 		</>
