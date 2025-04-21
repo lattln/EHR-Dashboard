@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo, use } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { USER_INFO } from '../constantsPages';
 import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
@@ -22,10 +22,23 @@ const DashBoard = () => {
     const nav = useNavigate();
 
     useEffect(() => {
+        async function checkFitbitLinked(){
+            if(!isValidToken(user.fitbitAccountAuth)){
+                await refreshToken(user.fitbitAccountAuth);
+            }
+
+            setFitBitLinked(true);
+        }
+
         if(Meteor.userId() == null){
             nav('/auth')
         }
-    }, [])
+
+        if(!userLoading && user.fitbitAccountAuth){
+            checkFitbitLinked()
+        }
+        
+    }, [userLoading])
 
     useEffect(() => {
         // Load the persisted configuration from localStorage
@@ -55,21 +68,6 @@ const DashBoard = () => {
         return () => {
             swapyRef.current?.destroy();
         };
-    }, []);
-
-    // Check if Fitbit is linked and refresh token if needed
-    useEffect(() => {
-        async function checkFitBitLinked() {
-            let token = localStorage.getItem('fitbit-token');
-            if (token != null) {
-                if (!(await isValidToken(token))) {
-                    refreshToken(token);
-                }
-                setFitBitLinked(true);
-            }
-        }
-
-        checkFitBitLinked();
     }, []);
 
     // Save the current widget configuration to localStorage

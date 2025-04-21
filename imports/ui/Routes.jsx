@@ -44,7 +44,7 @@ const Routes = () => {
                 ],
             },
 
-            { path: "/auth", element: <AuthPage /> },
+            { path: "/", element: <AuthPage /> },
             { path: "dev", element: <DevLanding /> },
             { path: "/toke", element: <Token />},
             { path: "*", element: <NotFound /> },

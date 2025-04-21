@@ -6,7 +6,7 @@ const Summary = () => {
     const [summary, setSummary] = useState('');
     const [loading, setLoading] = useState(true);
     const { user, userLoading } = useUser();
-
+    /*
     useEffect(() => {
         async function fetchSummary() {
             try {
@@ -51,7 +51,7 @@ const Summary = () => {
                 />
             )}
         </div>
-    );
+    );*/
 };
 
 export default Summary;

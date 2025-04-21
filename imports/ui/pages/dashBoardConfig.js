@@ -1,11 +1,11 @@
 export const dashboardConfig = [
-    {
+    /*{
         id: "bmi",
         label: "BMI",
         type: "BMI",
         height: 1,
         width: 1
-    },
+    },*/
     {
         id: "steps",
         label: "Steps",
@@ -13,7 +13,7 @@ export const dashboardConfig = [
         height: 1,
         width: 1
     },
-    {
+    /*{
         id: "sleepHeatMap",
         label: "Last Week of Sleep",
         type: "SleepHeatMap",
@@ -40,7 +40,7 @@ export const dashboardConfig = [
         type: "SleepEfficiency",
         height: 1,
         width: 1
-    },
+    },*/
     {
         id: "weight",
         label: "Weight",

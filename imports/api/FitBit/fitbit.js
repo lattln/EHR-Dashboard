@@ -1,5 +1,7 @@
-import fitBitUtils from "./utils";
+import colors from "../../ui/Widgets/colors";
 import { decJWT } from "./auth";
+import fitBitUtils from "./utils";
+import { Meteor } from "meteor/meteor";
 
 /*
 Scopes we ask for:
@@ -12,22 +14,21 @@ Scopes we ask for:
     7. oxygen_saturation
 */
 
-const chartColors = [
-    'rgb(255, 99, 132)',
-    'rgb(53, 162, 235)',
-    '#c51d34',
-    '#6c6960',
-    '#1c1c1c',
-    '#734222',
-    '#8673a1'
-]
+async function makeRequest(url, userID){
+    let token = await Meteor.users.findOneAsync({ _id: userID }, { fields: { fitbitAccountAuth: 1 }});
+    if(!userID || !token.fitbitAccountAuth){
+        return {
+            success: false,
+            err: "Not logged in to fitbit"
+        }
 
-async function makeRequest(url){
-    let jwt = await decJWT(localStorage.getItem('fitbit-token'));
+    }
+
+    let jwe = await decJWT(token.fitbitAccountAuth);
     let res = await fetch(`https://api.fitbit.com${url}`, {
         headers: new Headers({
-            'authorization': `Bearer ${jwt.access_token}`,
-            'accept': 'application/json' 
+            Authorization: `Bearer ${jwe.access_token}`,
+            Accept: 'application/json',
         })
     })
 
@@ -48,9 +49,9 @@ async function getCalories(){
     return await makeRequest('/1/user/-/activities/calories/date/today/7d.json')
 }
 
-async function getCurrentSteps(){
+async function getCurrentSteps(userID){
     let today = fitBitUtils.today();
-    let res = await makeRequest(`/1/user/-/activities/date/${today}.json`);
+    let res = await makeRequest(`/1/user/-/activities/date/${today}.json`, userID);
 
     return {
         goal: res.goals.steps,
@@ -68,7 +69,7 @@ async function getHeartRate(){
         data: res['activities-heart'][0].value.heartRateZones.map((z) => {
             return z.minutes;
         }),
-        backgroundColor: chartColors
+        backgroundColor: colors 
     }]
 
     return {
@@ -88,7 +89,7 @@ async function getSleepBreakdown(){
     let summaryData = [{
         label: "Minutes",
         data: [sleepLog.summary.stages.deep, sleepLog.summary.stages.light, sleepLog.summary.stages.rem, sleepLog.summary.stages.wake],
-        backgroundColor: chartColors
+        backgroundColor: colors 
     }]
 
     return {
@@ -118,7 +119,7 @@ async function getSleepDuration(){
         {
             label: "Duration",
             data: [sleepLog.summary.totalMinutesAsleep],
-            backgroundColor: [chartColors[0]]
+            backgroundColor: [colors[0]]
         },
         {
             label: "Goal",
@@ -153,22 +154,16 @@ async function getSleepEfficiency(){
 async function getSleepHeatMap(){
     let today = fitBitUtils.today();
     let lastWeek = fitBitUtils.lastWeek();
-    let days = ["We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We"];
+    let days = [];
     let data = [];
 
-    /*let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
     sleepLog.sleep = sleepLog.sleep.reverse();
 
     sleepLog.sleep.map((log) => {
-        let num = Math.random()
         days.push(new Date(log.dateOfSleep).toUTCString().substring(0, 2));
         data.push(log.efficiency);
-    })*/
-
-    for(i = 0; i < 7; i++){
-        let num = Math.floor(Math.random() * (97-79) + 79);
-        data.push(num);
-    }
+    })
 
     return {
         data: data,

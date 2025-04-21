@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { getAuthUrl, isValidToken, refreshToken } from "../../../../api/FitBit/auth";
 import { dashboardConfig } from "../../dashBoardConfig";
+import { useUser } from "../../../User";
 
 const Settings = () => {
     const [fitBitUrl, setFitBitUrl] = useState({});
     const [fitBitLinked, setFitBitLinked] = useState(false);
     const [currentConfig, setCurrentConfig] = useState(dashboardConfig);
+    const { user, userLoading } = useUser();
 
     const linkFitBit = (e) => {
         e.preventDefault();
@@ -21,11 +23,9 @@ const Settings = () => {
     }, [])
 
     useEffect(() => {
-        let token = localStorage.getItem('fitbit-token');
-
-        if (token != null) {
-            if (!isValidToken(token)) {
-                refreshToken(token);
+        if(!userLoading && user.fitbitAccountAuth != null && user.fitbitAccountAuth.length > 0) {
+            if (!isValidToken(user.fitbitAccountAuth)) {
+                refreshToken(user.fitbitAccountAuth);
             }
             setFitBitLinked(true);
         }
@@ -35,7 +35,7 @@ const Settings = () => {
         if (persistedConfig) {
             setCurrentConfig(JSON.parse(persistedConfig));
         }
-    }, [])
+    }, [userLoading])
 
     const handlePresetChange = (preset) => {
         setCurrentConfig(preset);
