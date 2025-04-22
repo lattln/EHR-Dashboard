@@ -7,7 +7,20 @@ Accounts.onCreateUser((options, user) => {
   // Add custom fields to the user object
   user.profile = options.profile !== undefined ? options.profile : {}
   //global fields all user objects should have
-  user.config = {};
+  user.config = [
+    {
+      name: "Preset 1",
+      widget: []
+    },
+    {
+      name: "Preset 2",
+      widget: []
+    },
+    {
+      name: "Preset 3",
+      widget: []
+    }
+  ];
 
   //add any additional properties to the user object before adding it to the users collection.
   const {firstName, lastName, dob, phoneNumber, fhirID} = options;
