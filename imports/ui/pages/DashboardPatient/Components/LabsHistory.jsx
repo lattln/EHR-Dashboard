@@ -1,20 +1,75 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useUser } from '../../../User';
+import LabsResult from './LabsResult';
+import ThreeDotsWave from '../../three-dots-wave'
 
 const LabHistory = () => {
-    // Example data for lab results
-    const labResults = [
-        { name: 'Vitamin B-12', value: 550, unit: 'mg/dl', minValue: 200, maxValue: 900 },
-        { name: 'HBA1C', value: 5.3, unit: '%', minValue: 4, maxValue: 6 },
-        { name: 'Hemoglobin', value: 12.5, unit: 'g/dl', minValue: 12, maxValue: 18 },
-        { name: 'Vitamin D', value: 50, unit: 'ng/ml', minValue: 30, maxValue: 100 },
-        { name: 'TSH', value: 7, unit: 'uU/ml', minValue: 0.4, maxValue: 4.5 }
-    ];
+    const { userLoading, user, id } = useUser();
+    const [labResults, setLabResults] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedLab, setSelectedLab] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const calculateProgress = (value, maxValue) => {
-        const percentage = (value / maxValue) * 100;
-        return Math.min(percentage, 100);
+    useEffect(() => {
+        if (userLoading || !user) {
+            return;
+        }
+        const fetchLabResults = async () => {
+            try {
+                Meteor.call('patient.getRecentLabs', id, 1, 100, (err, res) => {
+                    if (err) {
+                        setError(err.message);
+                        setLoading(false);
+                    } else {
+                        setLabResults(res);
+                        setLoading(false);
+                    }
+                });
+            } catch (error) {
+                setError(error.message);
+                setLoading(false);
+            }
+        };
+
+        fetchLabResults();
+    }, [userLoading, user, id]);
+
+    const handleLabClick = (lab) => {
+        setSelectedLab(lab);
+        setIsModalOpen(true);
     };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+
+    if (loading) {
+        return (
+            <div className="flex min-h-screen bg-gray-100">
+                <div className="flex-1 p-6 bg-white">
+                    {/* Header */}
+                    <header className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl font-semibold">Lab Results</h2>
+                    </header>
+                    {/* Loading Spinner for Lab Report List */}
+                    <div className="flex justify-center items-center min-h-[60vh]">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <ThreeDotsWave size="1rem" />
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -22,72 +77,34 @@ const LabHistory = () => {
             <div className="flex-1 p-6 bg-white">
                 <header className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">Lab Results</h2>
-                    <span className="text-sm text-gray-500">2x / year | high priority</span>
                 </header>
 
-                <div className="bg-gray-100 p-6 rounded-lg shadow-lg mb-6">
-                    <h3 className="text-xl font-bold">Baseline Test</h3>
-                    <p className="text-gray-700 mt-2">....insert </p>
-                    <p className="text-gray-500 text-sm mt-2">....insert </p>
-                </div>
-
-                {/* Lab Results */}
+                {/* Display Lab Reports List */}
                 <div className="space-y-6">
                     {labResults.map((result, index) => (
                         <motion.div
                             key={index}
-                            className="bg-white p-4 rounded-lg shadow-md"
+                            className="bg-white p-4 rounded-lg shadow-md cursor-pointer"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.2 }} // Stagger animation for each lab result
+                            transition={{ duration: 0.5, delay: index * 0.2 }}
+                            onClick={() => handleLabClick(result)}
                         >
                             <div className="flex justify-between items-center">
-                                <p className="font-semibold">{result.name}</p>
-                                <p className="font-semibold">{result.value} {result.unit}</p>
-                            </div>
-
-                            {/* Progress Bar Animation */}
-                            <motion.div
-                                className="mt-2 w-full bg-gray-300 rounded-full h-2"
-                                initial={{ width: '0%' }}
-                                animate={{ width: `${calculateProgress(result.value, result.maxValue)}%` }}
-                                transition={{ duration: 1, ease: 'easeOut' }} // Smooth progress bar animation
-                            >
-                                <div className="bg-blue-500 h-2 rounded-full"></div>
-                            </motion.div>
-
-                            <div className="flex justify-between mt-2 text-xs text-gray-500">
-                                <span>{result.minValue} {result.unit}</span>
-                                <span>{result.maxValue} {result.unit}</span>
+                                <p className="font-semibold">{result.loincText}</p>
+                                <p className="font-semibold">{new Date(result.dateIssued).toLocaleDateString()}</p>
                             </div>
                         </motion.div>
                     ))}
                 </div>
-
-                {/* Download Button */}
-                <div className="my-6 flex justify-end">
-                    <motion.button
-                        className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600"
-                        whileHover={{ scale: 1.1 }} // Button hover animation
-                        whileTap={{ scale: 0.95 }} // Button tap animation
-                    >
-                        Download Results
-                    </motion.button>
-                </div>
-
-                {/* Recommended Supplements & Prescriptions */}
-                <div className="my-6">
-                    <h3 className="text-lg font-semibold">Recommended Supplements & Prescriptions</h3>
-                    <div className="bg-gray-100 p-4 rounded-lg shadow-md mt-4">
-                        <p className="text-gray-700">Based on your test results, consider the following recommendations:</p>
-                        <ul className="list-disc pl-6 mt-2">
-                            <li>Vitamin B-12 supplement</li>
-                            <li>Iron supplement for Hemoglobin levels</li>
-                            <li>Vitamin D3 supplement</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
+
+            {/* Modal for showing the selected Lab Report details */}
+            <LabsResult
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                selectedLab={selectedLab}
+            />
         </div>
     );
 };

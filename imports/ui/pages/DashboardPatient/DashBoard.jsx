@@ -1,4 +1,3 @@
-import React, { useEffect, useRef, useState, useMemo, use } from 'react';
 import { USER_INFO } from '../constantsPages';
 import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
@@ -9,6 +8,9 @@ import Summary from './Components/Summary';
 import { ChatBot } from '../ChatBot';
 import { Meteor } from 'meteor/meteor';
 import { useUser } from '../../User';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+
+
 
 const DashBoard = () => {
     const { user, userLoading } = useUser();
@@ -20,7 +22,7 @@ const DashBoard = () => {
     const container = useRef(null);
 
     useEffect(() => {
-        if(Meteor.userId() == null){
+        if (Meteor.userId() == null) {
             nav('/auth')
         }
     }, [])
@@ -159,7 +161,7 @@ const DashBoard = () => {
                                                 className="w-full h-full bg-white p-4 rounded-lg"
                                             >
                                                 <div className="col-span-width p-2 h-full">
-			                                        <h2 className="text-lg font-bold">{widget.label}</h2>
+                                                    <h2 className="text-lg font-bold">{widget.label}</h2>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
                                                 </div>
                                             </div>
