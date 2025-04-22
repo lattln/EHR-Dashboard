@@ -5,9 +5,7 @@ Meteor.methods({
         this.unblock();
         if(!this.isSimulation){
             let { getCurrentSteps } = await import("./fitbit");
-            let res = await getCurrentSteps(this.userId);
-
-            return res;
+            return await getCurrentSteps(this.userId);
         }
     }
 })

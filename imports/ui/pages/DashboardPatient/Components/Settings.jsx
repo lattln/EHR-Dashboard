@@ -30,6 +30,10 @@ const Settings = () => {
             setFitBitLinked(true);
         }
 
+        if(!userLoading){
+            console.log(user.config);
+        }
+
         // Check for persisted configuration in localStorage
         const persistedConfig = localStorage.getItem("dashboardConfig");
         if (persistedConfig) {

@@ -15,15 +15,17 @@ const DashBoard = () => {
     const { user, userLoading } = useUser();
     const [widgets, setWidgets] = useState([]);
     const [slotItemMap, setSlotItemMap] = useState([]);
+    const [presets, setPresets] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
     const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
+    const [editing, setEditing] = useState(false);
     const swapyRef = useRef(null);
     const container = useRef(null);
     const nav = useNavigate();
 
     useEffect(() => {
         async function checkFitbitLinked(){
-            if(!isValidToken(user.fitbitAccountAuth)){
+            if(!await isValidToken(user.fitbitAccountAuth)){
                 await refreshToken(user.fitbitAccountAuth);
             }
 
@@ -37,10 +39,67 @@ const DashBoard = () => {
         if(!userLoading && user.fitbitAccountAuth){
             checkFitbitLinked()
         }
+
+        if(!userLoading){
+            setPresets([...user.config]);
+            if(presets.length === 0){
+                setPresets([
+                    {
+                        id: "bmi",
+                        label: "BMI",
+                        type: "BMI",
+                        height: 1,
+                        width: 1
+                    },
+                    {
+                        id: "steps",
+                        label: "Steps",
+                        type: "Steps",
+                        height: 1,
+                        width: 1
+                    },
+                    {
+                        id: "sleepHeatMap",
+                        label: "Last Week of Sleep",
+                        type: "SleepHeatMap",
+                        height: 1,
+                        width: 2
+                    },
+                    {
+                        id: "sleepBreakdown",
+                        label: "Sleep Breakdown",
+                        type: "SleepBreakdown",
+                        height: 1,
+                        width: 1
+                    },
+                    {
+                        id: "sleepDuration",
+                        label: "Sleep Duration",
+                        type: "SleepDuration",
+                        height: 1,
+                        width: 1
+                    },
+                    {
+                        id: "sleepEfficiency",
+                        label: "Sleep Efficiency",
+                        type: "SleepEfficiency",
+                        height: 1,
+                        width: 1
+                    },
+                    {
+                        id: "weight",
+                        label: "Weight",
+                        type: "Weight",
+                        height: 1,
+                        width: 2
+                    }
+                ])
+            }
+        }
         
     }, [userLoading])
 
-    useEffect(() => {
+    /*useEffect(() => {
         // Load the persisted configuration from localStorage
         const persistedConfig = localStorage.getItem("dashboardConfig");
         if (persistedConfig) {
@@ -48,7 +107,7 @@ const DashBoard = () => {
         } else {
             setWidgets(dashboardConfig); // Fallback to default config
         }
-    }, []);
+    }, []);*/
 
     useEffect(() => utils.dynamicSwapy(swapyRef.current, widgets, 'id', slotItemMap, setSlotItemMap), [widgets]);
 
@@ -71,11 +130,6 @@ const DashBoard = () => {
     }, []);
 
     // Save the current widget configuration to localStorage
-    useEffect(() => {
-        if (widgets.length > 0) {
-            localStorage.setItem("dashboardConfig", JSON.stringify(widgets));
-        }
-    }, [widgets]);
 
     // Define staggered animation variants for widgets
     const widgetVariants = {
@@ -119,10 +173,12 @@ const DashBoard = () => {
                         </div>
                         <div className="flex items-center justify-between">
                             <p className="font-semibold">{USER_INFO.lastAppt.label}: {USER_INFO.lastAppt.value}</p>
-                            <input type="checkbox" onChange={(event) => {
+                            <input type="checkbox" value={editing} onChange={(event) => {
                                 if (event.target.checked) {
+                                    setEditing(false);
                                     swapyRef.current.enable(true);
                                 } else {
+                                    setEditing(true);
                                     swapyRef.current.enable(false);
                                 }
                             }} />
