@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { getSleepBreakdown } from "../../api/FitBit/fitbit";
+import { Meteor } from 'meteor/meteor';
 import {
 	Chart,
 	ArcElement,
@@ -23,7 +23,7 @@ function SleepBreakdown({ fitBitLinked }){
 
 	useEffect(() => {
 		async function sleep(){
-			let summary = await getSleepBreakdown();
+			let summary = await Meteor.callAsync('fitbit.getSleepBreakdown');
 			if(summary.success){
 				setStageData({...stageData, datasets: summary.data });
 				setSleepLogExists(true);

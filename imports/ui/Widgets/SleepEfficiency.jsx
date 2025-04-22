@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getSleepEfficiency } from "../../api/FitBit/fitbit";
+import { Meteor } from 'meteor/meteor';
 
 function SleepEfficiencey({ fitBitLinked }){
 	const [efficiency, setEfficiency] = useState(0);
@@ -7,7 +7,7 @@ function SleepEfficiencey({ fitBitLinked }){
 
 	useEffect(() => {
 		async function efficiency(){
-			let res = await getSleepEfficiency();
+			let res = await Meteor.callAsync('fitbit.getSleepEfficiency');
 
 			if(res.efficiency != -1){
 				setSleepLogExists(true);

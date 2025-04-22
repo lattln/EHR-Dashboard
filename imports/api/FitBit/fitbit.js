@@ -77,9 +77,9 @@ async function getHeartRate(){
     }
 }
 
-async function getSleepBreakdown(){
+async function getSleepBreakdown(userId){
     let today = fitBitUtils.today();
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`, userId);
     if(sleepLog.sleep.length < 1){
         return {
             success: false
@@ -98,10 +98,10 @@ async function getSleepBreakdown(){
     }
 }
 
-async function getSleepDuration(){
+async function getSleepDuration(userId){
     let today = fitBitUtils.today();
-    let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json');
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
+    let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json', userId);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`, userId);
     
     let stack = sleepGoal.goal.minDuration - sleepLog.summary.totalMinutesAsleep;
 
@@ -136,9 +136,9 @@ async function getSleepDuration(){
     };
 }
 
-async function getSleepEfficiency(){
+async function getSleepEfficiency(userId){
     let today = fitBitUtils.today();
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`, userId);
 
     if(sleepLog.sleep.length > 0){
         return {
@@ -151,13 +151,13 @@ async function getSleepEfficiency(){
     }
 }
 
-async function getSleepHeatMap(){
+async function getSleepHeatMap(userId){
     let today = fitBitUtils.today();
     let lastWeek = fitBitUtils.lastWeek();
     let days = [];
     let data = [];
 
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`, userId);
     sleepLog.sleep = sleepLog.sleep.reverse();
 
     sleepLog.sleep.map((log) => {
