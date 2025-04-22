@@ -35,12 +35,20 @@ Meteor.methods({
     },
     /*
     config is expected to be in the form:
-        {
-            config1: [],
-            config2: [],
-            config3: [],
-            ...
-        }
+    user.config = [
+    {
+      name: "Preset 1",
+      widget: []
+    },
+    {
+      name: "Preset 2",
+      widget: []
+    },
+    {
+      name: "Preset 3",
+      widget: []
+    }
+  ];
     */
     async 'user.saveDashboardConfig'(config){
         this.unblock();

@@ -224,7 +224,7 @@ export async function updateConfig(userID, config) {
     logger.info(`Attempting updating dashboard config for User: ${userID}`);
     try {
         await Meteor.users.updateAsync({_id: userID}, {
-            $set: config
+            $set: {config: config}
         });
         logger.info(`Successfully updated dashboard config for User: ${userID}`);
 

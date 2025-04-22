@@ -7,7 +7,7 @@ Accounts.onCreateUser((options, user) => {
   // Add custom fields to the user object
   user.profile = options.profile !== undefined ? options.profile : {}
   //global fields all user objects should have
-  user.config = {};
+  user.config = [];
 
   //add any additional properties to the user object before adding it to the users collection.
   const {firstName, lastName, dob, phoneNumber, fhirID} = options;
@@ -20,7 +20,55 @@ Accounts.onCreateUser((options, user) => {
       user.profile.phoneNumber = phoneNumber;
       user.fhirID = fhirID;
       user.clinicians = [];
-      
+      user.config = [{
+        id: "bmi",
+        label: "BMI",
+        type: "BMI",
+        height: 1,
+        width: 1
+    },
+    {
+        id: "steps",
+        label: "Steps",
+        type: "Steps",
+        height: 1,
+        width: 1
+    },
+    {
+        id: "sleepHeatMap",
+        label: "Last Week of Sleep",
+        type: "SleepHeatMap",
+        height: 1,
+        width: 2
+    },
+    {
+        id: "sleepBreakdown",
+        label: "Sleep Breakdown",
+        type: "SleepBreakdown",
+        height: 1,
+        width: 1
+    },
+    {
+        id: "sleepDuration",
+        label: "Sleep Duration",
+        type: "SleepDuration",
+        height: 1,
+        width: 1
+    },
+    {
+        id: "sleepEfficiency",
+        label: "Sleep Efficiency",
+        type: "SleepEfficiency",
+        height: 1,
+        width: 1
+    },
+    {
+        id: "weight",
+        label: "Weight",
+        type: "Weight",
+        height: 1,
+        width: 2
+    }]
       break;
     case UserRoles.CLINICIAN:
       user.profile.firstName = firstName;
