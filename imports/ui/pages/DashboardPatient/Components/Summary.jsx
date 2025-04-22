@@ -1,15 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState, useEffect } from 'react';
+import { useUser } from '../../../User';
 
 const Summary = () => {
     const [summary, setSummary] = useState('');
     const [loading, setLoading] = useState(true);
+    const { user, userLoading } = useUser();
 
     useEffect(() => {
         async function fetchSummary() {
             try {
-                const patientID = 1;
-                const result = await Meteor.callAsync('ozwell.getSummary', patientID);
+                const id = user.fhirID; 
+                console.log(user);
+                const result = await Meteor.callAsync('ozwell.getSummary', id);
                 if (result?.data?.summary) {
                     setSummary(result.data.summary);
                 } else {
@@ -22,9 +25,11 @@ const Summary = () => {
                 setLoading(false);
             }
         }
-
-        fetchSummary();
-    }, []);
+        
+        if(!userLoading){
+            fetchSummary();
+        }
+    }, [userLoading]);
 
     return (
         <div className="w-full bg-white rounded-xl shadow-md p-6 mb-6 border border-gray-200 transition-all duration-300">

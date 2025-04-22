@@ -3,6 +3,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { UserRoles } from "../userRoles.js"
 import {findPatientByInfo} from '../../Fhir/Server/FhirUtils.js';
 import { logger } from "../../Logging/Server/logger-config.js";
+import { TypeCheck } from '../../Validator/typechecking.js';
 
 async function patientHandler(options) {
     const {
@@ -60,6 +61,7 @@ async function patientHandler(options) {
                 fhirID, 
                 role
             });
+        logger.info(`Patient User: ${userID} has successfully been created`);
     }
     catch (error){
         logger.error(error);
@@ -95,7 +97,6 @@ async function clinicianHandler(options) {
 
     let userID;
     try {
-        logger.info(`Attempting clinician creation`)
         userID = await Accounts.createUserAsync(options);
         logger.info(`successfully created clinician account for ${userID}`);
     }
@@ -121,7 +122,7 @@ function adminHandler(options) {
 }
 
 export async function signupUser(userInformation){
-    logger.info("beginning user creation via user.signup")
+    logger.info('beginning user creation via user.signup"')
 
     const { email, password, role } = userInformation;
 
@@ -139,11 +140,9 @@ export async function signupUser(userInformation){
     try {
         switch (role) {
             case UserRoles.PATIENT:
-                logger.info(`patient user creation starting.`)
                 userID = await patientHandler(userInformation);
                 break;
             case UserRoles.CLINICIAN:
-                logger.info(`clinician user creation starting.`)
                 userID = await clinicianHandler(userInformation);
                 break;
             case UserRoles.ADMIN:
@@ -169,14 +168,14 @@ export async function signupUser(userInformation){
 export async function updateProfile(userID, {...profileProps}) {
     const {firstName, lastName, fitbitAccountAuth} = profileProps;
     
-    if(!userID || !firstName || !lastName) {
+    if(!userID || !firstName || !lastName || phoneNumber) {
         throw new Meteor.Error("Invalid-Account-Updating", "Missing Required properties to update the account. Cannot have undefined properties.")
     }
     logger.info(`Attempting Updating profile for user: ${userID}`);
     try {
         await Meteor.users.updateAsync({_id: userID}, 
             {
-                $set: {"profile.firstName": firstName, "profile.lastName":lastName,  fitbitAccountAuth: fitbitAccountAuth || null}
+                $set: {"profile.firstName": firstName, "profile.lastName":lastName,  fitbitAccountAuth: fitbitAccountAuth || null, "profile.phoneNumber": phoneNumber}
             })
         logger.info(`Profile updated successfully for user: ${userID}`);
 
@@ -319,37 +318,44 @@ export async function removeUsersFromRoles(adminUserID, usersList, rolesList) {
     }
 }
 
+export async function isRootAdmin(userID){
+    const userObj = await Meteor.users.findOneAsync({_id: userID});
+
+    if(TypeCheck.isUndefined(userObj))
+        return false;
+
+    if((await isAdmin(userID)) && userObj.username === "ROOT"){
+        return true;
+    }
+
+    return false;
+}
+
 export async function addClinicianToPatient(userPatientID, userClinicianID) {
     if (!userPatientID || !userClinicianID) {
-        throw new Meteor.Error("Add-Clinician-Error", "provided arguments are undefined.");
+        throw new Meteor.Error("Add-Clinician-Error", "Provided arguments are undefined.");
     }
 
     try {
-        const patientList = Meteor.users.findOne({_id: userPatientID},{fields:{clinicians: 1}})?.clinicians || [];
-        const clinicianList = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+        await Promise.all([
+            Meteor.users.updateAsync({ _id: userPatientID }, { $addToSet: { clinicians: userClinicianID } }),
+            Meteor.users.updateAsync({ _id: userClinicianID }, { $addToSet: { patients: userPatientID } })
+        ]);
 
-        if(!patientList.includes(userClinicianID) ){
-            patientList.push(userClinicianID)
-        }
-
-        if(!clinicianList.includes(userPatientID)){
-            clinicianList.push(userPatientID)
-        }
-
-        const patientUserPromise = Meteor.users.updateAsync({_id: userPatientID}, {$set: {clinicians: patientList}});
-        const clinicianUserPromise = Meteor.users.updateAsync({_id: userClinicianID}, {$set: {patients: clinicianList}});
-        await Promise.all([patientUserPromise, clinicianUserPromise]);
-        logger.info({patient: userPatientID, clinician: userClinicianID, action: "patient and clinician ids have been added to each other's list."}, 
-            `added patient and clinician to each others list `);
+        logger.info(
+            { patient: userPatientID, clinician: userClinicianID, action: "Added patient and clinician to each other's list." },
+            `Added patient ${userPatientID} and clinician ${userClinicianID} to each other's lists.`
+        );
 
     } catch (error) {
         logger.error(error, `Issue adding clinician: ${userClinicianID} to patient: ${userPatientID}`);
-        if(error instanceof Meteor.Error){
+
+        if (error instanceof Meteor.Error) {
             throw new Meteor.Error("Add-Clinician-Error", error.reason);
         }
+
         throw new Meteor.Error("Add-Clinician-Error", error.message);
     }
-
 }
 
 export async function getFhirIDFromUserAccount(userPatientID) {
@@ -367,7 +373,7 @@ export async function getFhirIDFromUserAccount(userPatientID) {
 
 export async function hasPatientRecordAccess(userClinicianID, userPatientID) {
     try {
-        const listOfPatients = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+        const listOfPatients = (await Meteor.users.findOneAsync({_id: userClinicianID}, {fields: {patients: 1}}))?.patients || [];
         return listOfPatients.includes(userPatientID);
 
     } catch (error) {
@@ -375,33 +381,35 @@ export async function hasPatientRecordAccess(userClinicianID, userPatientID) {
     }
 }
 
+
 export async function removeClinicianFromPatient(userPatientID, userClinicianID) {
     if (!userPatientID || !userClinicianID) {
-        logger.error(`An error occurred while trying to add ${userPatientID} to ${userClinicianID} list of patients.`)
-        throw new Meteor.Error("Remove-Clinician-Error", "provided arguments are undefined.");
+        logger.error(`Invalid arguments: userPatientID: ${userPatientID}, userClinicianID: ${userClinicianID}`);
+        throw new Meteor.Error("Remove-Clinician-Error", "Provided arguments are undefined.");
     }
 
     try {
-        const patientList = Meteor.users.findOne({_id: userPatientID},{fields:{clinicians: 1}})?.clinicians || [];
-        const clinicianList = Meteor.users.findOne({_id: userClinicianID}, {fields: {patients: 1}})?.patients || [];
+        const patientUpdate = Meteor.users.updateAsync(
+            { _id: userPatientID },
+            { $pull: { clinicians: userClinicianID } }
+        );
 
-        if(patientList.includes(userClinicianID) ){
-            patientList = patientList.filter((id) => id !== userClinicianID);
-        }
+        const clinicianUpdate = Meteor.users.updateAsync(
+            { _id: userClinicianID },
+            { $pull: { patients: userPatientID } }
+        );
 
-        if(clinicianList.includes(userPatientID)){
-            clinicianList = clinicianList.filter((id) => id !== userPatientID);
-        }
+        await Promise.all([patientUpdate, clinicianUpdate]);
 
-        const patientUserPromise = Meteor.users.updateAsync({_id: userPatientID}, {$set: {clinicians: patientList}});
-        const clinicianUserPromise = Meteor.users.updateAsync({_id: userClinicianID}, {$set: {patients: clinicianList}});
-        await Promise.all([patientUserPromise, clinicianUserPromise]);
-        logger.info({patient: userPatientID, clinician: userClinicianID, action: "patient and clinician ids have been removed from eachother's list."}, 
-            `removed patient and clinician from each others list `);
+        logger.info(
+            { patient: userPatientID, clinician: userClinicianID },
+            `Successfully removed clinician ${userClinicianID} from patient ${userPatientID}'s list and vice versa.`
+        );
 
-    } catch(error){
+    } catch (error) {
         logger.error(error, `Issue removing clinician: ${userClinicianID} from patient: ${userPatientID}`);
-        if(error instanceof Meteor.Error){
+
+        if (error instanceof Meteor.Error) {
             throw new Meteor.Error("Remove-Clinician-Error", error.reason);
         }
         throw new Meteor.Error("Remove-Clinician-Error", error.message);

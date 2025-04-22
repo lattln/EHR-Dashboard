@@ -1,7 +1,9 @@
 import React from "react";
 import { USER_INFO } from "./constantsPages";
+import { useUser } from "../User";
 
 const Header = ({ onMenuClick }) => {
+    const { user, userLoading } = useUser();
     return (
         <div className="bg-white shadow-md p-4 flex justify-between items-center md:justify-end">
             {/* Hamburger for mobile */}
@@ -15,7 +17,7 @@ const Header = ({ onMenuClick }) => {
 
             <div className="flex items-center">
                 <h3 className="text-lg font-bold text-gray-800">
-                    Hi, {USER_INFO.name.firstName} {USER_INFO.name.lastName}
+                    Hi, {userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName} 
                 </h3>
                 <img
                     src="/blank.webp"

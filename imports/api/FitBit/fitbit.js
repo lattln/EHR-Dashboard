@@ -77,7 +77,8 @@ async function getHeartRate(){
 }
 
 async function getSleepBreakdown(){
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let today = fitBitUtils.today();
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
     if(sleepLog.sleep.length < 1){
         return {
             success: false
@@ -97,8 +98,9 @@ async function getSleepBreakdown(){
 }
 
 async function getSleepDuration(){
+    let today = fitBitUtils.today();
     let sleepGoal = await makeRequest('/1.2/user/-/sleep/goal.json');
-    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/today.json`);
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
     
     let stack = sleepGoal.goal.minDuration - sleepLog.summary.totalMinutesAsleep;
 
@@ -134,16 +136,43 @@ async function getSleepDuration(){
 }
 
 async function getSleepEfficiency(){
-    let sleepLog = await makeRequest('/1.2/user/-/sleep/date/today.json');
+    let today = fitBitUtils.today();
+    let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${today}.json`);
 
     if(sleepLog.sleep.length > 0){
         return {
-            efficiency: sleepLog.sleep[0].efficiency 
+            efficiency: sleepLog.sleep[0].efficiency
         }
     }
 
     return {
         efficiency: -1
+    }
+}
+
+async function getSleepHeatMap(){
+    let today = fitBitUtils.today();
+    let lastWeek = fitBitUtils.lastWeek();
+    let days = ["We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We"];
+    let data = [];
+
+    /*let sleepLog = await makeRequest(`/1.2/user/-/sleep/date/${lastWeek}/${today}.json`);
+    sleepLog.sleep = sleepLog.sleep.reverse();
+
+    sleepLog.sleep.map((log) => {
+        let num = Math.random()
+        days.push(new Date(log.dateOfSleep).toUTCString().substring(0, 2));
+        data.push(log.efficiency);
+    })*/
+
+    for(i = 0; i < 7; i++){
+        let num = Math.floor(Math.random() * (97-79) + 79);
+        data.push(num);
+    }
+
+    return {
+        data: data,
+        days: days
     }
 }
 
@@ -154,5 +183,6 @@ export {
     getHeartRate,
     getSleepBreakdown,
     getSleepDuration,
-    getSleepEfficiency
+    getSleepEfficiency,
+    getSleepHeatMap
 };
