@@ -44,6 +44,7 @@ const Routes = () => {
                 ],
             },
 
+            { index: true, element: < AuthPage to="/auth" />},
             { path: "/auth", element: <AuthPage /> },
             { path: "dev", element: <DevLanding /> },
             { path: "/toke", element: <Token />},
