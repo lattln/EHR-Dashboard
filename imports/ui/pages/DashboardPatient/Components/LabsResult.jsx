@@ -68,6 +68,10 @@ const LabsResult = ({ isOpen, onClose, selectedLab }) => {
                             )}
                         </div>
                     ))}
+
+                    <div className='space-y-4'>
+                        Noah Shit summary here.
+                    </div>
                 </div>
 
                 {/* Download Button */}
