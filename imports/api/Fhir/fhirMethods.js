@@ -757,6 +757,16 @@ Meteor.methods({
         }
     },
     async "patient.getSummaryMetrics"(patientID, pageNumber = 1, count = 100) {
+        const latestValue = (metrics) => {
+            if (!metrics || metrics.length === 0) return null;
+            const latest = metrics[0];
+            if (latest.valueQuantities && latest.valueQuantities[0].value) {
+                const val = parseFloat(latest.valueQuantities[0].value);
+                return parseFloat(val.toFixed(3));
+            }
+            return null;
+        };
+
         this.unblock();
         if (!this.isSimulation) {
             let { getPatientHealthMetrics } = await import("./Server/FhirUtils.js");
@@ -800,26 +810,74 @@ Meteor.methods({
                     getPatientHealthMetrics(LOINC_MAPPING.UREA_NITROGEN_BUN, patientID, pageNumber, count),
                     getPatientHealthMetrics(LOINC_MAPPING.CREATININE, patientID, pageNumber, count)
                 ]);
-                return {
-                    weightMetrics,
-                    heightMetrics,
-                    systolicMetrics,
-                    diastolicMetrics,
-                    heartRateMetrics,
-                    BMIMetrics,
-                    bodyTempMetrics,
-                    oxygenSaturationMetrics,
-                    hemoglobinMetrics,
-                    hemoglobinA1CMetrics,
-                    ESRMetrics,
-                    glucoseMetrics,
-                    potassiumMetrics,
-                    cholesterolTotalMetrics,
-                    LDLMetrics,
-                    HDLMetrics,
-                    BUNMetrics,
-                    creatinineMetrics
+
+                const payload = {
+                    age: 40,
+                    gender: 'male',
+                    weight: latestValue(weightMetrics),
+                    height: latestValue(heightMetrics),
+                    bloodPressure: {
+                        systolic: latestValue(systolicMetrics),
+                        diastolic: latestValue(diastolicMetrics),
+                    },
+                    heartRate: latestValue(heartRateMetrics),
+                    BMI: latestValue(BMIMetrics),
+                    labResults: {
+                        bodyTemp: latestValue(bodyTempMetrics),
+                        oxygenSaturation: latestValue(oxygenSaturationMetrics),
+                        hemoglobin: latestValue(hemoglobinMetrics),
+                        hemoglobinA1C: latestValue(hemoglobinA1CMetrics),
+                        ESR: latestValue(ESRMetrics),
+                        glucose: latestValue(glucoseMetrics),
+                        potassium: latestValue(potassiumMetrics),
+                        cholesterolTotal: latestValue(cholesterolTotalMetrics),
+                        LDL: latestValue(LDLMetrics),
+                        HDL: latestValue(HDLMetrics),
+                        BUN: latestValue(BUNMetrics),
+                        creatinine: latestValue(creatinineMetrics),
+                    },
                 };
+
+                let prompt = 
+                    `2-4 sentences, speak directly to the patient using "you" and "your" and offer brief advice. Be optimistic. Wrap important values in <strong> tags.\n` +
+                    `Data: A:${payload.age} G:${payload.gender} W:${payload.weight}kg H:${payload.height}cm BP:${payload.bloodPressure.systolic}/${payload.bloodPressure.diastolic}` +
+                    (payload.heartRate   ? ` HR:${payload.heartRate}` : '') +
+                    (payload.BMI         ? ` BMI:${payload.BMI}` : '') +
+                    (payload.labResults
+                        ? ` L:${[
+                            payload.labResults.bodyTemp       && `T${payload.labResults.bodyTemp}`,
+                            payload.labResults.oxygenSaturation&& `O${payload.labResults.oxygenSaturation}`,
+                            payload.labResults.hemoglobin      && `HGB${payload.labResults.hemoglobin}`,
+                            payload.labResults.hemoglobinA1C   && `A1C${payload.labResults.hemoglobinA1C}`,
+                            payload.labResults.ESR             && `ESR${payload.labResults.ESR}`,
+                            payload.labResults.glucose         && `Glu${payload.labResults.glucose}`,
+                            payload.labResults.potassium       && `K${payload.labResults.potassium}`,
+                            payload.labResults.cholesterolTotal&& `Chol${payload.labResults.cholesterolTotal}`,
+                            payload.labResults.LDL             && `LDL${payload.labResults.LDL}`,
+                            payload.labResults.HDL             && `HDL${payload.labResults.HDL}`,
+                            payload.labResults.BUN             && `BUN${payload.labResults.BUN}`,
+                            payload.labResults.creatinine      && `Cr${payload.labResults.creatinine}`,
+                            ].filter(Boolean).join(',')}`
+                        : '') +
+                    ` S:`;
+                
+                return prompt;
+            } catch (error) {
+                throw new Meteor.Error("FHIR-Server-Error", error.message);
+            }
+        }
+    },
+    async "patient.getLabSummary"(patientID, pageNumber = 1, count = 100) {
+        this.unblock();
+
+        const payload = Meteor.callAsync("patient.getRecentLabs", patientID, pageNumber, count);
+        console.log("SKHFKJDSHFKSDHFJKLSDHFKDSHFJKLDSHLJFKDSHLUFHS",payload);
+
+        if (!this.isSimulation) {
+            try {
+                let prompt = 
+                `2-4 sentences, speak directly to the patient using "you" and "your" and offer brief advice. Be optimistic. Wrap important values in <strong> tags.\n` +
+                `Data; `
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }

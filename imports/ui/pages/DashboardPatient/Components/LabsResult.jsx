@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { motion } from 'framer-motion';
+import { useUser } from '../../../User';
 
 const LabsResult = ({ isOpen, onClose, selectedLab }) => {
     if (!isOpen || !selectedLab) return null; 
+    const [summary, setSummary] = useState("");
+    const user = useUser();
+
+    const getSummary = () => {
+        const labSummary = Meteor.callAsync("patient.getSummary", user.id, "patient.getLabSummary");
+    }
 
     const calculateProgress = (value) => {
 
@@ -70,7 +78,7 @@ const LabsResult = ({ isOpen, onClose, selectedLab }) => {
                     ))}
 
                     <div className='space-y-4'>
-                        Noah Shit summary here.
+                        {getSummary()}
                     </div>
                 </div>
 
