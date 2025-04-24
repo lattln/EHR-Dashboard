@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { USER_INFO } from '../constantsPages';
 import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
@@ -8,9 +9,7 @@ import Summary from './Components/Summary';
 import { ChatBot } from '../ChatBot';
 import { Meteor } from 'meteor/meteor';
 import { useUser } from '../../User';
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-
-
+import { useNavigate } from 'react-router-dom';
 
 const DashBoard = () => {
     const { user, userLoading } = useUser();
@@ -18,24 +17,32 @@ const DashBoard = () => {
     const [slotItemMap, setSlotItemMap] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
     const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
+    const [editing, setEditing] = useState(false);
     const swapyRef = useRef(null);
     const container = useRef(null);
+    const nav = useNavigate();
 
     useEffect(() => {
+        async function checkFitbitLinked(){
+            if(!await isValidToken(user.fitbitAccountAuth)){
+                await refreshToken(user.fitbitAccountAuth);
+            }
+
+            setFitBitLinked(true);
+        }
+
         if (Meteor.userId() == null) {
             nav('/auth')
         }
-    }, [])
 
-    useEffect(() => {
-        // Load the persisted configuration from localStorage
-        const persistedConfig = localStorage.getItem("dashboardConfig");
-        if (persistedConfig) {
-            setWidgets(JSON.parse(persistedConfig));
-        } else {
-            setWidgets(dashboardConfig); // Fallback to default config
+        if(!userLoading && user.fitbitAccountAuth){
+            checkFitbitLinked()
         }
-    }, []);
+
+        if(!userLoading){
+            setWidgets([...user.config[0].widget]);
+        }
+    }, [userLoading])
 
     useEffect(() => utils.dynamicSwapy(swapyRef.current, widgets, 'id', slotItemMap, setSlotItemMap), [widgets]);
 
@@ -57,27 +64,7 @@ const DashBoard = () => {
         };
     }, []);
 
-    // Check if Fitbit is linked and refresh token if needed
-    useEffect(() => {
-        async function checkFitBitLinked() {
-            let token = localStorage.getItem('fitbit-token');
-            if (token != null) {
-                if (!(await isValidToken(token))) {
-                    refreshToken(token);
-                }
-                setFitBitLinked(true);
-            }
-        }
-
-        checkFitBitLinked();
-    }, []);
-
     // Save the current widget configuration to localStorage
-    useEffect(() => {
-        if (widgets.length > 0) {
-            localStorage.setItem("dashboardConfig", JSON.stringify(widgets));
-        }
-    }, [widgets]);
 
     // Define staggered animation variants for widgets
     const widgetVariants = {
@@ -121,10 +108,12 @@ const DashBoard = () => {
                         </div>
                         <div className="flex items-center justify-between">
                             <p className="font-semibold">{USER_INFO.lastAppt.label}: {USER_INFO.lastAppt.value}</p>
-                            <input type="checkbox" onChange={(event) => {
+                            <input type="checkbox" value={editing} onChange={(event) => {
                                 if (event.target.checked) {
+                                    setEditing(false);
                                     swapyRef.current.enable(true);
                                 } else {
+                                    setEditing(true);
                                     swapyRef.current.enable(false);
                                 }
                             }} />

@@ -14,6 +14,7 @@ const Login = ({ toggleAuth }) => {
 
         Meteor.loginWithPassword(email, password, (err) => {
             if (err) {
+                console.log(password);
                 setError(err.reason);
                 console.log(error);
             } else {

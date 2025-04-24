@@ -12,3 +12,4 @@ import "../imports/api/User/Server/UserUtils.js"
 import "../imports/api/OpenAI/openaiMethods.js";
 import "../imports/api/Ozwell/ozwellMethods.js";
 import "../imports/api/Echo/echoMethods.js";
+import "../imports/api/FitBit/fitbitMethods.js";

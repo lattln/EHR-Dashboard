@@ -71,7 +71,15 @@ const Register = ({ toggleAuth }) => {
 
             try {
                 let result = await Meteor.callAsync("user.signup", userData);
-                console.log(result);
+                Meteor.loginWithPassword(email, password, (err) => {
+                    if (err) {
+                        setError(err.reason);
+                        console.log(error);
+                    } else {
+                        setError("");
+                        navigate("/patient/home");
+                    }
+                });
             } catch (e) {
                 console.log(e);
             }

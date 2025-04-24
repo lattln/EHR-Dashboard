@@ -1,10 +1,5 @@
 import { EncryptJWT, jwtDecrypt } from "jose";
 import { Meteor } from 'meteor/meteor';
-/*
-    CONSTANTS:
-
-        token duration: amount of time a token is valid for in seconds
-*/
 
 const TOKEN_DURATION = 28800;
 const JWT_SECRET = Meteor.settings.public.JWT_SECRET || process.env.JWT_SECRET;
@@ -99,12 +94,11 @@ async function getToken(code, url){
             errors: res.errors
         }
     } else {
-
         const jwt = await encJWT(res);
-        localStorage.setItem('fitbit-token', jwt);
 
         return {
-            success: true
+            success: true,
+            token: jwt
         }
     }
 }
@@ -161,7 +155,19 @@ async function refreshToken(token){
 
         //encrypt the token that was received and store it in local storage
         const jwt = await encJWT(res);
-        localStorage.setItem('fitbit-token', jwt);
+        const user = await Meteor.user();
+        if(!user){
+            return {
+                success: false,
+                error: "user not logged in"
+            }
+        }
+        await Meteor.callAsync('user.updateProfile', {
+            firstName: user.profile.firstName,
+            lastName: user.profile.lastName,
+            phoneNumber: user.profile.phoneNumber,
+            fitbitAccountAuth: jwt
+        })
 
         return {
             success: true

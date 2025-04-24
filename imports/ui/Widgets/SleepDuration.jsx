@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { getSleepDuration } from "../../api/FitBit/fitbit";
+import { Meteor } from 'meteor/meteor';
 import fitBitUtils from "../../api/FitBit/utils";
 
 function SleepDuration({ fitBitLinked }) {
@@ -32,7 +32,7 @@ function SleepDuration({ fitBitLinked }) {
 	}
 	useEffect(() => {
 		async function sleep() {
-			let res = await getSleepDuration();
+			let res = await Meteor.callAsync('fitbit.getSleepDuration');
 
 			if (res.success) {
 				setSleepLogExists(true);

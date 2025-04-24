@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getSleepHeatMap } from "../../api/FitBit/fitbit";
+import { Meteor } from 'meteor/meteor';
 import { HeatMapGrid } from 'react-grid-heatmap';
 
 function SleepHeatMap({ fitBitLinked }){
@@ -9,12 +9,14 @@ function SleepHeatMap({ fitBitLinked }){
 
 	useEffect(() => {
 		async function logs(){
-			let res = await getSleepHeatMap();
+			let res = await Meteor.callAsync('fitbit.getSleepHeatMap');
 			setXLabels(res.days);
 			setData([res.data]);
 		}
 
-		logs();
+		if(fitBitLinked){
+			logs();
+		}
 	}, [fitBitLinked])
 
 	return (

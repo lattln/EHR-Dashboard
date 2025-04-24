@@ -1,24 +1,26 @@
 import GaugeComponent from "react-gauge-component";
 import React, { useEffect, useState } from "react";
-import { getCurrentSteps } from "../../api/FitBit/fitbit";
+import { useUser } from "../User";
 
 function Steps({ fitBitLinked }){
     const [steps, setSteps] = useState(0);
     const [goalSteps, setGoalSteps] = useState(10000);
     const [dist, setDist] = useState(0);
+    const { userLoading, id } = useUser();
 
     useEffect(() => {
         async function currSteps(){
-            let s = await getCurrentSteps();
+            let s = await Meteor.callAsync('fitbit.getCurrentSteps', id);
+            console.log(s);
             setSteps(s.steps);
             setGoalSteps(s.goal);
             setDist(s.distance);
         }
 
-        if(fitBitLinked){
+        if(fitBitLinked && !userLoading){
             currSteps();
         }
-    }, [fitBitLinked]);
+    }, [fitBitLinked, userLoading]);
 
     return (
         <>
