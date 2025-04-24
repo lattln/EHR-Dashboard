@@ -1,27 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const TypingDots = () => {
-    const bounceTransition = {
-        y: {
-            duration: 0.4,
-            yoyo: Infinity,
-            ease: "easeInOut",
-        },
-    };
-    return (
-        <div className="flex space-x-1 items-center mt-1 pl-1">
-            {[0, 1, 2].map((i) => (
-                <motion.span
-                    key={i}
-                    className="w-2 h-2 rounded-full bg-gray-400"
-                    animate={{ y: ["0%", "-30%", "0%"] }}
-                    transition={{ ...bounceTransition, delay: i * 0.1 }}
-                />
-            ))}
-        </div>
-    );
-};
+import ThreeDotsWave from "./three-dots-wave";
 
 export const ChatBot = () => {
     const [question, setQuestion] = useState("");
@@ -42,15 +21,22 @@ export const ChatBot = () => {
         const userMessage = { role: "user", content: question };
         setMessages((prev) => [...prev, userMessage]);
         setLoading(true);
+        setQuestion("");
 
         Meteor.call("echo.ask", question, (err, res) => {
             setLoading(false);
+
+            const botMessageContent = err ? `Error: ${err.message}` : res?.response;
+            const loincCodes = res?.loincCodes || [];
+
+
             const botMessage = {
-                role: "assistant",
-                content: err ? `Error: ${err.message}` : res,
+                content: botMessageContent,
+                loincCodes,
             };
+
+            console.log(botMessage)
             setMessages((prev) => [...prev, botMessage]);
-            setQuestion("");
         });
     };
 
@@ -152,8 +138,8 @@ export const ChatBot = () => {
                                             exit={{ opacity: 0, y: 10 }}
                                             transition={{ duration: 0.3 }}
                                             className={`rounded-xl px-4 py-2 text-sm max-w-[80%] whitespace-pre-wrap ${msg.role === "user"
-                                                    ? "bg-blue-600 text-white self-end ml-auto mr-2"
-                                                    : "bg-gray-100 text-gray-800 self-start mr-auto ml-2"
+                                                ? "bg-blue-600 text-white self-end ml-auto mr-2"
+                                                : "bg-gray-100 text-gray-800 self-start mr-auto ml-2"
                                                 }`}
                                         >
                                             {msg.content}
@@ -161,14 +147,14 @@ export const ChatBot = () => {
                                     ))}
                                 </AnimatePresence>
 
-
                                 {loading && (
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ duration: 0.3 }}
+                                        className="flex space-x-1 items-center mt-1 pl-1"
                                     >
-                                        <TypingDots />
+                                        <ThreeDotsWave size=".25rem" />
                                     </motion.div>
                                 )}
                                 <div ref={messagesEndRef} />
@@ -181,13 +167,19 @@ export const ChatBot = () => {
                                 placeholder="Ask a question..."
                                 className="w-full border p-2 rounded text-sm resize-none mt-2 mb-1"
                                 rows={2}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        askChatbot();
+                                    }
+                                }}
                             />
                             <button
                                 onClick={askChatbot}
                                 disabled={loading || !question.trim()}
                                 className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition w-fit self-end"
                             >
-                                Ask
+                                Send
                             </button>
                         </motion.div>
                     )}

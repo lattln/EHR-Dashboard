@@ -4,6 +4,8 @@ import { callOpenAI } from '../OpenAI/openaiMethods.js';
 import { z } from 'zod';
 import { countTokens } from '../OpenAI/tokenCounter.js';
 import { logger } from '../Logging/Server/logger-config.js';
+import { P } from 'pino';
+import { getFhirIDFromUserAccount } from '../User/Server/UserUtils.js';
 
 async function callOzwell(prompt, schema) {
     try {
@@ -148,6 +150,9 @@ Meteor.methods({
     },
 
     async 'ozwell.getSummary'(patientID) {
+        const temp = await getFhirIDFromUserAccount(this.userId)
+        console.log("SDKLJFHSDJKHFKJSDHFKJSDHFJKSDHJKFHSDJKFHJSDKFH", temp)
+
         const metrics = await Meteor.callAsync('patient.getSummaryMetrics', patientID);
 
         const latestValue = (metrics) => {

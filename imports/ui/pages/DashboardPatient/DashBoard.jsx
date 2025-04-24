@@ -32,7 +32,7 @@ const DashBoard = () => {
             setFitBitLinked(true);
         }
 
-        if(Meteor.userId() == null){
+        if (Meteor.userId() == null) {
             nav('/auth')
         }
 
@@ -151,7 +151,7 @@ const DashBoard = () => {
                                                 className="w-full h-full bg-white p-4 rounded-lg"
                                             >
                                                 <div className="col-span-width p-2 h-full">
-			                                        <h2 className="text-lg font-bold">{widget.label}</h2>
+                                                    <h2 className="text-lg font-bold">{widget.label}</h2>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
                                                 </div>
                                             </div>

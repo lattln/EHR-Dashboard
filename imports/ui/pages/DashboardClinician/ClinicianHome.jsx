@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const ClinicianHome = () => {
+export default function ClinicianHome() {
     return (
-        <div>ClinicianHome</div>
+        <>
+            <div>
+                ClinicianHomeD
+            </div>
+        </>
     )
 }
-
-export default ClinicianHome
