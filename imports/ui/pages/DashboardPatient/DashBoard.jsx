@@ -15,7 +15,6 @@ const DashBoard = () => {
     const { user, userLoading } = useUser();
     const [widgets, setWidgets] = useState([]);
     const [slotItemMap, setSlotItemMap] = useState([]);
-    const [presets, setPresets] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
     const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
     const [editing, setEditing] = useState(false);
