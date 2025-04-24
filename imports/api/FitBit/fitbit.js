@@ -35,20 +35,6 @@ async function makeRequest(url, userID){
     return await res.json();
 }
 
-async function getActivityLog(){
-    let queryParams = new URLSearchParams({
-        afterDate: getLastWeekString(),
-        sort: 'asc',
-        limit: 10,
-        offset: 0
-    })
-    return await makeRequest('/1/user/-/activities/list.json?' + queryParams.toString());
-}
-
-async function getCalories(){
-    return await makeRequest('/1/user/-/activities/calories/date/today/7d.json')
-}
-
 async function getCurrentSteps(userID){
     let today = fitBitUtils.today();
     let res = await makeRequest(`/1/user/-/activities/date/${today}.json`, userID);
@@ -57,23 +43,6 @@ async function getCurrentSteps(userID){
         goal: res.goals.steps,
         steps: res.summary.steps,
         distance: res.summary.distances[0].distance
-    }
-}
-
-async function getHeartRate(){
-    let yesterday = fitBitUtils.yesterday();
-    let res = await makeRequest(`/1/user/-/activities/heart/date/${yesterday}/1d.json`);
-
-    let timeSpentInZones = [{
-        label: "Minutes",
-        data: res['activities-heart'][0].value.heartRateZones.map((z) => {
-            return z.minutes;
-        }),
-        backgroundColor: colors 
-    }]
-
-    return {
-        timeData: timeSpentInZones
     }
 }
 
@@ -172,10 +141,7 @@ async function getSleepHeatMap(userId){
 }
 
 export {
-    getActivityLog,
-    getCalories,
     getCurrentSteps,
-    getHeartRate,
     getSleepBreakdown,
     getSleepDuration,
     getSleepEfficiency,
