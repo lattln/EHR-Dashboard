@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useRole } from "../RoleContext";
 import { SIDEBAR_DATA_CLINICIAN, SIDEBAR_DATA_PATIENT } from "./constantsPages";
 
 const SideNavBar = ({ onCloseMobile }) => {
-    //const { role } = useRole();
     const sidebarData = 'patient' === 'patient' ? SIDEBAR_DATA_PATIENT : SIDEBAR_DATA_CLINICIAN;
 
     return (
@@ -27,9 +25,7 @@ const SideNavBar = ({ onCloseMobile }) => {
 
                 {/* Logo */}
                 <div className="pt-6 pb-6 pl-3">
-                    <Link to="/dev">
-                        <h1 className="text-2xl font-semibold text-white">HEALTHBRIDGE</h1>
-                    </Link>
+                    <h1 className="text-2xl font-semibold text-white">HEALTHBRIDGE</h1>
                 </div>
 
                 {/* Nav Links */}

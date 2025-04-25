@@ -1,6 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import DevLanding from "./pages/DevLandingPage/DevLanding";
+import DevLanding from "./pages/LandingPage/LandingPage";
 import AuthPage from "./pages/LoginPages/AuthPage";
 import Token from "./pages/Token";
 
@@ -17,6 +17,7 @@ import PatientRecords from "./pages/DashboardClinician/Components/PatientRecords
 import ClinicianSettings from "./pages/DashboardClinician/Components/ClinicianSettings";
 import PatientList from "./pages/DashboardClinician/Components/patientList";
 import Tasks from "./pages/DashboardClinician/Components/Tasks";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 const Routes = () => {
     const router = createBrowserRouter(
@@ -48,9 +49,9 @@ const Routes = () => {
                 ],
             },
 
-            { index: true, element: < AuthPage to="/auth" />},
+            { index: true, element: < LandingPage to="/home" />},
             { path: "/auth", element: <AuthPage /> },
-            { path: "dev", element: <DevLanding /> },
+            { path: "home", element: <LandingPage /> },
             { path: "/toke", element: <Token />},
             { path: "*", element: <NotFound /> },
         ],
