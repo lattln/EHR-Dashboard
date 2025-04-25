@@ -870,14 +870,26 @@ Meteor.methods({
     async "patient.getLabSummary"(patientID, pageNumber = 1, count = 100) {
         this.unblock();
 
-        const payload = Meteor.callAsync("patient.getRecentLabs", patientID, pageNumber, count);
-        console.log("SKHFKJDSHFKSDHFJKLSDHFKDSHFJKLDSHLJFKDSHLUFHS",payload);
+        function formatLabData(panels) {
+            return panels
+                .flatMap(panel => panel.observations)
+                .map(obs => {
+                    const code = obs.loincCode;                   // 6690-2
+                    const { value, unit } = obs.valueQuantities[0];
+                    const v    = Math.round(value * 10) / 10;      // round to 1 decimal
+                    return `${code}${v}${unit}`;                  // 6690-24.3x10*3/uL
+                })
+                .join(',');
+        }
 
+        const payload = await Meteor.callAsync("patient.getRecentLabs", patientID, pageNumber, count);
         if (!this.isSimulation) {
             try {
                 let prompt = 
-                `2-4 sentences, speak directly to the patient using "you" and "your" and offer brief advice. Be optimistic. Wrap important values in <strong> tags.\n` +
-                `Data; `
+                    `2-4 sentences simplifying the lab, speak directly to the patient using "you" and "your". Try not to use too many numbers and units. Wrap important values in <strong> tags.\n` +
+                    `Lab data: ${JSON.stringify(formatLabData(payload))}`
+
+                return prompt
             } catch (error) {
                 throw new Meteor.Error("FHIR-Server-Error", error.message);
             }
