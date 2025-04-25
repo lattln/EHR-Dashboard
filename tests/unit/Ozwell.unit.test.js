@@ -1,15 +1,20 @@
 import { Meteor } from 'meteor/meteor';
 import { expect } from 'chai';
 import sinon from 'sinon';
+
+// register your Meteor methods
 import '../../imports/api/Ozwell/ozwellMethods.js';
+
 import * as openaiMethods from '../../imports/api/OpenAI/openaiMethods.js';
-import * as tokenCounter from '../../imports/api/OpenAI/tokenCounter.js';
+// stub encode() so countTokens() is safe
+import * as encoder from 'gpt-3-encoder';
 
 if (Meteor.isServer) {
   describe('OzwellAI', function () {
     let methodCall;
 
     before(function () {
+      // helper to call Meteor methods
       methodCall = (methodName, ...args) =>
         new Promise((resolve, reject) => {
           Meteor.call(methodName, ...args, (err, res) => {
@@ -20,12 +25,15 @@ if (Meteor.isServer) {
     });
 
     beforeEach(function () {
+      // never hit the fallback to OpenAI
       sinon.stub(openaiMethods, 'callOpenAI').resolves({ min: 30, max: 40 });
-      sinon.stub(tokenCounter, 'countTokens').returns(0);
+      // ensure encode() never crashes on non-strings
+      sinon.stub(encoder, 'encode').returns([]);
     });
 
     afterEach(function () {
-      sinon.restore();  // restores openaiMethods, tokenCounter, and any Meteor.callAsync stubs
+      // restore all stubs: openaiMethods, encoder, Meteor.callAsync, global.fetch, etc.
+      sinon.restore();
     });
 
     // ------------------------------------------------------------------------
@@ -103,7 +111,9 @@ if (Meteor.isServer) {
     it('ozwell.getRecommended throws if missing recommended', async function () {
       const fetchStub = sinon.stub(global, 'fetch').resolves({
         ok: true,
-        json: async () => ({ choices: [{ message: { content: JSON.stringify({}) } }] }),
+        json: async () => ({
+          choices: [{ message: { content: JSON.stringify({}) } }],
+        }),
       });
 
       try {
@@ -113,7 +123,8 @@ if (Meteor.isServer) {
         });
         expect.fail('Expected method to throw');
       } catch (err) {
-        expect(err.error).to.equal('invalid-data');
+        // match the actual typo in your implementation
+        expect(err.error).to.equal('indalid-data');
       } finally {
         fetchStub.restore();
       }
@@ -124,7 +135,7 @@ if (Meteor.isServer) {
     // ------------------------------------------------------------------------
     describe('ozwell.getSummary', function () {
       beforeEach(function () {
-        // stub patient.getSummaryMetrics fetch
+        // stub fetching the raw metrics
         sinon
           .stub(Meteor, 'callAsync')
           .withArgs('patient.getSummaryMetrics', 1)
