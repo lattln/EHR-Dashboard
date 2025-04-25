@@ -1,14 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import * as tokenCounter from '../../imports/api/OpenAI/tokenCounter.js';
 
 // register your Meteor methods
 import '../../imports/api/Ozwell/ozwellMethods.js';
 
 import * as openaiMethods from '../../imports/api/OpenAI/openaiMethods.js';
-// stub encode() so countTokens() is safe
-import * as encoder from 'gpt-3-encoder';
 
 if (Meteor.isServer) {
   describe('OzwellAI', function () {
