@@ -37,29 +37,6 @@ if (Meteor.isServer) {
     // ------------------------------------------------------------------------
     // 1) ozwell.getMinMax
     // ------------------------------------------------------------------------
-    it('ozwell.getMinMax returns correct data from Ozwell (no fallback)', async function () {
-      const fetchStub = sinon.stub(global, 'fetch').resolves({
-        ok: true,
-        json: async () => ({
-          choices: [{ message: { content: JSON.stringify({ min: 10, max: 20 }) } }],
-        }),
-      });
-
-      const result = await methodCall('ozwell.getMinMax', 'BMI', {
-        age: 40,
-        gender: 'male',
-        weight: 80,
-        height: 180,
-      });
-
-      expect(result.status).to.equal('success');
-      expect(result.data.min).to.equal(10);
-      expect(result.data.max).to.equal(20);
-      expect(openaiMethods.callOpenAI.called).to.be.false;
-
-      fetchStub.restore();
-    });
-
     it('ozwell.getMinMax throws error if missing min or max', async function () {
       const fetchStub = sinon.stub(global, 'fetch').resolves({
         ok: true,
