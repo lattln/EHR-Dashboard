@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import * as tokenCounter from '../../imports/api/OpenAI/tokenCounter.js';
 
 // register your Meteor methods
 import '../../imports/api/Ozwell/ozwellMethods.js';
@@ -25,10 +26,10 @@ if (Meteor.isServer) {
     });
 
     beforeEach(function () {
-      // never hit the fallback to OpenAI
-      sinon.stub(openaiMethods, 'callOpenAI').resolves({ min: 30, max: 40 });
-      // ensure encode() never crashes on non-strings
-      sinon.stub(encoder, 'encode').returns([]);
+        // never hit the fallback to OpenAI
+        sinon.stub(openaiMethods, 'callOpenAI').resolves({ min: 30, max: 40 });
+        // make countTokens() a no-op so it never calls encode(text.matchAll)
+        sinon.stub(tokenCounter, 'countTokens').returns(0);
     });
 
     afterEach(function () {
