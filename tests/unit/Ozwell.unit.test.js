@@ -222,5 +222,88 @@ if (Meteor.isServer) {
                 expect(err.reason).to.match(/does not contain a summary/i);
             }
         });
+
+        describe('ozwell.getSummary', function () {
+            beforeEach(function () {
+              // Stub the Meteor.callAsync that fetches raw metrics
+              sinon.stub(Meteor, 'callAsync')
+                .withArgs('patient.getSummaryMetrics', 1)
+                .resolves({
+                  weightMetrics: [{ valueQuantities: [{ value: 80 }] }],
+                  heightMetrics: [{ valueQuantities: [{ value: 180 }] }],
+                  systolicMetrics: [{ valueQuantities: [{ value: 120 }] }],
+                  diastolicMetrics: [{ valueQuantities: [{ value: 80 }] }],
+                  heartRateMetrics: [],
+                  BMIMetrics: [],
+                  bodyTempMetrics: [],
+                  oxygenSaturationMetrics: [],
+                  hemoglobinMetrics: [],
+                  hemoglobinA1CMetrics: [],
+                  ESRMetrics: [],
+                  glucoseMetrics: [],
+                  potassiumMetrics: [],
+                  cholesterolTotalMetrics: [],
+                  LDLMetrics: [],
+                  HDLMetrics: [],
+                  BUNMetrics: [],
+                  creatinineMetrics: [],
+                });
+      
+              // Stub the Ozwell API fetch
+              fetchStub = sinon.stub(global, 'fetch');
+            });
+      
+            it('returns summary from Ozwell (no fallback)', async function () {
+              fetchStub.resolves({
+                ok: true,
+                json: async () => ({
+                  choices: [
+                    {
+                      message: {
+                        content: JSON.stringify({ summary: 'test' }),
+                      },
+                    },
+                  ],
+                }),
+              });
+      
+              const result = await methodCall(
+                'ozwell.getSummary',
+                1,
+                'patient.getSummaryMetrics'
+              );
+      
+              expect(result.status).to.equal('success');
+              expect(result.data.summary).to.equal('test');
+              expect(openaiMethods.callOpenAI.called).to.be.false;
+            });
+      
+            it('throws if missing summary', async function () {
+              fetchStub.resolves({
+                ok: true,
+                json: async () => ({
+                  choices: [
+                    {
+                      message: {
+                        content: JSON.stringify({}),
+                      },
+                    },
+                  ],
+                }),
+              });
+      
+              try {
+                await methodCall(
+                  'ozwell.getSummary',
+                  1,
+                  'patient.getSummaryMetrics'
+                );
+                expect.fail('Expected method to throw');
+              } catch (err) {
+                expect(err.error).to.equal('invalid-data');
+                expect(err.reason).to.match(/does not contain a summary/i);
+              }
+            });
+          });
     });
 }
