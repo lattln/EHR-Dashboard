@@ -9,8 +9,7 @@ const Summary = () => {
     useEffect(() => {
         async function fetchSummary() {
             try {
-                const id = user.fhirID; 
-                console.log(user);
+                const id = user.user.fhirID; 
                 const result = await Meteor.callAsync('ozwell.getSummary', id);
                 if (result?.data?.summary) {
                     setSummary(result.data.summary);
@@ -25,10 +24,10 @@ const Summary = () => {
             }
         }
         
-        if(!userLoading){
+        if(!user.userLoading){
             fetchSummary();
         }
-    }, [userLoading]);
+    }, [user.userLoading]);
 
     return (
         <div className="w-full bg-white rounded-xl shadow-md p-6 mb-6 border border-gray-200 transition-all duration-300">

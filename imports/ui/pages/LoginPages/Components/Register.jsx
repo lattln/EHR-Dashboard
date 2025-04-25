@@ -8,7 +8,7 @@ const Register = ({ toggleAuth }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordMatch, setPasswordMatch] = useState("");
-    const [role, setRole] = useState(0);
+    const [role, setRole] = useState(UserRoles.CLINICIAN);
     const [error, setError] = useState("");
     const [first, setFirst] = useState("")
     const [last, setLast] = useState("")
@@ -17,9 +17,9 @@ const Register = ({ toggleAuth }) => {
     const navigate = useNavigate();
 
     const handleRoleSelection = (selectedRole) => {
-        if(selectedRole = 0){
+        if(selectedRole == "clinician"){
             setRole(UserRoles.CLINICIAN);
-        } else if(selectedRole = 1){
+        } else if(selectedRole == "patient"){
             setRole(UserRoles.PATIENT);
         }
     };
@@ -143,63 +143,65 @@ const Register = ({ toggleAuth }) => {
                 </div>
 
                 {/* Extra patient information */}
-                <div className="space-y-1">
-                    <div className="flex gap-4">
-                        <div>
-                            <label className="text-gray-700 text-sm font-medium">First</label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="First Name"
-                                    value={first}
-                                    onChange={(e) => setFirst(e.target.value)}
-                                    className="w-3/4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
-                                    required
-                                />
-                                <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                { role === UserRoles.PATIENT ?
+                    <div className="space-y-1">
+                        <div className="flex gap-4">
+                            <div>
+                                <label className="text-gray-700 text-sm font-medium">First</label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="First Name"
+                                        value={first}
+                                        onChange={(e) => setFirst(e.target.value)}
+                                        className="w-3/4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                        required
+                                    />
+                                    <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="text-gray-700 text-sm font-medium">Last</label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Last Name"
+                                        value={last}
+                                        onChange={(e) => setLast(e.target.value)}
+                                        className="w-3/4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                        required
+                                    />
+                                    <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <label className="text-gray-700 text-sm font-medium">Last</label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Last Name"
-                                    value={last}
-                                    onChange={(e) => setLast(e.target.value)}
-                                    className="w-3/4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
-                                    required
-                                />
-                                <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                            </div>
-                        </div>
-                    </div>
 
-                    <label className="space-y-1 text-gray-700 text-sm font-medium">Phone Number</label>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="123-456-7891"
-                            value={phone}
-                            onChange={(e) => handlePhoneChange(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
-                            required
-                        />
-                        <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                    </div>
-                    
-                    <label className="space-y-1 text-gray-700 text-sm font-medium">Date of Birth</label>
-                    <div className="relative">
-                        <input
-                            type="date"
-                            value={dob}
-                            onChange={(e) => setDOB(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
-                            required
-                        />
-                        <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                    </div>
-                </div>
+                        <label className="space-y-1 text-gray-700 text-sm font-medium">Phone Number</label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="123-456-7891"
+                                value={phone}
+                                onChange={(e) => handlePhoneChange(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                required
+                            />
+                            <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                        </div>
+                        
+                        <label className="space-y-1 text-gray-700 text-sm font-medium">Date of Birth</label>
+                        <div className="relative">
+                            <input
+                                type="date"
+                                value={dob}
+                                onChange={(e) => setDOB(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                                required
+                            />
+                            <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+                        </div>
+                    </div> : ""
+                }
 
                 {/* Role Selection */}
                 <div className="space-y-1">
@@ -211,7 +213,7 @@ const Register = ({ toggleAuth }) => {
                                     ? "bg-blue-600 text-white"
                                     : "border border-gray-400 text-gray-600 hover:bg-gray-200"
                                 }`}
-                            onClick={() => handleRoleSelection(0)}
+                            onClick={() => handleRoleSelection("clinician")}
                         >
                             Clinician
                         </button>
@@ -221,7 +223,7 @@ const Register = ({ toggleAuth }) => {
                                     ? "bg-blue-600 text-white"
                                     : "border border-gray-400 text-gray-600 hover:bg-gray-200"
                                 }`}
-                            onClick={() => handleRoleSelection(1)}
+                            onClick={() => handleRoleSelection("patient")}
                         >
                             Patient
                         </button>

@@ -1,9 +1,18 @@
-import React from "react";
-import { USER_INFO } from "./constantsPages";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../User";
 
 const Header = ({ onMenuClick }) => {
     const { user, userLoading } = useUser();
+    const [first, setFirst] = useState("");
+    const [last, setLast] = useState("");
+
+    useEffect(() => {
+        if(!user.userLoading){
+            setFirst(user.user.profile.firstName);
+            setLast(user.user.profile.lastLast);
+        }
+    }, [user.userLoading])
+
     return (
         <div className="bg-white shadow-md p-4 flex justify-between items-center md:justify-end">
             {/* Hamburger for mobile */}
@@ -17,7 +26,7 @@ const Header = ({ onMenuClick }) => {
 
             <div className="flex items-center">
                 <h3 className="text-lg font-bold text-gray-800">
-                    Hi, {userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName} 
+                    Hi, {user.userLoading ? "..." : first + " " + last} 
                 </h3>
                 <img
                     src="/blank.webp"

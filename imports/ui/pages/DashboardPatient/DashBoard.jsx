@@ -12,7 +12,12 @@ import { useUser } from '../../User';
 import { useNavigate } from 'react-router-dom';
 
 const DashBoard = () => {
-    const { user, userLoading } = useUser();
+    const { user, presetName } = useUser();
+    const [userInfo, setUserInfo] = useState({
+        first: "",
+        last: "",
+        dob: ""
+    })
     const [widgets, setWidgets] = useState([]);
     const [slotItemMap, setSlotItemMap] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
@@ -24,8 +29,8 @@ const DashBoard = () => {
 
     useEffect(() => {
         async function checkFitbitLinked(){
-            if(!await isValidToken(user.fitbitAccountAuth)){
-                await refreshToken(user.fitbitAccountAuth);
+            if(!await isValidToken(user.user.fitbitAccountAuth)){
+                await refreshToken(user.user.fitbitAccountAuth);
             }
 
             setFitBitLinked(true);
@@ -35,14 +40,21 @@ const DashBoard = () => {
             nav('/auth')
         }
 
-        if(!userLoading && user.fitbitAccountAuth){
-            checkFitbitLinked()
+        if(!user.userLoading){
+            console.log(user.user);
+            setWidgets([...user.user.config[0].widget]);
+            setUserInfo({
+                first: user.user.profile.firstName,
+                last: user.user.profile.lastName,
+                dob: user.user.profile.dob 
+            })
+
+            if(user.user.fitbitAccountAuth){
+                checkFitbitLinked();
+            }
         }
 
-        if(!userLoading){
-            setWidgets([...user.config[0].widget]);
-        }
-    }, [userLoading])
+    }, [user.userLoading])
 
     useEffect(() => utils.dynamicSwapy(swapyRef.current, widgets, 'id', slotItemMap, setSlotItemMap), [widgets]);
 
@@ -65,6 +77,26 @@ const DashBoard = () => {
     }, []);
 
     // Save the current widget configuration to localStorage
+    useEffect(() => {
+        async function updateConfig(){
+            /*
+            let filtered = user.user.config.filter((c) => c.name != presetName);
+            let res = await Meteor.callAsync('user.saveDashboardConfig', [
+                {
+                    name: user.user.config[0].name,
+                    widget: widgets
+                },
+                ...filtered
+            ])
+
+            console.log(res);
+            */
+        }
+
+        if(!user.userLoading){
+            updateConfig();
+        }
+    }, [widgets]);
 
     // Define staggered animation variants for widgets
     const widgetVariants = {
@@ -99,8 +131,8 @@ const DashBoard = () => {
                 <div className="p-6 space-y-6 overflow-y-auto">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
                         <div>
-                            <p className="font-semibold">Name: {userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName}</p>
-                            <p className="font-semibold">Birthday: {userLoading ? "..." : user.profile.dob}</p>
+                            <p className="font-semibold">Name: {userInfo.first + " " + userInfo.last}</p>
+                            <p className="font-semibold">Birthday: {userInfo.dob}</p>
                         </div>
                         <div>
                             <p className="font-semibold">{USER_INFO.physician.label}: {USER_INFO.physician.value}</p>
