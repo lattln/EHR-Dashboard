@@ -45,7 +45,7 @@ export default function ThreeDotsWave({ size = "2rem" }) {
 
     const DotTransition = {
         duration: 0.5,
-        yoyo: Infinity, // Infinite animation
+        repeat: Infinity,
         ease: "easeInOut"
     };
 

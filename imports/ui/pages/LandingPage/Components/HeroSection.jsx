@@ -7,7 +7,7 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="bg-blue-900 text-white text-center py-16"
+            className="bg-blue-900 text-white text-center py-16 pt-18"
         >
             <div className="container mx-auto">
                 <motion.h1

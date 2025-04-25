@@ -17,7 +17,7 @@ const SignUpSection = () => {
                     animate={{ y: 0 }}
                     transition={{ duration: 1 }}
                 >
-                    Sign Up Now
+                    Sign Up Now Or Login
                 </motion.h2>
                 <p className="text-lg mb-8">Create an account to start using the dashboard and visualize your data.</p>
                 <motion.button
