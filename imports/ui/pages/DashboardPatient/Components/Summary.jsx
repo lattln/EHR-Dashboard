@@ -11,9 +11,8 @@ const Summary = () => {
         async function fetchSummary() {
             try {
                 const id = user.fhirID; 
+                console.log(user);
                 const result = await Meteor.callAsync('ozwell.getSummary', id, "patient.getSummaryMetrics");
-                console.log(result)
-                
                 if (result?.data?.summary) {
                     setSummary(result.data.summary);
                 } else {
