@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { motion } from 'framer-motion';
+import { useUser } from '../../../User';
 
 const LabsResult = ({ isOpen, onClose, selectedLab }) => {
     if (!isOpen || !selectedLab) return null; 
+    const [summary, setSummary] = useState("");
+    const user = useUser();
+
+    useEffect(() => {
+        const fetchSummary = async () => {
+            if (!user?.id || !selectedLab) return;
+            try {
+                const response = await Meteor.callAsync("ozwell.getSummary", user.id, "patient.getLabSummary");
+                if (response?.status === 'success' && response.data?.summary) {
+                    setSummary(response.data.summary); // <- use the string only
+                }
+            } catch (error) {
+                console.error("Failed to fetch summary:", error);
+            }
+        };
+    
+        if (isOpen && selectedLab) {
+            fetchSummary();
+        }
+    }, [isOpen, selectedLab, user]);
 
     const calculateProgress = (value) => {
 
@@ -69,9 +91,12 @@ const LabsResult = ({ isOpen, onClose, selectedLab }) => {
                         </div>
                     ))}
 
-                    <div className='space-y-4'>
-                        Noah Shit summary here.
-                    </div>
+                        {summary && (
+                            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                                <p className="text-sm text-gray-800" 
+                                dangerouslySetInnerHTML={{ __html: summary }} />
+                            </div>
+                        )}
                 </div>
 
                 {/* Download Button */}

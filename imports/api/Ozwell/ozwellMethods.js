@@ -149,75 +149,11 @@ Meteor.methods({
         }
     },
 
-    async 'ozwell.getSummary'(patientID) {
-        const temp = await getFhirIDFromUserAccount(this.userId)
-        console.log("SDKLJFHSDJKHFKJSDHFKJSDHFJKSDHJKFHSDJKFHJSDKFH", temp)
+    async 'ozwell.getSummary'(patientID, meteorCall) {
+        // const temp = await getFhirIDFromUserAccount(this.userId)
+        // console.log("SDKLJFHSDJKHFKJSDHFKJSDHFJKSDHJKFHSDJKFHJSDKFH", temp)
 
-        const metrics = await Meteor.callAsync('patient.getSummaryMetrics', patientID);
-
-        const latestValue = (metrics) => {
-            if (!metrics || metrics.length === 0) return null;
-            const latest = metrics[0];
-            if (latest.valueQuantities && latest.valueQuantities[0].value) {
-                const val = parseFloat(latest.valueQuantities[0].value);
-                return parseFloat(val.toFixed(3));
-            }
-            return null;
-        };
-
-        const payload = {
-            age: 40, // could be dynamic later
-            gender: 'male', // could be dynamic later
-            weight: latestValue(metrics.weightMetrics),
-            height: latestValue(metrics.heightMetrics),
-            bloodPressure: {
-                systolic: latestValue(metrics.systolicMetrics),
-                diastolic: latestValue(metrics.diastolicMetrics),
-            },
-            heartRate: latestValue(metrics.heartRateMetrics),
-            BMI: latestValue(metrics.BMIMetrics),
-            labResults: {
-                bodyTemp: latestValue(metrics.bodyTempMetrics),
-                oxygenSaturation: latestValue(metrics.oxygenSaturationMetrics),
-                hemoglobin: latestValue(metrics.hemoglobinMetrics),
-                hemoglobinA1C: latestValue(metrics.hemoglobinA1CMetrics),
-                ESR: latestValue(metrics.ESRMetrics),
-                glucose: latestValue(metrics.glucoseMetrics),
-                potassium: latestValue(metrics.potassiumMetrics),
-                cholesterolTotal: latestValue(metrics.cholesterolTotalMetrics),
-                LDL: latestValue(metrics.LDLMetrics),
-                HDL: latestValue(metrics.HDLMetrics),
-                BUN: latestValue(metrics.BUNMetrics),
-                creatinine: latestValue(metrics.creatinineMetrics),
-            },
-        };
-
-        // building the prompt; each field is using the medical abbreviation to minimiaze the amount of tokens used per-call
-        const prompt =
-            `2-4 sentences, speak directly to the patient using "you" and "your" and offer brief advice. Be optimistic. 
-            Wrap important values in <strong> tags.` +
-            `Data: A:${payload.age} G:${payload.gender} W:${payload.weight}kg H:${payload.height}cm BP:${payload.bloodPressure.systolic}/${payload.bloodPressure.diastolic}` +
-            (payload.heartRate ? ` HR:${payload.heartRate}` : '') +
-            (payload.BMI ? ` BMI:${payload.BMI}` : '') +
-            (payload.labResults
-                ? ` L:${[
-                    payload.labResults.bodyTemp && `T${payload.labResults.bodyTemp}`,
-                    payload.labResults.oxygenSaturation && `O${payload.labResults.oxygenSaturation}`,
-                    payload.labResults.hemoglobin && `HGB${payload.labResults.hemoglobin}`,
-                    payload.labResults.hemoglobinA1C && `A1C${payload.labResults.hemoglobinA1C}`,
-                    payload.labResults.ESR && `ESR${payload.labResults.ESR}`,
-                    payload.labResults.glucose && `Glu${payload.labResults.glucose}`,
-                    payload.labResults.potassium && `K${payload.labResults.potassium}`,
-                    payload.labResults.cholesterolTotal && `Chol${payload.labResults.cholesterolTotal}`,
-                    payload.labResults.LDL && `LDL${payload.labResults.LDL}`,
-                    payload.labResults.HDL && `HDL${payload.labResults.HDL}`,
-                    payload.labResults.BUN && `BUN${payload.labResults.BUN}`,
-                    payload.labResults.creatinine && `Cr${payload.labResults.creatinine}`,
-                ]
-                    .filter(Boolean)
-                    .join(',')}`
-                : '') +
-            ` S:`;
+        const prompt = await Meteor.callAsync(meteorCall, patientID);
 
         const schema = {
             'summary': {
