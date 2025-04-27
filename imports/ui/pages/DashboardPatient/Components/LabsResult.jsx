@@ -100,13 +100,14 @@ const LabsResult = ({ isOpen, onClose, selectedLab }) => {
                 </div>
 
                 {/* Download Button */}
-                <div className="my-6 flex justify-end">
+                <div className="my-6 flex justify-center">
                     <motion.button
                         className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
+                        onClick={onClose}
                     >
-                        Download Results
+                        Close Lab Report
                     </motion.button>
                 </div>
             </motion.div>

@@ -39,6 +39,7 @@ const SideNavBar = ({ onCloseMobile }) => {
                     >
                         <Link
                             to={link.route}
+                            onClick={onCloseMobile}
                             className="text-white hover:text-gray-300 pl-3 flex flex-row space-x-4 hover:bg-blue-500 p-4 rounded-lg"
                         >
                             {link.icon}
