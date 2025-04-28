@@ -10,7 +10,7 @@ const NavBar = () => {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="bg-white shadow sticky top-0 z-50"
+            className="bg-white bg-opacity-30 backdrop-blur-md sticky top-0 z-50"
         >
             <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-row items-center justify-between h-16">
                 <Link to="/" className="text-2xl font-bold text-gray-800">
@@ -19,12 +19,9 @@ const NavBar = () => {
 
                 {/* desktop menu */}
                 <div className="hidden md:flex space-x-8 text-gray-700 items-center">
-                    <a href="#about" className="hover:text-gray-900">About</a>
+                    <a href="#about"    className="hover:text-gray-900">About</a>
                     <a href="#features" className="hover:text-gray-900">Features</a>
-                    <Link to="/auth" className="hover:text-gray-900">Sign In</Link>
-                    <Link to="/auth" className="ml-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                        Book Appointment
-                    </Link>
+                    <Link to="/auth"    className="hover:text-gray-900">Sign In</Link>
                 </div>
 
                 {/* mobile toggle */}
@@ -48,15 +45,12 @@ const NavBar = () => {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="md:hidden bg-white shadow-lg"
+                        className="md:hidden bg-white bg-opacity-30 backdrop-blur-md"
                     >
                         <div className="flex flex-col px-6 py-4 space-y-3">
-                            <a href="#about" onClick={() => setIsOpen(false)} className="hover:text-gray-900">About</a>
+                            <a href="#about"    onClick={() => setIsOpen(false)} className="hover:text-gray-900">About</a>
                             <a href="#features" onClick={() => setIsOpen(false)} className="hover:text-gray-900">Features</a>
-                            <Link to="/auth" onClick={() => setIsOpen(false)} className="hover:text-gray-900">Sign In</Link>
-                            <Link to="/auth" onClick={() => setIsOpen(false)} className="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                                Book Appointment
-                            </Link>
+                            <Link to="/auth"    onClick={() => setIsOpen(false)} className="hover:text-gray-900">Sign In</Link>
                         </div>
                     </motion.div>
                 )}
