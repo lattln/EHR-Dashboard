@@ -252,7 +252,7 @@ export const IconChatBot = ({ className, onClick }) => (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        class={className}
+        className={className}
         onClick={onClick}
         >
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -273,7 +273,7 @@ export const IconDashboard = ({ className, onClick }) => (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        class={className}
+        className={className}
         onClick={onClick}
     >
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -293,7 +293,7 @@ export const IconLabReport = ({ className, onClick }) => (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        class={className}
+        className={className}
         onClick={onClick}
     >
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
