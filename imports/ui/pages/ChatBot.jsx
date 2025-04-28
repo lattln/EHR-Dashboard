@@ -152,7 +152,7 @@ export const ChatBot = () => {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ duration: 0.3 }}
-                                        className="flex space-x-1 items-center mt-1 pl-1"
+                                        className="flex space-x-1 items-center pt-6 pl-2"
                                     >
                                         <ThreeDotsWave size=".25rem" />
                                     </motion.div>
