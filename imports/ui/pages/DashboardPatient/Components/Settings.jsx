@@ -3,7 +3,9 @@ import { Meteor } from "meteor/meteor";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getAuthUrl, isValidToken, refreshToken } from "../../../../api/FitBit/auth";
 import { useUser } from "../../../User";
+import { motion } from "framer-motion";
 import Widgets from "../../../Widgets/index";
+import ThreeDotsWave from "../../three-dots-wave";
 
 const reorder = (list, start, end) => {
     const copy = Array.from(list);
@@ -156,53 +158,97 @@ const Settings = () => {
     // save all edits
     const handleSave = () => savePresets(presets, () => alert("Layouts saved!"));
 
-    if (userLoading) return <div className="p-6">Loading…</div>;
+    const containerVariants = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.1,
+            }
+        }
+    };
+
+    const sectionVariants = {
+        hidden: { opacity: 0, y: -20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    };
+
+    const listItemVariants = {
+        hidden: { opacity: 0, x: -20 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.3 } }
+    };
+
+    if (userLoading) {
+        return (
+            <div className="p-6">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <ThreeDotsWave size="1rem" />
+                </motion.div>
+            </div>
+        )
+    }
 
     return (
-        <div className="p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Settings</h2>
-
-            <button
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 mb-6"
-                onClick={() => (window.location.href = fitBitUrl)}
-                disabled={fitBitLinked}
-            >
-                {fitBitLinked ? "FitBit Linked" : "Link FitBit Account"}
-            </button>
-
-            {/* Preset Picker */}
-            <h3 className="text-xl font-semibold mb-2">Preset Layouts</h3>
-            <div className="flex flex-wrap gap-2 mb-4">
-                {presets.map((p, i) => (
-                    <div key={i} className="flex items-center space-x-1">
-                        <button
-                            className={`px-4 py-2 rounded-lg ${i === 0
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-200 hover:bg-gray-300"
-                                }`}
-                            onClick={() => handlePresetChange(i)}
-                        >
-                            {p.name}
-                        </button>
-                        <button
-                            onClick={() => handleDeletePreset(i)}
-                            className="text-red-500 hover:text-red-700 px-1"
-                            title="Delete preset"
-                        >
-                            &times;
-                        </button>
-                    </div>
-                ))}
+        <motion.div
+            className="p-6 bg-white rounded-lg shadow-md"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            {/* Section 1: Title & Fitbit Button */}
+            <motion.div variants={sectionVariants} className="mb-6">
+                <h2 className="text-2xl font-bold mb-2">Settings</h2>
                 <button
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                    onClick={handleAddPreset}
+                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                    onClick={() => (window.location.href = fitBitUrl)}
+                    disabled={fitBitLinked}
                 >
-                    + Add Preset
+                    {fitBitLinked ? "FitBit Linked" : "Link FitBit Account"}
                 </button>
-            </div>
+            </motion.div>
 
-            {/* Inline Rename */}
-            <div className="mb-4 flex items-center space-x-2">
+            {/* Section 2: Preset Picker */}
+            <motion.div variants={sectionVariants} className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">Preset Layouts</h3>
+                <div className="flex flex-wrap gap-2">
+                    {presets.map((p, i) => (
+                        <motion.div
+                            key={i}
+                            variants={listItemVariants}
+                            className="flex items-center space-x-1"
+                        >
+                            <button
+                                className={`px-4 py-2 rounded-lg ${i === 0 ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+                                    }`}
+                                onClick={() => handlePresetChange(i)}
+                            >
+                                {p.name}
+                            </button>
+                            <button
+                                onClick={() => handleDeletePreset(i)}
+                                className="text-red-500 hover:text-red-700 px-1"
+                                title="Delete preset"
+                            >
+                                &times;
+                            </button>
+                        </motion.div>
+                    ))}
+                    <motion.button
+                        variants={listItemVariants}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                        onClick={handleAddPreset}
+                    >
+                        + Add Preset
+                    </motion.button>
+                </div>
+            </motion.div>
+
+            {/* Section 3: Inline Rename */}
+            <motion.div variants={sectionVariants} className="mb-6 flex items-center space-x-2">
                 {isRenaming ? (
                     <input
                         className="border px-2 py-1 rounded"
@@ -214,9 +260,7 @@ const Settings = () => {
                     />
                 ) : (
                     <>
-                        <span className="font-medium">
-                            {presets[selectedPresetIndex]?.name}
-                        </span>
+                        <span className="font-medium">{presets[selectedPresetIndex]?.name}</span>
                         <button
                             className="text-sm text-blue-500 hover:underline"
                             onClick={startRenaming}
@@ -225,19 +269,17 @@ const Settings = () => {
                         </button>
                     </>
                 )}
-            </div>
+            </motion.div>
 
-            {/* Add Widget */}
-            <div className="mb-4 flex space-x-2 items-center">
+            {/* Section 4: Add Widget */}
+            <motion.div variants={sectionVariants} className="mb-6 flex space-x-2 items-center">
                 <select
                     className="p-2 border rounded flex-1"
                     value={newWidgetType}
                     onChange={e => setNewWidgetType(e.target.value)}
                 >
                     {widgetTypes.map(t => (
-                        <option key={t} value={t}>
-                            {t}
-                        </option>
+                        <option key={t} value={t}>{t}</option>
                     ))}
                 </select>
                 <button
@@ -246,67 +288,73 @@ const Settings = () => {
                 >
                     + Add Widget
                 </button>
-            </div>
+            </motion.div>
 
-            {/* Drag & Drop Editor */}
-            {presets[selectedPresetIndex]?.widget?.length > 0 ? (
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="widgets-list">
-                        {provided => (
-                            <ul
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                                className="space-y-2 mb-4"
-                            >
-                                {presets[selectedPresetIndex].widget.map((w, idx) => (
-                                    <Draggable key={w.id} draggableId={w.id} index={idx}>
-                                        {prov => (
-                                            <li
-                                                ref={prov.innerRef}
-                                                {...prov.draggableProps}
-                                                {...prov.dragHandleProps}
-                                                className="p-4 bg-gray-100 rounded shadow flex items-center justify-between"
-                                            >
-                                                <span>{w.label}</span>
-                                                <div className="flex flex-col space-y-1">
-                                                    <button
-                                                        onClick={() => moveWidget(idx, -1)}
-                                                        className="text-gray-600 hover:text-gray-800"
-                                                        title="Move up"
-                                                    >
-                                                        ▲
-                                                    </button>
-                                                    <button
-                                                        onClick={() => moveWidget(idx, +1)}
-                                                        className="text-gray-600 hover:text-gray-800"
-                                                        title="Move down"
-                                                    >
-                                                        ▼
-                                                    </button>
-                                                </div>
-                                            </li>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </ul>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            ) : (
-                <p className="italic text-gray-500 mb-4">
-                    No widgets in this preset.
-                </p>
-            )}
+            {/* Section 5: Drag & Drop Widget List */}
+            <motion.div variants={sectionVariants} className="mb-6">
+                {presets[selectedPresetIndex]?.widget?.length > 0 ? (
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="widgets-list">
+                            {provided => (
+                                <motion.ul
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    className="space-y-2"
+                                    variants={containerVariants}        // you can even nest a smaller stagger here
+                                    initial="hidden"
+                                    animate="visible"
+                                >
+                                    {presets[selectedPresetIndex].widget.map((w, idx) => (
+                                        <Draggable key={w.id} draggableId={w.id} index={idx}>
+                                            {prov => (
+                                                <motion.li
+                                                    ref={prov.innerRef}
+                                                    {...prov.draggableProps}
+                                                    {...prov.dragHandleProps}
+                                                    className="p-4 bg-gray-100 rounded shadow flex items-center justify-between"
+                                                    variants={listItemVariants}
+                                                >
+                                                    <span>{w.label}</span>
+                                                    <div className="flex flex-col space-y-1">
+                                                        <button
+                                                            onClick={() => moveWidget(idx, -1)}
+                                                            className="text-gray-600 hover:text-gray-800"
+                                                            title="Move up"
+                                                        >
+                                                            ▲
+                                                        </button>
+                                                        <button
+                                                            onClick={() => moveWidget(idx, +1)}
+                                                            className="text-gray-600 hover:text-gray-800"
+                                                            title="Move down"
+                                                        >
+                                                            ▼
+                                                        </button>
+                                                    </div>
+                                                </motion.li>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </motion.ul>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                ) : (
+                    <p className="italic text-gray-500">No widgets in this preset.</p>
+                )}
+            </motion.div>
 
-            {/* Save Button */}
-            <button
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                onClick={handleSave}
-            >
-                Save Layouts
-            </button>
-        </div>
+            {/* Section 6: Save Button */}
+            <motion.div variants={sectionVariants}>
+                <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    onClick={handleSave}
+                >
+                    Save Layouts
+                </button>
+            </motion.div>
+        </motion.div>
     );
 };
 

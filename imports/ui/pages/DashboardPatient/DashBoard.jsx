@@ -80,7 +80,7 @@ const DashBoard = () => {
                         </div>
                     </div>
                     <Summary />
-                    <div className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 text-black overflow-clip">
+                    <div className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black overflow-clip">
                         <AnimatePresence>
                             {widgets.map((widget, index) => {
                                 if (!widget) {

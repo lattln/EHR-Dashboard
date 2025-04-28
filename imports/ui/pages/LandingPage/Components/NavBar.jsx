@@ -13,15 +13,14 @@ const NavBar = () => {
             className="bg-white bg-opacity-30 backdrop-blur-md sticky top-0 z-50"
         >
             <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-row items-center justify-between h-16">
-                <Link to="/" className="text-2xl font-bold text-gray-800">
+                <a href="#hero" className="text-2xl font-bold text-gray-800">
                     EHR Dashboard
-                </Link>
+                </a>
 
-                {/* desktop menu */}
                 <div className="hidden md:flex space-x-8 text-gray-700 items-center">
-                    <a href="#about"    className="hover:text-gray-900">About</a>
+                    <a href="#about" className="hover:text-gray-900">About</a>
                     <a href="#features" className="hover:text-gray-900">Features</a>
-                    <Link to="/auth"    className="hover:text-gray-900">Sign In</Link>
+                    <Link to="/auth" className="hover:text-gray-900">Sign In</Link>
                 </div>
 
                 {/* mobile toggle */}
@@ -48,9 +47,9 @@ const NavBar = () => {
                         className="md:hidden bg-white bg-opacity-30 backdrop-blur-md"
                     >
                         <div className="flex flex-col px-6 py-4 space-y-3">
-                            <a href="#about"    onClick={() => setIsOpen(false)} className="hover:text-gray-900">About</a>
+                            <a href="#about" onClick={() => setIsOpen(false)} className="hover:text-gray-900">About</a>
                             <a href="#features" onClick={() => setIsOpen(false)} className="hover:text-gray-900">Features</a>
-                            <Link to="/auth"    onClick={() => setIsOpen(false)} className="hover:text-gray-900">Sign In</Link>
+                            <Link to="/auth" onClick={() => setIsOpen(false)} className="hover:text-gray-900">Sign In</Link>
                         </div>
                     </motion.div>
                 )}

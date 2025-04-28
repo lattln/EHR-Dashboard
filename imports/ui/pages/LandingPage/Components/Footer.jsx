@@ -6,11 +6,10 @@ const Footer = () => (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="bg-white border-t mt-20 py-8"
+        className="bg-white py-3"
     >
-        <div className="container mx-auto px-6 md:px-12 lg:px-24 text-center text-gray-600">
-            <p>&copy; 2025 EHR Dashboard. All rights reserved.</p>
-            <a href="#about" className="block mt-2 hover:text-gray-800">Contact Us</a>
+        <div className="container mx-auto px-6 md:px-12 lg:px-24 text-center text-gray-800 flex justify-center">
+            <p>&copy; 2025 HealthBridge. All rights reserved.</p>
         </div>
     </motion.footer>
 );

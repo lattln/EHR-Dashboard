@@ -13,7 +13,7 @@ const SignUpSection = () => (
         <div className="container mx-auto px-6 md:px-12 lg:px-24 py-20 text-center">
             {/* Heading */}
             <motion.h2
-                className="text-3xl md:text-4xl font-semibold mb-4"
+                className="text-2xl md:text-4xl font-semibold mb-4"
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6 }}
@@ -23,7 +23,7 @@ const SignUpSection = () => (
 
             {/* Subhead */}
             <motion.p
-                className="text-lg md:text-xl mb-8 text-blue-100 max-w-2xl mx-auto"
+                className="text-lg mb-8 text-blue-100 max-w-2xl mx-auto"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -38,7 +38,7 @@ const SignUpSection = () => (
             >
                 <Link
                     to="/auth"
-                    className="bg-white text-blue-600 font-medium py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition"
+                    className="bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-100 transition"
                 >
                     Register Now
                 </Link>
