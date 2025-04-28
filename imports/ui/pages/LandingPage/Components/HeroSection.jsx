@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import DemoLabResult from './DemoLabResult';
 
 const HeroSection = () => (
     <motion.section
@@ -38,13 +39,10 @@ const HeroSection = () => (
                 className="space-y-6"
             >
                 <div className="bg-white rounded-xl shadow-lg p-6">
-                    <h3 className="font-semibold text-lg">Lab Results Tracking</h3>
-                    <p className="text-gray-500 mt-2">Real-time insights into every patient’s labs.</p>
+                    <h3 className="font-bold text-2xl ">Lab Results Tracking</h3>
+                    <p className="text-gray-500 mt-2">Real-time insights into every patient's labs.</p>
                 </div>
-                <div className="bg-white rounded-xl shadow-lg h-48 flex items-center justify-center">
-                    {/* Replace with a screenshot or illustration */}
-                    <span className="text-gray-300 italic">[LabView Mock-up]</span>
-                </div>
+                <DemoLabResult />
             </motion.div>
         </div>
     </motion.section>

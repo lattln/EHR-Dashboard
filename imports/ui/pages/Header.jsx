@@ -82,13 +82,13 @@ const Header = ({ onMenuClick }) => {
                             className="absolute top-full right-0 mt-1 w-40 overflow-hidden bg-white rounded-lg shadow-lg border border-gray-200 z-50"
                         >
                             <Link
-                                to="/userSettings"
+                                to="/patient/userSettings"
                                 className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex gap-2"
                             >
                                 <IconUser /> User
                             </Link>
                             <Link
-                                to="/setting"
+                                to="/patient/settings"
                                 className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex gap-2"
                             >
                                 <IconSetting /> Settings
