@@ -6,6 +6,7 @@ import { useUser } from "../../../User";
 import { motion } from "framer-motion";
 import Widgets from "../../../Widgets/index";
 import ThreeDotsWave from "../../three-dots-wave";
+import { IconTrash } from "../../svgLibrary";
 
 const reorder = (list, start, end) => {
     const copy = Array.from(list);
@@ -155,6 +156,17 @@ const Settings = () => {
         );
     };
 
+    // Delete a specific widget locally
+    const handleDeleteWidget = (idxToRemove) => {
+        setPresets(ps =>
+            ps.map((p, i) =>
+                i === selectedPresetIndex
+                    ? { ...p, widget: p.widget.filter((_, j) => j !== idxToRemove) }
+                    : p
+            )
+        );
+    };
+
     // save all edits
     const handleSave = () => savePresets(presets, () => alert("Layouts saved!"));
 
@@ -291,28 +303,29 @@ const Settings = () => {
             </motion.div>
 
             {/* Section 5: Drag & Drop Widget List */}
-            <motion.div variants={sectionVariants} className="mb-6">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.5, ease: "easeOut" }}
+                className="mb-4"
+            >
                 {presets[selectedPresetIndex]?.widget?.length > 0 ? (
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="widgets-list">
                             {provided => (
-                                <motion.ul
+                                <ul
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                     className="space-y-2"
-                                    variants={containerVariants}        // you can even nest a smaller stagger here
-                                    initial="hidden"
-                                    animate="visible"
                                 >
                                     {presets[selectedPresetIndex].widget.map((w, idx) => (
                                         <Draggable key={w.id} draggableId={w.id} index={idx}>
                                             {prov => (
-                                                <motion.li
+                                                <li
                                                     ref={prov.innerRef}
                                                     {...prov.draggableProps}
                                                     {...prov.dragHandleProps}
                                                     className="p-4 bg-gray-100 rounded shadow flex items-center justify-between"
-                                                    variants={listItemVariants}
                                                 >
                                                     <span>{w.label}</span>
                                                     <div className="flex flex-col space-y-1">
@@ -324,6 +337,13 @@ const Settings = () => {
                                                             ▲
                                                         </button>
                                                         <button
+                                                            onClick={() => handleDeleteWidget(idx)}
+                                                            className="text-black/70 hover:text-black/50"
+                                                            title="Delete widget"
+                                                        >
+                                                            <IconTrash />
+                                                        </button>
+                                                        <button
                                                             onClick={() => moveWidget(idx, +1)}
                                                             className="text-gray-600 hover:text-gray-800"
                                                             title="Move down"
@@ -331,12 +351,12 @@ const Settings = () => {
                                                             ▼
                                                         </button>
                                                     </div>
-                                                </motion.li>
+                                                </li>
                                             )}
                                         </Draggable>
                                     ))}
                                     {provided.placeholder}
-                                </motion.ul>
+                                </ul>
                             )}
                         </Droppable>
                     </DragDropContext>
@@ -354,7 +374,7 @@ const Settings = () => {
                     Save Layouts
                 </button>
             </motion.div>
-        </motion.div>
+        </motion.div >
     );
 };
 
