@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import { Navigate, useNavigate } from "react-router-dom";
 
 // Framer Motion Variants
 const pageVariants = {
@@ -12,6 +13,13 @@ const pageVariants = {
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const nav = useNavigate();
+
+    useEffect(() => {
+        if (Meteor.userId() != null) {
+            nav('/patient/home')
+        }
+    });
 
     return (
         <div className="h-screen w-screen bg-gray-100 flex items-center justify-center p-8">

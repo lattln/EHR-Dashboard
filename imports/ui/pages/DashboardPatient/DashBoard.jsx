@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { USER_INFO } from '../constantsPages';
-import { dashboardConfig } from "../dashBoardConfig";
 import Widgets from '../../Widgets';
-import { createSwapy, utils } from 'swapy';
 import { isValidToken, refreshToken } from '../../../api/FitBit/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import Summary from './Components/Summary';
@@ -14,59 +12,30 @@ import { useNavigate } from 'react-router-dom';
 const DashBoard = () => {
     const { user, userLoading } = useUser();
     const [widgets, setWidgets] = useState([]);
-    const [slotItemMap, setSlotItemMap] = useState([]);
     const [fitBitLinked, setFitBitLinked] = useState(false);
-    const slottedItems = useMemo(() => utils.toSlottedItems(widgets, 'id', slotItemMap), [widgets, slotItemMap]);
-    const [editing, setEditing] = useState(false);
-    const swapyRef = useRef(null);
-    const container = useRef(null);
     const nav = useNavigate();
 
     useEffect(() => {
-        async function checkFitbitLinked(){
-            if(!await isValidToken(user.fitbitAccountAuth)){
+        async function checkFitbitLinked() {
+            if (!await isValidToken(user.fitbitAccountAuth)) {
                 await refreshToken(user.fitbitAccountAuth);
             }
-
             setFitBitLinked(true);
         }
 
         if (Meteor.userId() == null) {
-            nav('/auth')
+            nav('/auth');
         }
 
-        if(!userLoading && user.fitbitAccountAuth){
-            checkFitbitLinked()
+        if (!userLoading && user.fitbitAccountAuth) {
+            checkFitbitLinked();
         }
 
-        if(!userLoading){
-            setWidgets([...user.config[0].widget]);
+        if (!userLoading) {
+            setWidgets([...user.config[0].widget]); 
         }
-    }, [userLoading])
+    }, [userLoading]);
 
-    useEffect(() => utils.dynamicSwapy(swapyRef.current, widgets, 'id', slotItemMap, setSlotItemMap), [widgets]);
-
-    // Initialize Swapy
-    useEffect(() => {
-        if (container.current) {
-            swapyRef.current = createSwapy(container.current, {
-                manualSwap: true,
-                enabled: false
-            });
-
-            swapyRef.current.onSwap((event) => {
-                setSlotItemMap(event.newSlotItemMap.asArray);
-            });
-        }
-
-        return () => {
-            swapyRef.current?.destroy();
-        };
-    }, []);
-
-    // Save the current widget configuration to localStorage
-
-    // Define staggered animation variants for widgets
     const widgetVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: (index) => ({
@@ -76,7 +45,6 @@ const DashBoard = () => {
         }),
     };
 
-    // Header animation variant (coming from the top)
     const headerVariants = {
         hidden: { opacity: 0, y: -50 },
         visible: {
@@ -95,6 +63,7 @@ const DashBoard = () => {
                     exit="hidden"
                     variants={headerVariants}
                 >
+                    {/* Optional Header Content */}
                 </motion.div>
                 <div className="p-6 space-y-6 overflow-y-auto">
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 bg-blue-600 text-white rounded-lg shadow-lg p-6">
@@ -108,24 +77,12 @@ const DashBoard = () => {
                         </div>
                         <div className="flex items-center justify-between">
                             <p className="font-semibold">{USER_INFO.lastAppt.label}: {USER_INFO.lastAppt.value}</p>
-                            <input type="checkbox" value={editing} onChange={(event) => {
-                                if (event.target.checked) {
-                                    setEditing(false);
-                                    swapyRef.current.enable(true);
-                                } else {
-                                    setEditing(true);
-                                    swapyRef.current.enable(false);
-                                }
-                            }} />
                         </div>
                     </div>
                     <Summary />
-                    <div
-                        ref={container}
-                        className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 text-black overflow-clip">
-
+                    <div className="Container-Grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black overflow-clip">
                         <AnimatePresence>
-                            {slottedItems.map(({ slotId, itemId, item: widget }, index) => {
+                            {widgets.map((widget, index) => {
                                 if (!widget) {
                                     return null;
                                 }
@@ -133,8 +90,7 @@ const DashBoard = () => {
                                 const WidgetComponent = Widgets[widget.type];
                                 return (
                                     <motion.div
-                                        key={slotId}
-                                        data-swapy-slot={slotId}
+                                        key={widget.id}
                                         className="bg-white/30 rounded-lg shadow-md h-80"
                                         initial="hidden"
                                         animate="visible"
@@ -144,11 +100,7 @@ const DashBoard = () => {
                                         style={{ gridColumn: 'span ' + widget.width }}
                                     >
                                         {widget && (
-                                            <div
-                                                key={itemId}
-                                                data-swapy-item={itemId}
-                                                className="w-full h-full bg-white p-4 rounded-lg"
-                                            >
+                                            <div className="w-full h-full bg-white p-4 rounded-lg">
                                                 <div className="col-span-width p-2 h-full">
                                                     <h2 className="text-lg font-bold">{widget.label}</h2>
                                                     <WidgetComponent fitBitLinked={fitBitLinked} />
