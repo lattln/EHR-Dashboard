@@ -757,14 +757,9 @@ Meteor.methods({
         }
     },
     async "patient.getSummaryMetrics"(patientID, pageNumber = 1, count = 100) {
-        const latestValue = (metrics) => {
-            if (!metrics || metrics.length === 0) return null;
-            const latest = metrics[0];
-            if (latest.valueQuantities && latest.valueQuantities[0].value) {
-                const val = parseFloat(latest.valueQuantities[0].value);
-                return parseFloat(val.toFixed(3));
-            }
-            return null;
+        const latestValue = (res) => {
+            if (!res || res.length == 0) return null
+            return res[res.length - 1].valueQuantities[0].value
         };
 
         this.unblock();
