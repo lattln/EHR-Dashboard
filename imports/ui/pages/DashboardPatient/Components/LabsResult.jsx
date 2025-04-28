@@ -66,8 +66,8 @@ const LabsResult = ({
                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
                         <p
                             className="text-sm text-gray-800"
+                            dangerouslySetInnerHTML={{ __html: summary }}
                         />
-                        {summary}
                     </div>
                 )}
             </div>
