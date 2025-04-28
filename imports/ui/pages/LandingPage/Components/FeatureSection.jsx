@@ -7,22 +7,22 @@ const FeatureSection = () => {
         {
             title: 'Lab View',
             description: 'Dive into historical and current lab results with rich visuals.',
-            img: <IconLabReport className={"w-16 h-16 mx-auto mb-4 text-sm"}/>
+            img: <IconLabReport className={"w-16 h-16 mx-auto mb-4 text-sm"} />
         },
         {
-            title: 'Clinician Dashboard',
-            description: 'Manage patient assignments, notes, and tasks in one place.',
-            img: <IconDashboard className={"w-16 h-16 mx-auto mb-4 text-sm"}/>
+            title: 'Patient Dashboard',
+            description: 'Access your personal health records, lab results, and appointment history all in one place.',
+            img: <IconUser className="w-16 h-16 mx-auto mb-4 text-sm" />
         },
         {
             title: 'Settings & Presets',
             description: 'Drag-and-drop widgets, save multiple dashboard layouts.',
-            img: <IconSetting className={"w-16 h-16 mx-auto mb-4 text-sm"}/>
+            img: <IconSetting className={"w-16 h-16 mx-auto mb-4 text-sm"} />
         },
         {
             title: 'Echo Chatbot',
             description: 'Ask questions of your EHR data using natural language.',
-            img: <IconChatBot className={"w-16 h-16 mx-auto mb-4 text-sm"}/>
+            img: <IconChatBot className={"w-16 h-16 mx-auto mb-4 text-sm"} />
         },
     ];
 
