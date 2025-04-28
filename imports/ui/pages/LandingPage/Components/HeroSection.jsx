@@ -1,35 +1,52 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const HeroSection = () => {
-    return (
-        <motion.section
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="bg-blue-900 text-white text-center py-16 pt-18"
-        >
-            <div className="container mx-auto">
-                <motion.h1
-                    className="text-4xl font-bold mb-4"
-                    initial={{ y: -50 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 1 }}
-                >
-                    Unlock the Power of Data with EHR Dashboard
-                </motion.h1>
-                <p className="text-xl mb-6">
-                    Visualize patient data and improve clinical decision-making
+const HeroSection = () => (
+    <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="bg-white pt-20 pb-24"
+    >
+        <div className="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            {/* Left Text */}
+            <motion.div
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+            >
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    Unlock the Power of Your EHR Data
+                </h1>
+                <p className="text-lg text-gray-600 mb-6">
+                    Visualize patient metrics, lab results, and trends in real-time to drive better clinical decisions.
                 </p>
-                <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    className="bg-orange-500 text-white py-2 px-6 rounded-md shadow-lg hover:bg-orange-400 transition duration-300"
+                <a
+                    href="#features"
+                    className="inline-flex items-center text-blue-600 font-medium hover:underline"
                 >
-                    Get Started
-                </motion.button>
-            </div>
-        </motion.section>
-    );
-};
+                    Explore Features&nbsp;→
+                </a>
+            </motion.div>
+
+            {/* Right Graphic Placeholder */}
+            <motion.div
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="space-y-6"
+            >
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h3 className="font-semibold text-lg">Lab Results Tracking</h3>
+                    <p className="text-gray-500 mt-2">Real-time insights into every patient’s labs.</p>
+                </div>
+                <div className="bg-white rounded-xl shadow-lg h-48 flex items-center justify-center">
+                    {/* Replace with a screenshot or illustration */}
+                    <span className="text-gray-300 italic">[LabView Mock-up]</span>
+                </div>
+            </motion.div>
+        </div>
+    </motion.section>
+);
 
 export default HeroSection;

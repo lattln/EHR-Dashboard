@@ -5,6 +5,7 @@ import AboutSection from './Components/AboutSection';
 import FeatureSection from './Components/FeatureSection';
 import SignUpSection from './Components/SignUpSection';
 import Footer from './Components/Footer';
+import UseCaseSection from './Components/UseCaseSection';
 
 const LandingPage = () => {
     return (
@@ -12,6 +13,7 @@ const LandingPage = () => {
             <NavBar />
             <HeroSection />
             <AboutSection />
+            <UseCaseSection />
             <FeatureSection />
             <SignUpSection />
             <Footer />
