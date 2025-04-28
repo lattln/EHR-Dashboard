@@ -12,7 +12,7 @@ const FeatureSection = () => {
         {
             title: 'Patient Dashboard',
             description: 'Access your personal health records, lab results, and appointment history all in one place.',
-            img: <IconUser className="w-16 h-16 mx-auto mb-4 text-sm" />
+            img: <IconDashboard className="w-16 h-16 mx-auto mb-4 text-sm" />
         },
         {
             title: 'Settings & Presets',
