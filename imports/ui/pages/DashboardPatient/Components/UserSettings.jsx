@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Meteor } from "meteor/meteor";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../User";
+import ThreeDotsWave from "../../three-dots-wave";
 
 const UserSettings = () => {
     const { user, userLoading } = useUser();
@@ -13,18 +14,6 @@ const UserSettings = () => {
             nav('/auth');
         }
     }, [])
-
-    const logout = (e) => {
-        e.preventDefault();
-        Meteor.logout((err) => {
-            if (err) {
-                console.log(err);
-                alert("Error loggin out");
-            } else {
-                nav("/auth");
-            }
-        })
-    }
 
     const containerVariants = {
         hidden: {},
@@ -41,6 +30,20 @@ const UserSettings = () => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
     };
 
+
+    if (userLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-[60vh]">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <ThreeDotsWave size="1rem" />
+                </motion.div>
+            </div>
+        )
+    }
 
     return (
         <motion.div
@@ -62,10 +65,6 @@ const UserSettings = () => {
                             <h2 className="text-2xl font-semibold">{userLoading ? "..." : user.profile.firstName + " " + user.profile.lastName}</h2>
                         </div>
                     </div>
-
-                    <button onClick={logout} className="w-fit bg-blue-600 text-white mt-4 p-2 rounded-lg hover:bg-blue-700">
-                        Log Out
-                    </button>
                 </div>
             </motion.div>
 
@@ -88,7 +87,7 @@ const UserSettings = () => {
                                     name="firstName"
                                     value={userLoading ? "..." : user.profile.firstName}
                                     className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled="true"
+                                    disabled
                                 />
                             </div>
                             <div>
@@ -99,7 +98,7 @@ const UserSettings = () => {
                                     name="lastName"
                                     value={userLoading ? "..." : user.profile.lastName}
                                     className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    disabled="true"
+                                    disabled
                                 />
                             </div>
                         </div>
@@ -111,7 +110,7 @@ const UserSettings = () => {
                                 name="email"
                                 value={userLoading ? "..." : user.emails[0].address}
                                 className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                disabled="true"
+                                disabled
                             />
                         </div>
                         <div>
@@ -122,7 +121,7 @@ const UserSettings = () => {
                                 name="phone"
                                 value={userLoading ? "..." : user.profile.phoneNumber}
                                 className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                disabled="true"
+                                disabled
                             />
                         </div>
 

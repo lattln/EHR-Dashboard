@@ -180,7 +180,7 @@ const Settings = () => {
 
     if (userLoading) {
         return (
-            <div className="p-6">
+            <div className="flex justify-center items-center min-h-[60vh]">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
