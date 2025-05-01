@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThreeDotsWave from "./three-dots-wave";
+import { useUser } from "../User";
 
 export const ChatBot = () => {
     const [question, setQuestion] = useState("");
@@ -9,6 +10,7 @@ export const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 320, height: 384 });
     const [dragging, setDragging] = useState(false);
+    const { user, userLoading } = useUser();
 
     const popupRef = useRef(null);
     const messagesEndRef = useRef(null);
@@ -23,7 +25,7 @@ export const ChatBot = () => {
         setLoading(true);
         setQuestion("");
 
-        Meteor.call("echo.ask", question, (err, res) => {
+        Meteor.call("echo.ask", user.fhirID, question, (err, res) => {
             setLoading(false);
 
             const botMessageContent = err ? `Error: ${err.message}` : res?.response;
