@@ -18,12 +18,9 @@ Meteor.methods({
             throw new Meteor.Error("embedding-failed", error.message);
         }
     },
-    async "echo.ask"(question) {
+    async "echo.ask"(patientId, question) {
         this.unblock();
         //if (!this.userId) throw new Meteor.Error("unauthorized");
-
-        // TODO: this needs to be able to read the current user rather than hard coding
-        const patientId = 1;
 
         const vectorStore = await PineconeStore.fromExistingIndex(
             new OpenAIEmbeddings({
