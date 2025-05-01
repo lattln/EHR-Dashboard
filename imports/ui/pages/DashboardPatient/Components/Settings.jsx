@@ -16,7 +16,7 @@ const reorder = (list, start, end) => {
 };
 
 const Settings = () => {
-    const { user, userLoading, refreshUser } = useUser();
+    const { user, userLoading } = useUser();
     const [fitBitUrl, setFitBitUrl] = useState("");
     const [fitBitLinked, setFitBitLinked] = useState(false);
 
@@ -61,7 +61,7 @@ const Settings = () => {
                 alert("Save failed: " + err.reason);
             } else {
                 setPresets(newPresets);
-                refreshUser();
+                console.log(presets)
                 if (cb) cb();
             }
         });
@@ -117,7 +117,7 @@ const Settings = () => {
     const handleAddWidget = () => {
         const type = newWidgetType;
         const id = `${type}-${Date.now()}`;
-        const w = { id, label: type, type, height: 1, width: 1 };
+        const w = { id, label: type, type, height: 2, width: 1 };
         setPresets(ps =>
             ps.map((p, idx) =>
                 idx === selectedPresetIndex
@@ -281,6 +281,7 @@ const Settings = () => {
                         </button>
                     </>
                 )}
+
             </motion.div>
 
             {/* Section 4: Add Widget */}
